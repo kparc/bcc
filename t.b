@@ -1,3 +1,5 @@
+c[i]{n:0;W(x>1){x:$[x&1;(\x)+x+1;/x];n+:1};n}
+c[9]
 a[ii]$[x;a[-x;$[y;a[x;-y];1]];+y]
 b[Ii]{h:#x;l:0;W(h>l)$[y>x[i:/l+h];l:i+1;h:i];l}
 f[iII]{m:0;$[k:-x;W(x){x-:1;j:*y;N(k)y[i]:y[+i];y[k]:j;j:f[k;y;z];$[m<j;m:j;]};{N(#y)z[i]:y[i];W(j:*z){m+:1;N(j){k:z[i];z[i]:z[j];z[j]:k;j-:1}}}];m}
@@ -27,7 +29,4 @@ z:!8
 w:t[0;13]
 \t:100 c[w]
 \t:30 m[100]
-
-
-
-
+\\

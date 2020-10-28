@@ -6,7 +6,7 @@
 //ackermann
 I a(I x,I y){R x?a(x-1,y?a(x,y-1):1):y+1;}
 
-//binarysearch
+//bsearch
 I b(I*x,I y){I h=x[-1],i,l=0;W(h>l)y>x[i=l+h>>1]?l=i+1:(h=i);R l;}
 
 //fannkuch

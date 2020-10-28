@@ -1,4 +1,8 @@
-typedef unsigned char C,*S,*K;typedef int I;typedef long J;typedef double F;typedef void V;V*memcpy();J strlen(const char*);
+#include<string.h>
+#include<stdio.h>
+
+typedef unsigned char C,*S,*K;typedef int I;typedef long long J;typedef double F;typedef void V;
+//V*memcpy();strlen(const char*);
 
 #define R return
 #define P(b,a...)   if(b)return(a);
@@ -7,6 +11,7 @@ typedef unsigned char C,*S,*K;typedef int I;typedef long J;typedef double F;type
 #define $(b,a...)   if(b){a;}else           //cond
 #define C(i,a...)   case i:{a;}break;       //case
 #define S(i,c,a...) switch(i){c default:a;} //switch
+#define O printf
 
 #define MN(a,b)    ({typeof(a)_a=(a);typeof(a)_b=(b);_a<_b?_a:_b;})
 #define MX(a,b)    ({typeof(a)_a=(a);typeof(a)_b=(b);_a>_b?_a:_b;})
