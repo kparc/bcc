@@ -83,7 +83,7 @@ ZK d(I r,K x,ST st){
    P(!Ay&&!q(y)&&!Az&&!q(y),M|=1<<(m=D[KF==b]++),y=e(0,y,st),M&=~(1<<m),z=O2(b,a,r,y,f(m,z,st)),--D[KF==b],z)
    R Ay&&!q(y)&&2-a&&4-a?O2(b,9<a?11-a+11:a,r,e(s,z,st),y):O2(b,a,r,e(s,y,st),d(s,z,st)))}
 
-//! parse compile link eval
+//! parse compile link exec
 K ps(S tp){Ss=tp;pst t={{0},{0},0,{1,1},8,0};ST st=&t;//pst t;ST st=&t;sA=M=0;sN=8;D0=D1=1;N(26,L[i]=T[i]=0)N(26,O("%d %d\n",L[i],T[i]))
  S r='['==Ss[1]&&(r=sc(Ss,']'))&&*++r?r:0;K*k=r||':'==Ss[1]?sA=*Ss,Ss+=2,G+sA-'a':0;
  P('!'==*Ss,++Ss,X(k,enm(ki(ip(Ss,strlen(Ss))))))
@@ -96,9 +96,9 @@ K ps(S tp){Ss=tp;pst t={{0},{0},0,{1,1},8,0};ST st=&t;//pst t;ST st=&t;sA=M=0;sN
  zy=j2(X0(qfv?f(0,x,st):v(0,x,0,st)),c3(RET,D0,D1));
  zy=u(t(x),zy);
  lnk(zy,z,sA);//dis(zy,1); //!< pretty print opcodes
- R k?X(k,r?z:Z0(ev(z))):z;}
+ R k?X(k,r?z:Z0(ex(z))):z;}
 
-K1(ev){//!< ("[i]{sourcecode}";0xrtype0xopcodes0xconsts) xyu is return type
+K1(ex){//!< ("[i]{sourcecode}";0xrtype0xopcodes0xconsts) xyu is return type
  ret fn;R fn.code=xy,KS<xu?fn.k():KF==xu?kf(fn.f()):ki(fn.j());}//<! K|F|J
 
 //:~

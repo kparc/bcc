@@ -11,7 +11,7 @@ ZK Ee(I a,I c,ST st){K r=k1(kc(c)),x;do r=jk(r,x=qt()?n(ki(0)):p(st));W(';'==*Ss
 ZK pF(K x,I b,ST st){R KF-b||KF==t(x)?x:Ax&&126<xi?n(kf(xi-128)):u(KF,k2(kc('%'),x));}
 
 //! class          !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
-I c(I c){R 128>c?"   +$++ ()++ + +0000000000+;+++  aaaaaaaaaaaaaNaaaaaaaaWaaa[+]  `aaaaaaaaaaaaaaaaaaaaaaaaaa{+} "[c-32]:0;}
+I c(I c){R 128>c?"   +$++ ()++ + +0000000000+;+++  aaaaaaaaaaaaaNaaaaaaaaWaaa[+]+ `aaaaaaaaaaaaaaaaaaaaaaaaaa{+} "[c-32]:0;}
 // !til #cnt %div     *mul|frst +sum|inc -sub|dec     &and |or /shr \shl   <=>leg    ;sep      $[c;t;f] N(times){} W(true){}
 
 //! \todo cst xor mod neq not flr ...

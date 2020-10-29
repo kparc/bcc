@@ -10,7 +10,7 @@
 #define X2 12L
 #define X3 13L
 #define QQ 15L
-extern J nt[],ip();extern K G[],r1(),tn(),j2(),k0(),sS(),enm(),o();V exit(),w2(),r0();S pi(),pf(),px();F fp();_ K X(K*k,K y){R r0(*k),*k=y,NL;}
+extern J nt[],ip();extern K G[],ex(K),ps(S),r1(),tn(),j2(),k0(),sS(),enm(),o();V exit(),w2(),r0();S pi(),pf(),px();F fp();_ K X(K*k,K y){R r0(*k),*k=y,NL;}
 _ I oc(I i){R w2((S)&i),i;}_ V nl(){w2("\n");}_ S os(S s){R w2(s),nl(),s;}_ J oi(J j){R os(pi(j)),j;}_ F of(F f){R os(pf(f)),f;}_ J ox(J j){R os(px(j)),j;}
 _ S sc(S s,I c){W(*s-c)P(!*s++,0)R s;}
 _ I scn(S s,I c,I n){N(n,P(c==s[i],i))R n;}//_ K P1(J x){R(K)(X1<<48|x);}_ K P2(J x){R(K)(X2<<48|x);}_ K P3(J x){R(K)(X3<<48|x);}
