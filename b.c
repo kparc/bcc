@@ -83,18 +83,19 @@ ZK d(I r,K x,ST st){
    P(!Ay&&!q(y)&&!Az&&!q(y),M|=1<<(m=D[KF==b]++),y=e(0,y,st),M&=~(1<<m),z=O2(b,a,r,y,f(m,z,st)),--D[KF==b],z)
    R Ay&&!q(y)&&2-a&&4-a?O2(b,9<a?11-a+11:a,r,e(s,z,st),y):O2(b,a,r,e(s,y,st),d(s,z,st)))}
 
+//! parse compile link eval
 K ps(S tp){Ss=tp;pst t={{0},{0},0,{1,1},8,0};ST st=&t;//pst t;ST st=&t;sA=M=0;sN=8;D0=D1=1;N(26,L[i]=T[i]=0)N(26,O("%d %d\n",L[i],T[i]))
  S r='['==Ss[1]&&(r=sc(Ss,']'))&&*++r?r:0;K*k=r||':'==Ss[1]?sA=*Ss,Ss+=2,G+sA-'a':0;
  P('!'==*Ss,++Ss,X(k,enm(ki(ip(Ss,strlen(Ss))))))
  z=k2(kp(Ss-!!k),NL);//z=k2(kp(s),NL);
  if(!Ss[1]&&26u>*Ss-'a')r1(G[*Ss-'a']);
  if(r){X(k,k2(r1(zx),u(KI,c2(1,1))));N(r-Ss-1,L[23+i]=D0++,T[23+i]=l(" chijefs CHIJEFS",Ss[i]))Ss=r;}
- K x=p(st);//o(x);//!<dump parse tree
+ K x=p(st);//o(x);//!< dump parse tree
  N(23,if(Ti)Li=D[KF==Ti]++)
  I qfv=Ax||'$'-*x;
  zy=j2(X0(qfv?f(0,x,st):v(0,x,0,st)),c3(RET,D0,D1));
  zy=u(t(x),zy);
- lnk(zy,z,sA);//dis(zy,1);
+ lnk(zy,z,sA);//dis(zy,1); //!< pretty print opcodes
  R k?X(k,r?z:Z0(ev(z))):z;}
 
 K1(ev){x=xy,x=KS<xu?((K(*)())x)():KF==xu?kf(((F(*)())x)()):ki(((J(*)())x)());R x;}
