@@ -9,11 +9,11 @@ V w2(S s){write(2,s,strlen(s));}ZS r2(S s){ZC b[256];R w2(s),b[read(0,b,256)-1]=
 ZI rand(){ZJ j0=-314159;R j0=4294957665L*j0+(j0>>32);}
 
 ZS ma(I d,J n){
-	ZJ p=0x700000;p+=d?0:n;
+	ZJ p=0x700000;p+=d?0:n; //!< fixme 0x700000 hello macos 
 	S r=mmap(
 		(V*)(d?0:p-n),
 		n,PROT_READ|PROT_WRITE|PROT_EXEC,
-	d?2:0x22,
+	d?2:0x22, //<! classic canadian roulette
 	d?d:-1,0);
 	//O("ma d %d n %lld r %p\n",d,n,r);if(errno)O("errno %s\n",strerror(errno));//!< 0x22 facepalm
 	R r;}
@@ -44,7 +44,7 @@ F fp(S p,I n){P('-'==*p,-fp(p+1,n-1))I l=scn(p,'e',n),m=scn(p,'.',l),f=l<n?ip(p+
 #if (__x86_64__||i386)&&!__TINYC__
 ZI clzl(I n){R 60-__builtin_clzl(n);}V csr(){R;asm("movl $0x9fc0,-4(%rsp);ldmxcsr -4(%rsp);");}//V csr(){volatile I mxcsr=0x9fc0;asm("ldmxcsr %0":"=m"(mxcsr));}
 #else
-ZI clzl(I n){I i=0;W(n)n/=2,++i;R i-4;}V csr(){R;}//fixme
+ZI clzl(I n){I i=0;W(n)n/=2,++i;R i-4;}V csr(){R;}//<! \fixme tcc ldmxcsr nyi
 #endif
 
 // malloc free:  mturnnnn list join (k[cifs] k[CIFS])
@@ -63,7 +63,7 @@ ZK1(l2){R kp("[]");}
 ZV1(l0){if((J)xy)l0(xy),l0(xz);xx=M[xm],M[xm]=x;}
 K3(l1){K r=m1(24);R rt=8,rn=3,rx=x,ry=y,rz=z,r;}
 
-// REPL \ltwvf DAZ FTZ
+//! repl \ltwvf daz ftz fixme hello segv \see julia
 K G[26],ev(),ps();V dis(K,I);ZK es();ZK K0;K k0(){R r1(K0);}ZK vf(I f){K r=kS(0);N(26,K x=G[i];if(NL-x)if(f^(Ax||xt))r=j2(r,ks(i)))R r;}
 ZK Li(K x,I i){R!xt||KS<xt?Xx:KC==xt?kc(Xc):KI==xt?ki(Xi):ks(Xi);}ZK e1(K(*f)(),K x){K r=kK(xn);N1(rn,Rx=f?f(Li(x,i)):Li(x,i))R r;}
 K sS(I c,K x){I n=c?xn:0;N(xn,K y=Xx;n+=yn)K r=kC(n);if(c)--rn;S s=r;N(xn,K y=Xx;s=memcpy(s,y,yn)+yn;if(c)*s++=c)R X0(r);}
@@ -86,7 +86,9 @@ ZS1(es){K x;P('\\'-*s,!*s?NL:(x=ps(s))&&NL-x?X0(ev(x)):x)if(!*++s||'\\'==*s)exit
 V km(S*a){N(26,G[i]=NL)*(K*)(K0=kK(0))=c0();if(*++a)pr(ld(*a));O("kparc/b x64\n");W(1)pr(es(r2(" ")));}I main(I ac,char**av){R csr(),km((S*)av),0;}
 K1(enm){K r=kI(xi);N(rn,Ri=i)R r;}
 
-//K qi(I i){R qs((S[]){"nyi","rank","length","type","domain","value"}[i]);}
+//K qi(I i){R qs((S[]){"nyi","rank","length","type","domain","value"}[i]);} //!< \fixme humans prefer this to segvs
+
+//! \todo format c:
 //ZK1(rd1){QC(x)x=jc(x,0);I d=open(x,0);Qs(0>d,x)J b[16];fstat(d,b);R x=X0(511+ma(0,0,0,b[6]+4096)),xm=-1,xt=KC,ma(0,d,x,xn=b[6]),W+=xn,x;}(W-=xn,mu(x-511,xn+4096))
 //ZK2(wr1){QC(x)x=jc(x,0);QC(y)unlink(x);I d=open(x,0102,0666);Qs(0>d,x)ftruncate(d,yn);R x=X0(ma(1,d,0,yn)),dsn(x,y,yn),mu(x,yn),Y0(NL);}
 //K1(rd0){R Ss(0,rd1(x));} //{-1_'(0,1+&x=y)_y} K2(wr0){R wr1(x,sS(0,y));} //{,/x,'y}          
@@ -103,5 +105,7 @@ S(31&f,C(0,*--a=M[r])C(1,M[r]=*a++)C(2,c=M[r]?1:0)C(3,of(M[r])) C(4,M[r]=L[*s++]
 R x=xy,KS<xu?(K)*L:KF==xu?kf(*M):ki((I)*L);}V1(lnk){}K ps(S s){K z;I a=0;I ln(S s){I c=*s&31;R!*s?1:32>*s||4>c?2:15>*s?5:3;}I j(I t){R KF==t?32:0;}C B=2,RET=0,JJ[]={16,17,18,19,24,21,22,23};
 K cc(I o,I r){R c2(8+o,r);}K Jj(K x,I n){R c5(8+x[xn],n-3);}K cll(I c){R c2(1,c);}K psh(I t,I r){R c2(32+j(t),r);}K pop(I t,I r){R c2(33+j(t),r);}K tst(I t,I r){R c2(34+j(t),r);}
 K sh(I t,I r){R c2(35+j(t),r);}K cv(I x,I y){R c3(36+32,x,y);}K cm(I t,I x,I y){R c3(38+j(t),x,y);}K o2(I t,I o,I r,I x,I y){R c3(48+o+j(t),16*r+x,y);}*/
+
+//! original spec
 // :+-*% ^&|<=>  x64 JJ Jj o2 cc tst RET cll psh pop acdbsbsd89..  o[m[s|d]] c3 eb+1 e8+4 e9+4 [f2/66/4*][0f] 5* 7*+1 b*+4 0f8*+4  03 23 2b 3b (6b 83) 89 8b ..
 
