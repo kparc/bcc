@@ -43,7 +43,7 @@ c89, c99, .. (not interesting right now since i already prefer b and there is no
 
 notes:
 A.S kernel interface (map unmap ..)
-a.c replaces libc (fp and pf need more work)
+a.c replaces libc (fp and pf need much more work)
 b.c compiles b code
  
 p() parse(this would change for c89 etc.  minor. the rest is the same.)
