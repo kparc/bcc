@@ -99,7 +99,7 @@ K ps(S tp){Ss=tp;pst t={{0},{0},0,{1,1},8,0};ST st=&t;//pst t;ST st=&t;sA=M=0;sN
  R k?X(k,r?z:Z0(ev(z))):z;}
 
 ret fn;K1(ev){ //!< ("[i]{sourcecode}";0xrtype0xopcodes0xconstants)
-  fn.k=(V*)xy; //!< throw away the source, xu contains return type:
+  fn.code=xy; //!< throw away the source, xu contains return type:
   R KS<xu?fn.k():KF==xu?kf(fn.f()):ki(fn.j());} //<! K|F|J
 
 
