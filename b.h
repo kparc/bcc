@@ -10,5 +10,6 @@ typedef struct{C L[26];C T[26];I M;C D[2];C N;I A;}pst;typedef pst*ST;ZK d(I,K,S
 #define Di D[i]
 #define Li L[i]
 #define Ti T[i]
+#define S0 *Ss //!< current tape position
 #define q(x) _q(x,L)
 #define t(x) _t(x,T)
