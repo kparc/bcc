@@ -55,9 +55,9 @@ ZK m1(J n){K x,r;I i=clzl(n+7),j;P(x=M[i],M[i]=xx,x)j=i;
  W(!(x=++j<31?M[j]:8+ma(0,16L<<(j=MX(18,i)))));
  xm=i,M[j]=xx,r=x;W(i<j)x+=16L<<xm,M[*(J*)(x-8)=i++]=x,xx=0;R r;}
 
-//! \nt native type widths of Kchijefs: arr, int8, int16, int32, int64, eh?, float, symbol
-//      K c h i j e f s
+//!    (K c h i j e f s) arr, int8, int16, int32, int64, real, double, sym
 J nt[]={8,1,2,4,8,4,8,4};ZJ W=-32;ZV l0();V1(r0){if(Ax||!x)R;if(8==xt){l0(x);R;}if(xr){--xr;R;}if(!xt||KS<xt)N1(xn,r0(Xx))W-=16L<<xm,xx=M[xm],M[xm]=x;}K1(r1){P(Ax,x)R++xr?x:AB("r1");}
+
 K tn(I t,I n){K x=m1(MX(1,n)*nt[KS<t?0:t]);R W+=16L<<xm,xu=0,xt=t,xn=n,x;}
 ZK xiy(K x,I i,K y){memcpy(x+NX*i,y,NX*yn);if(!yt)N(yn,r1(Yx))R Y0(x);}
 K2(j2){I m=xn,n=m+(Ay?1:yn);P(!m&&!xt,X0(y))$(xr||8+NX*n>16L<<xm,x=xiy(tn(xt,n),0,x))xu=0,xn=n;Ay?memcpy(x+NX*m,&y,NX):xiy(x,m,y);R x;}
