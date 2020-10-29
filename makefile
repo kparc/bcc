@@ -10,7 +10,7 @@ l:
 
 # gcc
 g:
-	gcc -Wno-builtin-declaration-mismatch $O $(LF) $(SRC) -o bg $(CF)
+	gcc -pagezero_size 1000 $O $(LF) $(SRC) -o bg $(CF)
 	./bg t.b
 
 # tcc

@@ -1,4 +1,4 @@
-  #include"a.h"
+#include"a.h"
 I U(I i);I l(S s,I c);K1(ev);K l1();I c(I c);ZK c5(I o,I n){R cj(o,pn((S)&n,4));}
 S Ss;K z;ZI A[]={0,7,6,2,1,8,9,10,11,3,12,13,14,15,5,4},B=5,RET=0xc3,
  //    jmp  jb   jz   jnbe jmp32 jnb  jnz  jbe   jnb32
