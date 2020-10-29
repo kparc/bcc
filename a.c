@@ -49,7 +49,7 @@ ZI clzl(I n){I i=0;W(n)n/=2,++i;R i-4;}V csr(){R;}//<! \fixme tcc ldmxcsr nyi
 #endif
 
 // malloc free:  mturnnnn list join (k[cifs] k[CIFS])
-//! mturnnnn is K: membucket, type, flags, refcount, payload
+//! K is mturnnnn: membucket, type, flags, refcount, length
 ZK M[31];//!< malloc is a classic pow2 buddy allocator w/o coalescing
 ZK m1(J n){K x,r;I i=clzl(n+7),j;P(x=M[i],M[i]=xx,x)j=i;
  W(!(x=++j<31?M[j]:8+ma(0,16L<<(j=MX(18,i)))));
@@ -67,7 +67,7 @@ ZK1(l2){R kp("[]");}
 ZV1(l0){if((J)xy)l0(xy),l0(xz);xx=M[xm],M[xm]=x;}
 K3(l1){K r=m1(24);R rt=8,rn=3,rx=x,ry=y,rz=z,r;}
 
-//! repl daz ftz \lvwtf: \l load \v vars \w wssize \t[:n] timer[ntimes] \f funs
+//! repl daz ftz \wtfvl: \w wssize \t[:n] timer[ntimes] \f funs \v vars \l loadfile
 //! \G global namespace \fixme 1char literals are tough on the ego
 K G[26],ev(),ps();V dis(K,I);ZK es();ZK K0;K k0(){R r1(K0);}ZK vf(I f){K r=kS(0);N(26,K x=G[i];if(NL-x)if(f^(Ax||xt))r=j2(r,ks(i)))R r;}
 ZK Li(K x,I i){R!xt||KS<xt?Xx:KC==xt?kc(Xc):KI==xt?ki(Xi):ks(Xi);}ZK e1(K(*f)(),K x){K r=kK(xn);N1(rn,Rx=f?f(Li(x,i)):Li(x,i))R r;}
