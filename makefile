@@ -3,14 +3,18 @@ CF=-minline-all-stringops -fno-asynchronous-unwind-tables -fno-stack-protector -
 SRC=a.c b.c p.c
 O=-O0 -g
 
+ifeq ($(shell uname),Darwin)
+ CF+= -pagezero_size 1000
+endif
+
 # llvm
 l:
-	clang -pagezero_size 1000 -Wno-empty-body $O $(LF) $(SRC) -o bl $(CF)
+	clang $O $(LF) $(SRC) -o bl $(CF)
 	./bl t.b
 
 # gcc
 g:
-	gcc -pagezero_size 1000 $O $(LF) $(SRC) -o bg $(CF)
+	gcc $O $(LF) $(SRC) -o bg $(CF)
 	./bg t.b
 
 # tcc
