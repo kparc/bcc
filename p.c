@@ -12,7 +12,10 @@ ZK pF(K x,I b,ST st){R KF-b||KF==t(x)?x:Ax&&126<xi?n(kf(xi-128)):u(KF,k2(kc('%')
 
 //! class          !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
 I c(I c){R 128>c?"   +$++ ()++ + +0000000000+;+++  aaaaaaaaaaaaaNaaaaaaaaWaaa[+]  `aaaaaaaaaaaaaaaaaaaaaaaaaa{+} "[c-32]:0;}
-// !til #cnt %div *(mul|frst) +(sum|inc) -(sub|dec) &and |or /shr \shl    <=>leg     ;sep      $[c;t;f] N(times){} W(true){}
+// !til #cnt %div     *mul|frst +sum|inc -sub|dec     &and |or /shr \shl   <=>leg    ;sep      $[c;t;f] N(times){} W(true){}
+
+//! \todo cst xor mod neq not flr ...
+
 //! parse
 K p(ST st){K x,y;I a,b;
  switch('0'-c('-'==(a=*Ss++)?Ss['.'==*Ss]:'.'==a?*Ss:a)?c(a):'0'){
