@@ -9,9 +9,11 @@ typedef int I;typedef unsigned int UI;typedef long long J;typedef void V;
 #define N(n,a...) {I _n=(n),i=0;W(i<_n){a;++i;}}
 #define rI ((I*)r)
 #define xI ((I*)x)
-I c(I n){I c=0;W(n!=1){n=n&1?(n<<1)+n+1:n>>1;c++;}R c;}//!< all numbers lead to one
-inline ZI cmp(I*x,I i,I*y,I j){R x[i]<y[j]?-1:x[i]>y[j];}//!< comparator
 
+//c[i]{n:0;W(x>1){x:$[x&1;(\x)+x+1;/x];n+:1};n}
+I c(I n){I c=0;W(n!=1){n=n&1?(n<<1)+n+1:n>>1;c++;}R c;}//!< all numbers lead to one
+
+inline ZI cmp(I*x,I i,I*y,I j){R x[i]<y[j]?-1:x[i]>y[j];}//!< comparator
 ZI mrg(I*b,I*x,I l,I h,I d){
   I t,u,m=(UI)(l+h+1)/2;
   P(h==m,(b[l]=-1,l))
