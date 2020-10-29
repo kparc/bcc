@@ -98,9 +98,7 @@ K ps(S tp){Ss=tp;pst t={{0},{0},0,{1,1},8,0};ST st=&t;//pst t;ST st=&t;sA=M=0;sN
  lnk(zy,z,sA);//dis(zy,1); //!< pretty print opcodes
  R k?X(k,r?z:Z0(ev(z))):z;}
 
-ret fn;K1(ev){ //!< ("[i]{sourcecode}";0xrtype0xopcodes0xconstants)
-  fn.code=xy; //!< throw away the source, xu contains return type:
-  R KS<xu?fn.k():KF==xu?kf(fn.f()):ki(fn.j());} //<! K|F|J
-
+K1(ev){//!< ("[i]{sourcecode}";0xrtype0xopcodes0xconsts) xyu is return type
+ ret fn;R fn.code=xy,KS<xu?fn.k():KF==xu?kf(fn.f()):ki(fn.j());}//<! K|F|J
 
 //:~
