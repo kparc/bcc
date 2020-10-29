@@ -98,6 +98,12 @@ K ps(S tp){Ss=tp;pst t={{0},{0},0,{1,1},8,0};ST st=&t;//pst t;ST st=&t;sA=M=0;sN
  lnk(zy,z,sA);//dis(zy,1); //!< pretty print opcodes
  R k?X(k,r?z:Z0(ev(z))):z;}
 
-K1(ev){x=xy,x=KS<xu?((K(*)())x)():KF==xu?kf(((F(*)())x)()):ki(((J(*)())x)());R x;}
+K1(ev){  //!< ("[ii]{leetcodez}"; 0xrtype0xleetopcodes0xstackconsts)
+  x=xy,  //!< throw away the source, xu now contains the return type
+  x=     //!< x will hold the execution result, possible ret types:
+  KS<xu?((K(*)())x)()        //!< a pointer
+  :KF==xu?kf(((F(*)())x)())  //!< a double
+  :ki(((J(*)())x)());        //!< a long
+ R x;}
 
 //:~

@@ -1,13 +1,12 @@
 #include"a.h"// read/write mmap/munmap printf/scanf malloc/free
-#define _GNU_SOURCE
-#include <unistd.h>
-#include <sys/syscall.h>
+#include<unistd.h>
+#include<sys/syscall.h>
 #include<errno.h>
 #include<sys/types.h>
 #include<sys/mman.h>
-#include <sys/stat.h>
+#include<sys/stat.h>
 
-I open(),close(),fstat();//I munmap();S mmap();J read(),write();V exit();
+I open(),close();//I fstat(),munmap();S mmap();J read(),write();V exit();
 ZF ms(){J a,d;asm volatile("rdtsc":"=a"(a),"=d"(d));R((d<<32)+a)*.58e-6;}//<! fixme .58e-6 somewhat a ballpark
 V w2(S s){write(2,s,strlen(s));}ZS r2(S s){ZC b[256];R w2(s),b[read(0,b,256)-1]=0,b;}
 ZI rand(){ZJ j0=-314159;R j0=4294957665L*j0+(j0>>32);}
