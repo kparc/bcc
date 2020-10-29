@@ -1,4 +1,5 @@
 typedef struct{C L[26];C T[26];I M;C D[2];C N;I A;}pst;typedef pst*ST;ZK d(I,K,ST);
+typedef union{K(*k)();F(*f)();J(*j)();}ret;//!< return types of compiled functions
 #define L st->L
 #define D st->D
 #define T st->T
