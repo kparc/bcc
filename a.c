@@ -2,6 +2,7 @@
 #include<errno.h>
 #include<sys/types.h>
 #include<sys/mman.h>
+#include<sys/stat.h>
 
 J read(),write();I open(),close(),fstat(),munmap();//S mmap();V exit();
 ZF ms(){J a,d;asm volatile("rdtsc":"=a"(a),"=d"(d));R((d<<32)+a)*.58e-6;}//<! fixme .58e-6 somewhat a ballpark
@@ -18,7 +19,7 @@ ZS ma(I d,J n){
 	//O("ma d %d n %lld r %p\n",d,n,r);if(errno)O("errno %s\n",strerror(errno));//!< 0x22 facepalm
 	R r;}
 
-ZS mf(S s,J*n){J b[18];I d=open(s,0);Qs(0>d,s)R fstat(d,b),s=(*n=b[6])?ma(d,*n):s,close(d),s;}
+ZS mf(S s,J*n){struct stat b;I d=open(s,0);Qs(0>d,s)R fstat(d,&b),s=(*n=b.st_size)?ma(d,*n):s,close(d),s;}
 
 // printf scanf 
 ZC b[24];ZS ng(S s){R*--s='-',s;}
