@@ -5,7 +5,7 @@ O=-O0 -g
 
 # llvm
 l:
-	clang -Wno-empty-body $O $(LF) $(SRC) -o bl $(CF)
+	clang -pagezero_size 1000 -Wno-empty-body $O $(LF) $(SRC) -o bl $(CF)
 	./bl t.b
 
 # gcc
@@ -21,7 +21,7 @@ t:
 # ref
 r:
 	clang -Os -g r.c -o r&&./r
-	objdump -d r
+	@#objdump -d r
 
 all: l g t
 

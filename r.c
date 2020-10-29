@@ -1,6 +1,7 @@
 //!\file reference impls
 #include<stdio.h>//printf
 typedef int I;typedef unsigned int UI;typedef long long J;typedef void V;
+#define ZJ static J
 #define ZI static I
 #define R return
 #define O printf

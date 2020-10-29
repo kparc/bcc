@@ -1,24 +1,22 @@
 #include"a.h"// read/write mmap/munmap printf/scanf malloc/free
+#define _GNU_SOURCE
+#include <unistd.h>
+#include <sys/syscall.h>
 #include<errno.h>
 #include<sys/types.h>
 #include<sys/mman.h>
+#include <sys/stat.h>
 
-J read(),write();I open(),close(),fstat(),munmap();//S mmap();V exit();
+I open(),close(),fstat();//I munmap();S mmap();J read(),write();V exit();
 ZF ms(){J a,d;asm volatile("rdtsc":"=a"(a),"=d"(d));R((d<<32)+a)*.58e-6;}//<! fixme .58e-6 somewhat a ballpark
 V w2(S s){write(2,s,strlen(s));}ZS r2(S s){ZC b[256];R w2(s),b[read(0,b,256)-1]=0,b;}
 ZI rand(){ZJ j0=-314159;R j0=4294957665L*j0+(j0>>32);}
 
-ZS ma(I d,J n){
-	ZJ p=0x700000;p+=d?0:n; //!< fixme 0x700000 hello macos 
-	S r=mmap(
-		(V*)(d?0:p-n),
-		n,PROT_READ|PROT_WRITE|PROT_EXEC,
-	d?2:0x22, //<! classic canadian roulette
-	d?d:-1,0);
-	//O("ma d %d n %lld r %p\n",d,n,r);if(errno)O("errno %s\n",strerror(errno));//!< 0x22 facepalm
-	R r;}
+ZS ma(I d,J n){ZJ p=0x70000000L;p+=d?0:n;
+	V*r=mmap((V*)(d?0:p-n),n,PROT_READ|PROT_WRITE|PROT_EXEC,d?MAP_PRIVATE:(MAP_ANON|MAP_PRIVATE|MAP_FIXED),d-!d,0);
+	P(r==MAP_FAILED,O("%s\n",strerror(errno)),(S)0)R r;}
 
-ZS mf(S s,J*n){J b[18];I d=open(s,0);Qs(0>d,s)R fstat(d,b),s=(*n=b[6])?ma(d,*n):s,close(d),s;}
+ZS mf(S s,J*n){struct stat b;I d=open(s,0);Qs(0>d,s)R fstat(d,&b),s=(*n=b.st_size)?ma(d,*n):s,close(d),s;}
 
 // printf scanf 
 ZC b[24];ZS ng(S s){R*--s='-',s;}
@@ -55,7 +53,7 @@ ZK m1(J n){K x,r;I i=clzl(n+7),j;P(x=M[i],M[i]=xx,x)j=i;
  W(!(x=++j<31?M[j]:8+ma(0,16L<<(j=MX(18,i)))));
  xm=i,M[j]=xx,r=x;W(i<j)x+=16L<<xm,M[*(J*)(x-8)=i++]=x,xx=0;R r;}
 
-//!    (K c h i j e f s) arr, int8, int16, int32, int64, real, double, sym
+//!     K c h i j e f s (arr int8 int16 int32 int64 real double sym)
 J nt[]={8,1,2,4,8,4,8,4};ZJ W=-32;ZV l0();V1(r0){if(Ax||!x)R;if(8==xt){l0(x);R;}if(xr){--xr;R;}if(!xt||KS<xt)N1(xn,r0(Xx))W-=16L<<xm,xx=M[xm],M[xm]=x;}K1(r1){P(Ax,x)R++xr?x:AB("r1");}
 
 K tn(I t,I n){K x=m1(MX(1,n)*nt[KS<t?0:t]);R W+=16L<<xm,xu=0,xt=t,xn=n,x;}

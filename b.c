@@ -1,4 +1,4 @@
-#include"a.h"
+  #include"a.h"
 I U(I i);I l(S s,I c);K1(ev);K l1();I c(I c);ZK c5(I o,I n){R cj(o,pn((S)&n,4));}
 S Ss;K z;ZI A[]={0,7,6,2,1,8,9,10,11,3,12,13,14,15,5,4},B=5,RET=0xc3,
  //    jmp  jb   jz   jnbe jmp32 jnb  jnz  jbe   jnb32
@@ -11,7 +11,7 @@ ZK cll(I c){R c5(0xe8,c);}
 ZK psh(I t,I x){R rex(0,0,x,c1(0x50+(7&A[x])));}
 ZK pop(I t,I x){R rex(0,0,x,c1(0x58+(7&A[x])));}
 ZK cc(I o,I x){R j2(i(0x0f20+JJ[o],16,x),i(0x0fb6,x,x));}
-ZK tst(I t,I x){R KF==t?AB("tst"):i(0x85,x,x);}
+ZK tst(I t,I x){R KF==t?AB("tst"):i(0x85,x,x);}                                                                                                                             
 ZK Jj(K x,I n){R cj(0x0f,c5(16+x[xn],n-4));}
 
 //                          ints:    mov  add  sub  imul     cmp  and    reg indicates the operation: 05741=add,sub,cmp,and,or
@@ -39,7 +39,7 @@ ZK O2(I t,I f,I r,K x,K y){I i=Ay?yi:yu;R u(r,j3(Ay?c0():y,x,10>f?o2(t,f,r,xu,i)
 ZK SH(I t,K y){R u(yu,j2(y,sh(t,yu)));}
 ZK ZR(I t,C r){R u(r,o2(t,2,r,r,r));}
 ZK MV(I t,I r,K y){R O2(t,0,r,u(r,c0()),y);}
- K Na(){S r=Ss;W(10u>*++Ss-'0'||'.'==*Ss);I f=0;N(Ss-r,f|='.'==r[i])R f?kf(fp(r,Ss-r)):ki(ip(r,Ss-r));}
+ K Na(){S r=Ss;W(10u>*++Ss-'0'||'.'==*Ss){};I f=0;N(Ss-r,f|='.'==r[i])R f?kf(fp(r,Ss-r)):ki(ip(r,Ss-r));}
 
 #include"b.h"
 ZI _q(K x,S sL){I i=xi-'a';R Ax?26u>i&&sL[i]?sL[i]:0:':'==*x?I(xy):0;}
