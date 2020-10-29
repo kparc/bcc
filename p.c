@@ -1,7 +1,7 @@
 #include"a.h"
 #include"b.h"
 
-extern S Ss;extern K z;//!<Ss tape z machine code
+extern S Ss;extern K z;//!< \Ss tape \z zx source zy 0xtype:opcodes:stack
 K u(I,K),Na();I U(I i),_t(K x,S sT);K p(ST);
 
 I l(S s,I c){S t=sc(s,c);R t?t-s:0;}
@@ -12,7 +12,7 @@ ZK pF(K x,I b,ST st){R KF-b||KF==t(x)?x:Ax&&126<xi?n(kf(xi-128)):u(KF,k2(kc('%')
 
 //! class          !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
 I c(I c){R 128>c?"   +$++ ()++ + +0000000000+;+++  aaaaaaaaaaaaaNaaaaaaaaWaaa[+]  `aaaaaaaaaaaaaaaaaaaaaaaaaa{+} "[c-32]:0;}
-
+// !til #cnt %div *(mul|frst) +(sum|inc) -(sub|dec) &and |or /shr \shl    <=>leg     ;sep      $[c;t;f] N(times){} W(true){}
 //! parse
 K p(ST st){K x,y;I a,b;
  switch('0'-c('-'==(a=*Ss++)?Ss['.'==*Ss]:'.'==a?*Ss:a)?c(a):'0'){
