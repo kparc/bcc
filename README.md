@@ -24,7 +24,7 @@ b : +-*%^&|<> =  /  \   $[c;t;f]
 c = +-*/^&|<> == << >>  if(c)t;else f;
 ```
 
-argtypes for x,y,z are declared, local types and result type are automatic.
+argtypes for x,y,z are declared, local types and result type are inferred.
 
 e.g. bsearch:
 
