@@ -85,9 +85,7 @@ c:  e8 ef ff ff ff          call   0
 
 source code:
 
-A.S  kernel interface
-a.c  event loop, syscalls, printer, i/o
-
+a.s  kernel interface
 a.c  runtime
 p.c  parser
 b.c  compiler
