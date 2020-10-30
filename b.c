@@ -107,7 +107,7 @@ K ps(S tp){Ss=tp;pst t={{0},{0},0,{1,1},8,0};ST st=&t;//pst t;ST st=&t;sA=M=0;sN
  zy=u(t(x),zy);lnk(zy,z,sA);//dis(zy,1); //!< disasm
  R k?X(k,r?z:Z0(ex(z))):z;}
 
-K1(ex){//!< ("[i]{sourcecode}";0xrtype0xopcodes0xconsts) xyu is return type:
- ret fn;R fn.code=xy,KS<xyu?fn.k():KF==xyu?kf(fn.f()):ki(fn.j());}//<! k|f|j
+K1(ex){//!< ("[i]{sourcecode}";0xrtype0xopcodes0xconsts) xyu is ret type:
+ obj o;R o.code=xy,KS<xyu?o.k():KF==xyu?kf(o.f()):ki(o.j());}//<! k|f|j
 
 //:~
