@@ -3,28 +3,28 @@
 S Ss;K z;ZI B=5,RET=0xc3,A[]={0,7,6,2,1,8,9,10,11,3,12,13,14,15,5,4},//!< x64 abi lol
  //    jmp  jb   jz   jnbe jmp32 jnb  jnz  jbe   jnb32
  JJ[]={0xeb,0x72,0x74,0x77,0xe9, 0x73,0x75,0x76, 0x0f83};
-
 ZK c5(I o,I n){R cj(o,pn((S)&n,4));}ZI m(I a,I b,I c){R 64*a+8*(7&b)+(7&c);}
 ZK rex(I r,I x,I b,K y){R(r=7<A[r])+(x=7<A[x])+(b=7<A[b])?cj(0x40+4*r+2*x+b,y):y;}
 ZK h(I o,I x,I y){R j2(256>o?c1(o):c2(o>>8,o),16>y?c1(m(3,x,y)):c5(m(0,x,5),y));}
 ZK i(I o,I x,I y){R rex(16>x?x:0,0,16>y?y:0,h(o,16>x?A[x]:x-16,16>y?A[y]:y));}
 ZK cc(I o,I x){R j2(i(0x0f20+JJ[o],16,x),i(0x0fb6,x,x));}
 ZK psh(I t,I x){R rex(0,0,x,c1(0x50+(7&A[x])));}
-ZK pop(I t,I x){R rex(0,0,x,c1(0x58+(7&A[x])));}
+ZK pop(I t,I x){R rex(0,0,x,c1(0x58+(7&A[x])));}//<! psh/pop tautology
 ZK tst(I t,I x){R KF==t?AB("tst"):i(0x85,x,x);}                                                                                                                             
 ZK Jj(K x,I n){R cj(0x0f,c5(16+x[xn],n-4));}
 ZK cll(I c){R c5(0xe8,c);}
+
 //                                                 0123456789123
 ZI l(S s,I c){S t=sc(s,c);R t?t-s:0;}I U(I i){R l(" +-*%^&|  <=>",i);}
 
-ZK o2f(I o,I x,I y){O("o2f: o %d x %d y %d\n",o,x,y);
+ZK o2f(I o,I x,I y){//O("o2f: o %d x %d y %d\n",o,x,y);
  //                  0    1    2     3    4    5    6
  //      ints:     mov  add  sub  imul  xor  cmp  and
  R 127>y?i((I[]){0x8b,0x03,0x2b,0x0faf,0x33,0x3b,0x23}[o],x,y)://!< 05741=add,sub,cmp,and,or
    rex(0,0,x,o?c3(0x83,m(3," \0\5  \7\4\1"[o],A[x]),y-128):c5(0xb8+(7&A[x]),y-128));}//!< move to register x
 //                          0 1 234 5 6 7
 
-//! return object code to execute opcode o with arguments x and y and leave the argument of type t in register r
+//!return object code to execute opcode o with arguments x and y and leave the argument of type t in register r
 ZK o2(I t,I o,I r,I x,I y){K z;P(KF==t,8u>y-8?AB("vex"):j2(c2(0xc5,16*(8&~r)+8*(15&~x)+(5-o?3:1)),
  //  for fp (with 0f prefix): i2f int to float
  //      mov  add  sub  mul  div  cmp      i2f
@@ -39,10 +39,11 @@ ZK cm(I t,I x,I y){R o2(t,5,x,x,y);}ZK cv(I x,I y){R o2(KF,8,x,x,A[y]);}ZK sh(I 
 //!opcode length
 ZI ln(S s){I o=*s++,h=o/16,p=0xc5==o?2:0x0f==o;R 4==h?1+ln(s):RET==o||5==h?1:*JJ==o||7==h?2:0xe==h||0xb==h?5:p&&8==*s/16?6:p+(3==s[p]/64?2+(0x83==o||0x6b==o):5==(0xc7&s[p])?6:3);}
 
+//!linker: fix relative addresses
 ZV lnk(K x,K z,I a){S s=x;W(s<x+xn){I n=ln(s+=4==*s/16),p=0xc5==*s?2:0x0f==*s;S r=s+n-4;
  if(0xe8==*s||(p?8-s[1]/16:4>*s/16||8==*s/16)&&5==(0xc7&s[1+p]))*(I*)r=(0xe8==*s?a-'a'==*r?x:26==*r?(S)l1:((K*)G[*r])[1]:32>*r?(S)&zF[2+*r-16]:(S)(G+*r-'a'))-r-4;s+=n;}}
 
-//!disassemble
+//!disasm: pretty print opcodes
 V dis(K x,I d){if(d)w2(px(xu));oc(" :"[d]);S s=x;W(s<x+xn-2){N(ln(s),w2(px(*s++)))oc(' ');}if(d)N(2,w2(px(*s++)))nl();}
 
 K u(I u,K x){R xu=u,x;}
@@ -81,10 +82,8 @@ ZI dh(K x,ST st){I t=T[xi-'a'];R 14==t?-2:13==t?-4:2*t-26;}
 ZK d(I r,K x,ST st){
  P(Ax,(r=q(x))?M|=1<<r,u(r,c0()):x)
  I s=15&r,a;K y,z;S((y=xy,c(a=*x)),
-  case'N':C('W',R w(x,st))
-  C('$',R u(r,v(r,x,1,st)))
-  C('{',R E(r,x,st))
-  C('[',R g(26,x,st))
+  case'N':C('W',R w(x,st))C('$',R u(r,v(r,x,1,st)))
+  C('{',R E(r,x,st))C('[',R g(26,x,st))
   C('a',R T[a-'a']?O2(0,1+dh(xx,st),s,d(0,xx,st),d(0,y,st)):g(a-'a',x,st))
   C(0,R y=d(0,y,st),O2(t(x),U(a-128),yu,y,d(s,xz,st))),
   if(':'==a){P(Ay,r=L[yi-'a'],M&=~(1<<r),f(r,xz,st))y=d(0,yy,st),z=e(s,xz,st),x=xy;R r=zu,u(r,j2(z,O2(0,dh(xx,st),r,d(0,xx,st),y)));}
@@ -103,13 +102,12 @@ K ps(S tp){Ss=tp;pst t={{0},{0},0,{1,1},8,0};ST st=&t;//pst t;ST st=&t;sA=M=0;sN
  if(r){X(k,k2(r1(zx),u(KI,c2(1,1))));N(r-Ss-1,L[23+i]=D0++,T[23+i]=l(" chijefs CHIJEFS",Ss[i]))Ss=r;}
  K x=p(st);//o(x);//!< dump parse tree
  N(23,if(Ti)Li=D[KF==Ti]++)
- I qfv=Ax||'$'-*x;
+ I qfv=Ax||'$'-*x;//<! f/v compile or print
  zy=j2(X0(qfv?f(0,x,st):v(0,x,0,st)),c3(RET,D0,D1));
- zy=u(t(x),zy);
- lnk(zy,z,sA);//dis(zy,1); //!< pretty print opcodes
+ zy=u(t(x),zy);lnk(zy,z,sA);//dis(zy,1); //!< disasm
  R k?X(k,r?z:Z0(ex(z))):z;}
 
 K1(ex){//!< ("[i]{sourcecode}";0xrtype0xopcodes0xconsts) xyu is return type:
- ret fn;R fn.code=xy,KS<xyu?fn.k():KF==xyu?kf(fn.f()):ki(fn.j());}//<! K|F|J
+ ret fn;R fn.code=xy,KS<xyu?fn.k():KF==xyu?kf(fn.f()):ki(fn.j());}//<! k|f|j
 
 //:~
