@@ -85,17 +85,17 @@ c:  e8 ef ff ff ff          call   0
 
 source code:
 
-a.s  kernel interface
-a.c  runtime
-p.c  parser
-b.c  compiler
+`a.S`  kernel interface
+`a.c`  runtime
+`p.c`  parser
+`b.c`  compiler
  
-p()  parse
-d()  to register (constant or global)
-e()  to register
-f()  force
+`p()`  parse
+`d()`  to register (constant or global)
+`e()`  to register
+`f()`  force
 
-ex() exec
+`ex()` run
 
 for riscv, arm, xtensa we need:
 
