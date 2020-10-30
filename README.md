@@ -108,12 +108,10 @@ faq
 
 there is no license.
 
-the original software was apparently meant as a friendly joke.
+the [original](http://kparc.com/b) software was apparently meant as a friendly joke.
 
 the name of this project is an insider pun and stands for `blind carbon copy`.
 
-this work is prompted by a formidable anonymous effort discovered at:
-
-https://docs.google.com/document/d/1W83ME5JecI2hd5hAUqQ1BVF32wtCel8zxb7WPq-D4f8/mobilebasic?urp=gmail_link&gxids=7628)
+this work is prompted by a formidable anonymous [effort](https://docs.google.com/document/d/1W83ME5JecI2hd5hAUqQ1BVF32wtCel8zxb7WPq-D4f8/mobilebasic?urp=gmail_link&gxids=7628).
 
 `/:~`
