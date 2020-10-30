@@ -14,7 +14,7 @@ ZK tst(I t,I x){R KF==t?AB("tst"):i(0x85,x,x);}
 ZK Jj(K x,I n){R cj(0x0f,c5(16+x[xn],n-4));}
 ZK cll(I c){R c5(0xe8,c);}
 
-//                                                 0123456789123
+//                                                 0123456789012
 ZI l(S s,I c){S t=sc(s,c);R t?t-s:0;}I U(I i){R l(" +-*%^&|  <=>",i);}
 
 ZK o2f(I o,I x,I y){//O("o2f: o %d x %d y %d\n",o,x,y);
