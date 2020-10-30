@@ -105,7 +105,7 @@ ret() cll() psh() pop()
 
 faq
 
-there is no license.
+there is no license. use at our own risk.
 
 the [original](http://kparc.com/b) software was apparently meant as a friendly joke.
 
