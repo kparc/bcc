@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  build-lin:
 
     runs-on: ubuntu-latest
 
@@ -15,3 +15,12 @@ jobs:
     - uses: actions/checkout@v2
     - name: make
       run: make g
+      
+  build-osx:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: make
+      run: make l
