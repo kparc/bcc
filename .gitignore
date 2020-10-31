@@ -5,3 +5,5 @@ bg
 bt
 r
 tmp
+*.profraw
+test

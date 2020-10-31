@@ -1,7 +1,7 @@
 #include"a.h"
 
 typedef union{V*code;K(*k)();F(*f)();J(*j)();}obj; //!<signatures of compiled funs
-typedef struct{C L[26];C T[26];I M;C D[2];C N;I A;}pst;typedef pst*ST;ZK d(I,K,ST);
+typedef struct{C L[26];C T[26];I M;C D[2];C N;I A;}pst;typedef pst*ST;
 
 #define L  st->L
 #define D  st->D

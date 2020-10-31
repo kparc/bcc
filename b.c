@@ -1,5 +1,7 @@
 #include"b.h"
 
+ZK d(I,K,ST);
+
 S Ss;K z;ZI B=5,RET=0xc3,A[]={0,7,6,2,1,8,9,10,11,3,12,13,14,15,5,4},//!< x64 abi lol
  //    jmp  jb   jz   jnbe jmp32 jnb  jnz  jbe   jnb32
  JJ[]={0xeb,0x72,0x74,0x77,0xe9, 0x73,0x75,0x76, 0x0f83};
