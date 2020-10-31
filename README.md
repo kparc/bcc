@@ -7,7 +7,7 @@ it produces compact and fast object code that uses very little stack.
 
 b aims to offer same types, ops and control as c.
 
-t.b and t.c:
+`t.b` and `t.c`:
 
 ```
          run  compile(ms) runsize
@@ -39,7 +39,7 @@ ackermann:
 b: a[ii]$[x;a[-x;$[y;a[x;-y];1]];+y]
 c: I a(I x,I y){R x?a(x-1,y?a(x,y-1):1):y+1;}
 
-b:        85ff741c85f6740e83ee0157e8efffffff5f8bf0eb05be0100000083ef01ebe08d4601c3 (36)
+b         85ff741c85f6740e83ee0157e8efffffff5f8bf0eb05be0100000083ef01ebe08d4601c3 (36)
 clang -Os 534889f04885ff7423488d5fff4885c0740d48ffc84889c6e8e3ffffffeb05b8010000004889df4885db75dd48ffc05bc3 (49)
 ```
 
@@ -82,7 +82,7 @@ c:  e8 ef ff ff ff          call   0
 594:   c3                   retq
 ```
 
-source code:
+source:
 
 `a.S`  kernel interface
 `a.c`  runtime
@@ -111,6 +111,6 @@ the [original](http://kparc.com/b) software was apparently meant as a friendly j
 
 the name of this project is an insider pun and stands for `blind carbon copy`.
 
-this work is prompted by a formidable anonymous [effort](https://docs.google.com/document/d/1W83ME5JecI2hd5hAUqQ1BVF32wtCel8zxb7WPq-D4f8/mobilebasic?urp=gmail_link&gxids=7628) of the [following](http://yiyus.info/cv.pdf) origin.
+this work is prompted by a formidable anonymous [effort](https://docs.google.com/document/d/1W83ME5JecI2hd5hAUqQ1BVF32wtCel8zxb7WPq-D4f8/mobilebasic) of the [following](http://yiyus.info/cv.pdf) origin.
 
 `/:~`
