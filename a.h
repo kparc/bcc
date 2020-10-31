@@ -18,7 +18,7 @@ _ K kK(I n){R tn(0,n);}
 _ K kC(I n){R tn(KC,n);}
 _ K kI(I n){R tn(KI,n);}
 _ K kS(I n){R tn(KS,n);}
-_ K pn(S s,I n){R memcpy(kC(n),s,n);}_ K kp(S s){R pn(s,strlen(s));}
+_ K pn(S s,I n){R memcpy(kC(n),s,n);}_ K kp(S s){R pn(s,strlen((char*)s));}
 _ K kc(J x){R(K)(KC<<48|x);}
 _ K ki(unsigned x){R(K)(KI<<48|(J)x);}
 _ K kf(F f){R*(K*)&f;}
