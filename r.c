@@ -11,6 +11,8 @@ typedef int I;typedef unsigned int UI;typedef long long J;typedef void V;
 #define rI ((I*)r)
 #define xI ((I*)x)
 
+I xor(I x,I y){R x^y;}V ox(I x,I y){O("%d^%d %d\n",x,y,xor(x,y));}
+
 //c[i]{n:0;W(x>1){x:$[x&1;(\x)+x+1;/x];n+:1};n}
 I c(I n){I c=0;W(n!=1){n=n&1?(n<<1)+n+1:n>>1;c++;}R c;}//!< all numbers lead to one
 
@@ -24,6 +26,9 @@ ZI mrg(I*b,I*x,I l,I h,I d){
     P((m=b[l])<0,(b[l]=h,t))}
 
 I main(V){
+
+  ox(1,1);
+
   I l=9;O("c[%d]=%d\n",l,c(l));
 
   I d=0,r[10]={0},o[10]={0},x[10]={8,9,3,5,6,0,7,2,1,4};

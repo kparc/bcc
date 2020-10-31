@@ -65,13 +65,11 @@ ZK1(se){
  P(!xn,c2("!("[!t],")  0   `"[t]))
  x=sS(";      "[t],e1(se,x));
  R!t?cj('(',jc(x,')')):x;}
-#define DIS 0 //!< \fixme DIS condition too crude to detect (src;bin) tuple
-K1(o){I d=DIS?!Ax&&2==xn&&3==xyu:0;K y=QQ-Ax?d?cj(' ',r1(xx)):se(x):j2(kp((K)"err: "),kp((S)(-1UL>>16&(J)x)));Y0(write(2,y,yn)),nl();if(d)dis(xy,0);R x;}
-ZK1(pr){if(NL-x)r0(o(x));R x;}
+K1(o){K y=QQ-Ax?se(x):j2(kp((K)"err: "),kp((S)(-1UL>>16&(J)x)));Y0(write(2,y,yn)),nl();R x;}ZK1(pr){if(NL-x)r0(o(x));R x;}
 ZS1(ld){J n;Q(s=mf(s,&n))S t=s,u;I a,d=0;W(t<s+n&&d>=0){u=sc(t,10),*u++=0,a=t[1]?0:(*t=='/')-(*t=='\\');if(!d&&!a&&'/'-*t)Q(pr(es(t)))d+=a,t=u;}if(n)munmap(s,n);R NL;}
 ZS1(tm){S t=sc(s,' ');Qs(!t,s)*t=0;I n=':'-*s++?1:10u>*s-'0'?ip(s,t-s):(J)es(s);K x='\\'-*++t?ps(t):0,r;F a=ms();N(n,Q(r=x?ex(x):ld(t+3))r0(r))if(x)r0(x);R ki(ms()-a);}
 ZS1(es){K x;P('\\'-*s,!*s?NL:(x=ps(s))&&NL-x?X0(ex(x)):x)if(!*++s||'\\'==*s)exit(0);R!s[1]?'w'==*s?ki(W):sc("vf",*s)?vf('f'==*s):qs(s):'t'==*s?tm(s+1):'l'==*s?ld(s+2):qs(s);}
-V km(S*a){N(26,G[i]=NL)*(K*)(K0=kK(0))=c0();if(*++a)pr(ld(*a));O("kparc/b x64\n");W(1)pr(es(r2(" ")));}I main(I ac,char**av){R csr(),km((S*)av),0;}
+V km(S*a){N(26,G[i]=NL)*(K*)(K0=kK(0))=c0();if(*++a)pr(ld(*a));os("kparc/b x64");W(1)pr(es(r2(" ")));}I main(I ac,char**av){R csr(),km((S*)av),0;}
 K1(enm){K r=kI(xi);N(rn,Ri=i)R r;}
 
 //:~

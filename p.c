@@ -12,7 +12,8 @@ ZK pF(K x,I b,ST st){R KF-b||KF==t(x)?x:Ax&&126<xi?n(kf(xi-128)):u(KF,k2(kc('%')
 I c(I c){R 128>c?"   +$++ ()++ + +0000000000+;+++  aaaaaaaaaaaaaNaaaaaaaaWaaa[+]+ `aaaaaaaaaaaaaaaaaaaaaaaaaa{+} "[c-32]:0;}
 
 K p(ST st){K x,y;I a,b;//!< parser
- switch('0'-c('-'==(a=*Ss++)?Ss['.'==*Ss]:'.'==a?*Ss:a)?c(a):'0'){
+ C sw='0'-c('-'==(a=*Ss++)?Ss['.'==*Ss]:'.'==a?*Ss:a)?c(a):'0';
+ switch(sw){
   case'N':T[sN++]=KI;
   C('W',R++Ss,x=p(st),++Ss,x=k3(kc(a),x,p(st)),sN-='N'==a,x)
   case'$':++Ss;
@@ -23,6 +24,7 @@ K p(ST st){K x,y;I a,b;//!< parser
   C('0',P('2'==a&&'*'==*Ss,++Ss,x=p(st),u(t(x),k2(kc('\\'),x)))--Ss;x=n(Na()))
   case'a':x='['==*Ss?++Ss,Ee(T[b=a-'a']?T[b]-8:(x=G[b],x=xy,D0=MX(D0,x[xn-2]),D1=MX(D1,x[xn-1]),xu),a,st):kc(a);break;
   default:AB(Ss-1);}
+
  P(qt(),x)if('+'-c(a=*Ss++))AB(Ss-1);if(':'==*Ss)++Ss,a+=128;
  y=p(st);b=t(y);
  $(':'==a&&Ax,T[xi-'a']=b)b='%'-a?MX(b,t(x)):KF;

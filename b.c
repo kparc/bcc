@@ -13,25 +13,28 @@ ZK pop(I t,I x){R rex(0,0,x,c1(0x58+(7&A[x])));}//<! psh/pop tautology
 ZK tst(I t,I x){R KF==t?AB("tst"):i(0x85,x,x);}                                                                                                                             
 ZK Jj(K x,I n){R cj(0x0f,c5(16+x[xn],n-4));}
 ZK cll(I c){R c5(0xe8,c);}
-
-//                                                 0123456789012
-ZI l(S s,I c){S t=sc(s,c);R t?t-s:0;}I U(I i){R l(" +-*%^&|  <=>",i);}
+  
+//                                                 01234567890123
+ZI l(S s,I c){S t=sc(s,c);R t?t-s:0;}I U(I i){R l(" +-*% &|  <=>",i);}
 
 ZK o2f(I o,I x,I y){//O("o2f: o %d x %d y %d\n",o,x,y);
- //                  0    1    2     3    4    5    6
- //      ints:     mov  add  sub  imul  xor  cmp  and
- R 127>y?i((I[]){0x8b,0x03,0x2b,0x0faf,0x33,0x3b,0x23}[o],x,y)://!< 05741=add,sub,cmp,and,or
+ //                  0    1    2     3    4    5    6   7   8   9   10
+ //ints:          mov  add  sub   imul       cmp  and              xor
+ R 127>y?i((I[]){0x8b,0x03,0x2b,0x0faf, 0x0,0x3b,0x23,0x0,0x0,0x0,0x33}[o],x,y)://!< 05741=add,sub,cmp,and,or
    rex(0,0,x,o?c3(0x83,m(3," \0\5  \7\4\1"[o],A[x]),y-128):c5(0xb8+(7&A[x]),y-128));}//!< move to register x
 //                          0 1 234 5 6 7
 
 //!return object code to execute opcode o with arguments x and y and leave the argument of type t in register r
-ZK o2(I t,I o,I r,I x,I y){K z;P(KF==t,8u>y-8?AB("vex"):j2(c2(0xc5,16*(8&~r)+8*(15&~x)+(5-o?3:1)),
- //  for fp (with 0f prefix): i2f int to float
- //      mov  add  sub  mul  div  cmp      i2f
- h((C[]){0x10,0x58,0x5c,0x59,0x5e,0x2e,0,0,0x2a}[o],r,y)))I a=126<y,s;
+ZK o2(I t,I o,I r,I x,I y){K z;//O("o: t=%c o=%d r=%d x=%d y=%d\n"," chijefs CHIJEFS"[t],o,r,x,y);
+ P(KF==t,8u>y-8?AB("vex"):j2(c2(0xc5,16*(8&~r)+8*(15&~x)+(5-o?3:1)),
+  // for fp (with 0f prefix): i2f int to float
+  //         0    1    2    3    4    5 6 7    8
+  //       mov  add  sub  mul  div  cmp      i2f
+  h((C[]){0x10,0x58,0x5c,0x59,0x5e,0x2e,0,0,0x2a}[o],r,y)))
+ I a=126<y,s;
  P(0<=o&&r==x&&(!a||3-o),4-o?o2f(o,r,y):129-y?AB("/"):i(0xd1,16+7,r))//<!shl/shr
-  P(0<o&&r==y,z=o2f(o,r,x),2-o?z:j2(z,i(0xf7,16+3,r)))//<!neg
-  P((a?3:1)<o,j2(o2f(0,r,x),o2f(o,r,y)))//     mov  mov     lea  imul
+ P(0<o&&r==y,z=o2f(o,r,x),2-o?z:j2(z,i(0xf7,16+3,r)))//<!neg
+ P((a?3:1)<o,j2(o2f(0,r,x),o2f(o,r,y)))//      mov  mov      lea imul
  R s=0<o?0:3+(o+1)/2,rex(r,a?0:y,x,c3(0>o?1&o?0x8b:0x89:3-o?0x8d:0x6b,m(3-o?a:3,A[r],a?A[x]:4),a?(2-o?y-128:128-y)<<s:m(s,A[y],A[x])));}
 
 ZK cm(I t,I x,I y){R o2(t,5,x,x,y);}ZK cv(I x,I y){R o2(KF,8,x,x,A[y]);}ZK sh(I t,I r){R AB("sh");}
@@ -43,12 +46,12 @@ ZI ln(S s){I o=*s++,h=o/16,p=0xc5==o?2:0x0f==o;R 4==h?1+ln(s):RET==o||5==h?1:*JJ
 ZV lnk(K x,K z,I a){S s=x;W(s<x+xn){I n=ln(s+=4==*s/16),p=0xc5==*s?2:0x0f==*s;S r=s+n-4;
  if(0xe8==*s||(p?8-s[1]/16:4>*s/16||8==*s/16)&&5==(0xc7&s[1+p]))*(I*)r=(0xe8==*s?a-'a'==*r?x:26==*r?(S)l1:((K*)G[*r])[1]:32>*r?(S)&zF[2+*r-16]:(S)(G+*r-'a'))-r-4;s+=n;}}
 
-//!disasm: pretty print opcodes
-V dis(K x,I d){if(d)w2(px(xu));oc(" :"[d]);S s=x;W(s<x+xn-2){N(ln(s),w2(px(*s++)))oc(' ');}if(d)N(2,w2(px(*s++)))nl();}
+//!disasm: pretty print opcodes and ret type
+V dis(K x){S s=x;W(s<x+xn-2){N(ln(s),w2(px(*s++)))oc(' ');}N(2,w2(px(*s++)))oc(' ');oc(KS<xu?'K':KF==xu?'f':'j');nl();}
 
 K u(I u,K x){R xu=u,x;}
 ZK jmp(I n){R n<-128||n>127?c5(JJ[4],0>n?n-3:n):c2(*JJ,n);}
-ZK O2(I t,I f,I r,K x,K y){I i=Ay?yi:yu;R u(r,j3(Ay?c0():y,x,10>f?o2(t,f,r,xu,i):j2(cm(t,xu,i),16>r?cc(f-9,r):c1(f-9))));}
+ZK O2(I t,I f,I r,K x,K y){I i=Ay?yi:yu;R u(r,j3(Ay?c0():y,x,U('<')>f?o2(t,f,r,xu,i):j2(cm(t,xu,i),16>r?cc(f-9,r):c1(f-9))));}
 ZK SH(I t,K y){R u(yu,j2(y,sh(t,yu)));}
 ZK ZR(I t,C r){R u(r,o2(t,2,r,r,r));}
 ZK MV(I t,I r,K y){R O2(t,0,r,u(r,c0()),y);}
@@ -97,17 +100,18 @@ ZK d(I r,K x,ST st){
 K ps(S tp){Ss=tp;pst t={{0},{0},0,{1,1},8,0};ST st=&t;//pst t;ST st=&t;sA=M=0;sN=8;D0=D1=1;N(26,L[i]=T[i]=0)N(26,O("%d %d\n",L[i],T[i]))
  S r='['==Ss[1]&&(r=sc(Ss,']'))&&*++r?r:0;K*k=r||':'==Ss[1]?sA=*Ss,Ss+=2,G+sA-'a':0;
  P('!'==*Ss,++Ss,X(k,enm(ki(ip(Ss,strlen(Ss))))))
+ if(!Ss[1]&&26u>*Ss-'a'){K x=G[*Ss-'a'];P(NL==x,w2("err: "),oc(*Ss),nl(),x)P(!Ax&&!xt,os(xx),dis(xy),NL)}
  z=k2(kp(Ss-!!k),NL);//<!(src;bin)
- if(!Ss[1]&&26u>*Ss-'a')r1(G[*Ss-'a']);
+ //if(!Ss[1]&&26u>*Ss-'a')r1(G[*Ss-'a']);
  if(r){X(k,k2(r1(zx),u(KI,c2(1,1))));N(r-Ss-1,L[23+i]=D0++,T[23+i]=l(" chijefs CHIJEFS",Ss[i]))Ss=r;}//!< fixme 23 aka increase argcount limit
  K x=p(st);//o(x);//!< dump parse tree
  N(23,if(Ti)Li=D[KF==Ti]++)//!< inner scope masks outer
  I qfv=Ax||'$'-*x;//<! f/v compile or print
  zy=j2(X0(qfv?f(0,x,st):v(0,x,0,st)),c3(RET,D0,D1));
- zy=u(t(x),zy);lnk(zy,z,sA);//dis(zy,1); //!< disasm
+ zy=u(t(x),zy);lnk(zy,z,sA);//dis(zy);//!< disasm
  R k?X(k,r?z:Z0(ex(z))):z;}
 
-K1(ex){//!< ("[i]{sourcecode}";0xrtype0xopcodes0xconsts) xyu is ret type:
+K1(ex){//!<("[i]{sourcecode}";0xrtype0xopcodes0xconsts) xyu is ret type
  obj o;R o.code=xy,KS<xyu?o.k():KF==xyu?kf(o.f()):ki(o.j());}//<! k|f|j
 
 //:~

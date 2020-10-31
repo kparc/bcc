@@ -6,6 +6,7 @@ typedef unsigned char C,*S,*K;typedef int I;typedef long long J;typedef double F
 
 #define R return
 #define P(b,a...)   if(b)return(a);
+//#define P(b,a...) if(b)R({a;});
 #define N(n,a...)   {I i=0,_n=(n);while(i<_n){a;++i;}}
 #define W(b...)     while((b))              //while
 #define $(b,a...)   if(b){a;}else           //cond
