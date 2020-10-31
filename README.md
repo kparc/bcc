@@ -1,5 +1,5 @@
-a `b` compiler
-==============
+## a `b` compiler
+
 
 `bcc` is an interactive compiler of a language called `b`.
 
@@ -24,7 +24,9 @@ b : +-*%^&|<> =  /  \   $[c;t;f]
 c = +-*/^&|<> == << >>  if(c)t;else f;
 ```
 
-argtypes for x,y,z are declared, local types and result type are inferred.
+argtypes for `x,y,z` are declared, local types and result type are inferred.
+
+### examples
 
 bsearch:
 
@@ -82,7 +84,7 @@ c:  e8 ef ff ff ff          call   0
 594:   c3                   retq
 ```
 
-source:
+### source
 
 `a.S`  kernel interface
 `a.c`  runtime
@@ -96,6 +98,8 @@ source:
 
 `ex()` run
 
+### porting
+
 for riscv, arm, xtensa we need:
 
 ```
@@ -103,7 +107,7 @@ jmp() tst() cmp()  o2()
 ret() cll() psh() pop()
 ```
 
-faq
+### faq
 
 there is no license. use at our own risk.
 
