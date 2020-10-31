@@ -47,22 +47,22 @@ clang -Os 534889f04885ff7423488d5fff4885c0740d48ffc84889c6e8e3ffffffeb05b8010000
 
 that is:
 
-```<a>:
-0:  85 ff                   test   edi,edi
-2:  74 1c                   je     0x20
-4:  85 f6                   test   esi,esi
-6:  74 0e                   je     0x16
-8:  83 ee 01                sub    esi,1
-b:  57                      push   rdi
-c:  e8 ef ff ff ff          call   0
-11: 5f                      pop    rdi
-12: 8b f0                   mov    esi,eax
-14: eb 05                   jmp    0x1b
-16: be 01 00 00 00          mov    esi,1
-1b: 83 ef 01                sub    edi,1
-1e: eb e0                   jmp    0
-20: 8d 46 01                lea    eax,[rsi+1]
-23: c3                      ret
+```
+0:     85 ff                test   edi,edi
+2:     74 1c                je     0x20
+4:     85 f6                test   esi,esi
+6:     74 0e                je     0x16
+8:     83 ee 01             sub    esi,1
+b:     57                   push   rdi
+c:     e8 ef ff ff ff       call   0
+11:    5f                   pop    rdi
+12:    8b f0                mov    esi,eax
+14:    eb 05                jmp    0x1b
+16:    be 01 00 00 00       mov    esi,1
+1b:    83 ef 01             sub    edi,1
+1e:    eb e0                jmp    0
+20:    8d 46 01             lea    eax,[rsi+1]
+23:    c3                   ret
 
 564:   53                   push   %rbx
 565:   48 89 f0             mov    %rsi,%rax
