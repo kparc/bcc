@@ -101,7 +101,7 @@ K ps(S tp){Ss=tp;pst t={{0},{0},0,{1,1},8,0};ST st=&t;//pst t;ST st=&t;sA=M=0;sN
  if(!Ss[1]&&26u>*Ss-'a')r1(G[*Ss-'a']);
  if(r){X(k,k2(r1(zx),u(KI,c2(1,1))));N(r-Ss-1,L[23+i]=D0++,T[23+i]=l(" chijefs CHIJEFS",Ss[i]))Ss=r;}
  K x=p(st);//o(x);//!< dump parse tree
- N(23,if(Ti)Li=D[KF==Ti]++)
+ N(23,if(Ti)Li=D[KF==Ti]++)//!< inner scope masks outer
  I qfv=Ax||'$'-*x;//<! f/v compile or print
  zy=j2(X0(qfv?f(0,x,st):v(0,x,0,st)),c3(RET,D0,D1));
  zy=u(t(x),zy);lnk(zy,z,sA);//dis(zy,1); //!< disasm
