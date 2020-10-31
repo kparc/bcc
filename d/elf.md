@@ -1,3 +1,15 @@
+how to elf with style:
+
+```
+$ nasm -f bin -o x x.S && chmod +x x && ./x; echo $?
+1
+$ ls -l x
+-rwxr-xr-x 1 root root 127 Oct 30 17:23 x
+```
+
+that is:
+
+```
 BITS 64
     org     0x10000
 e:                                                  ; Elf64_Ehdr
@@ -32,3 +44,6 @@ a:
             mov     al,  60
             syscall
 n equ $-$$
+```
+
+remarkable.
