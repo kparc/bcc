@@ -111,9 +111,3 @@ K1(ex){//!< ("[i]{sourcecode}";0xrtype0xopcodes0xconsts) xyu is ret type:
  obj o;R o.code=xy,KS<xyu?o.k():KF==xyu?kf(o.f()):ki(o.j());}//<! k|f|j
 
 //:~
-
-```
-f[Ii:a b]{}
-```
-where `:argnames` is optional defaulting to `xyz`
-
