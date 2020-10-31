@@ -99,7 +99,7 @@ K ps(S tp){Ss=tp;pst t={{0},{0},0,{1,1},8,0};ST st=&t;//pst t;ST st=&t;sA=M=0;sN
  P('!'==*Ss,++Ss,X(k,enm(ki(ip(Ss,strlen(Ss))))))
  z=k2(kp(Ss-!!k),NL);//<!(src;bin)
  if(!Ss[1]&&26u>*Ss-'a')r1(G[*Ss-'a']);
- if(r){X(k,k2(r1(zx),u(KI,c2(1,1))));N(r-Ss-1,L[23+i]=D0++,T[23+i]=l(" chijefs CHIJEFS",Ss[i]))Ss=r;}
+ if(r){X(k,k2(r1(zx),u(KI,c2(1,1))));N(r-Ss-1,L[23+i]=D0++,T[23+i]=l(" chijefs CHIJEFS",Ss[i]))Ss=r;}//!< fixme 23 aka increase argcount limit
  K x=p(st);//o(x);//!< dump parse tree
  N(23,if(Ti)Li=D[KF==Ti]++)//!< inner scope masks outer
  I qfv=Ax||'$'-*x;//<! f/v compile or print
@@ -111,3 +111,9 @@ K1(ex){//!< ("[i]{sourcecode}";0xrtype0xopcodes0xconsts) xyu is ret type:
  obj o;R o.code=xy,KS<xyu?o.k():KF==xyu?kf(o.f()):ki(o.j());}//<! k|f|j
 
 //:~
+
+```
+f[Ii:a b]{}
+```
+where `:argnames` is optional defaulting to `xyz`
+
