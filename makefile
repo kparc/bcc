@@ -1,5 +1,5 @@
 CF=-minline-all-stringops -fno-asynchronous-unwind-tables -fno-stack-protector -Wall -Wno-pointer-sign -Wno-strict-aliasing -Wno-parentheses -Wno-unused-value -Wno-misleading-indentation -Wno-unused-function
-#LF=-nostdlib -c s.S
+#LF=-nostdlib -c a.S
 SRC=a.c b.c p.c
 O=-O0 -g
 
