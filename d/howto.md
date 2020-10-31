@@ -6,7 +6,7 @@
 5. consider `git config pull.rebase true`
 6. tabs and `\r\n` are evil, dangling space is not cool, indent is `0x20`
 7. enjoy responsibly when you push to master
-8. once there are tests, consider a pre-commit hook
+8. consider `make test` pre-commit hook
 9. code comments are essential, kparc uses doxygen
 10. kparc code is 99% reflection 1% keyboard
 
