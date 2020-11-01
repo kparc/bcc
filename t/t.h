@@ -4,7 +4,7 @@
 
 #define NONE 0
 
-ZJ W0=0;//!< wssize
+ZJ W0=0,Wprev;//!< wssize
 
 extern V init();K1(enm);K1(pr);K Li(K x,I i),sS(I c,K x);S1(es);K pcle(S tp,I dbg);K1(se);//!< NB never forget signatures
 
@@ -29,12 +29,13 @@ V setUp(V){}V tearDown(V){}//!< before/after each test
   C('L',EQ_I(I(act),exp,msg)) \
   ,TEST_ASSERT_MESSAGE(0,"unknown type"))
 
-#define _(act,exp,msg,cleanup...) if(TYPE(act)=='S'){K x=str((S)(J)(act));\
+#define _(act,exp,msg,cleanup...) Wprev=ws();if(TYPE(act)=='S'){K x=str((S)(J)(act));\
   if(xQ(x)){TEST_ASSERT_EQUAL_STRING_MESSAGE(qs(exp),qs(x),msg);r0(x);}\
   else{ASSERT(x,exp,msg)}}else{ASSERT(act,exp,msg)};cleanup;
 
-#define PT(act,exp,msg) {K x=ptree(act);TEST_ASSERT_EQUAL_STRING_MESSAGE(exp,(S)x,msg);r0(x);}
+#define PT(act,exp,msg) {Wprev=ws();K x=ptree(act);TEST_ASSERT_EQUAL_STRING_MESSAGE(exp,(S)x,msg);r0(x);}
 #define WS(exp,msg)     {TEST_ASSERT_EQUAL_INT_MESSAGE(exp,ws()-W0,msg);}
+#define WS0(msg)        {TEST_ASSERT_EQUAL_INT_MESSAGE(0,ws()-Wprev,msg);}
 
 #define TESTS(units...) I main(I a,char**c){init();UNITY_BEGIN();units;R UNITY_END();}
 #define UNIT(name,tests...) V test##_##name(V){W0=ws();tests;WS(0,"test unit shouldn't leak memory")};
