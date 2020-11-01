@@ -43,7 +43,7 @@ K p(ST st){K x,y;I a,b;    //!< a operator, x/y operands, b return type
   C('[',R E(X2,a))         //!< parse a dyadic expression inside []
   C('(',x=p(st),++Ss)      //!< parse fenced expression
   C('0',                   //!< number
-    P('2'==a&&'*'==*Ss,++Ss,x=p(st),u(t(x),k2(kc('\\'),x)))//!< override 2*x as right shift /x and return
+    P('2'==a&&'*'==*Ss,++Ss,x=p(st),u(t(x),k2(kc('\\'),x)))//!< override 2*x as monadic left shift (\x) and return
     --Ss;x=n(Na()))        //<! parse number
   C('a',                   //<! identifier:
     x='['==*Ss?++Ss,E(     //<! a) if followed by [exp], it is an array indexing or a function call:
