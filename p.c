@@ -19,7 +19,7 @@ ZK pE(I a,I c,ST st){      //!< parse an expr \c cmd \a optional rettype
   W(';'==*Ss++);           //<! semicolon is the expression separator
  R u(a?a:t(x),r);}         //<! set the given rettype, or the rettype of last expr
 
-ZK pF(K x,I b,ST st){R KF-b||KF==t(x)?x:Ax&&126<xi?n(kf(xi-128)):u(KF,k2(kc('%'),x));}//!< cast rettype to float if needed
+ZK pF(K x,I b,ST st){R KF-b||KF==t(x)?x:Ax&&126<xi?n(kf(xi-128)):u(KF,k2(kc('%'),x));}//!< promote rettype to float if needed
 
 #include"p.h"//pE->E,pF->f
 
@@ -37,10 +37,10 @@ K p(ST st){K x,y;I a,b;    //!< a operator, x/y operands, b return type
    sN-='N'==a,x)           //<! undeclare loop var for N
   case'$':++Ss;            //!< $[ctf], fallthrough
   C('{',R E(0,a))          //!< inner scope, return enclosed expression
-  C('+',R x=p(st),         //!< operator
+  C('+',R x=p(st),         //!< an operator
    //!rettype: #x is int (count), x%y is float (div), *x is list type (first), others retain right operand type
    u('#'==a?KI:'%'==a?KF:t(x)-8*('*'==a),k2(kc(a),x)))
-  C('[',R E(12,a))
+  C('[',R E(X2,a))         //!< parse a dyadic expression inside []
   C('(',x=p(st),++Ss)      //!< parse fenced expression
   C('0',                   //!< number
     P('2'==a&&'*'==*Ss,++Ss,x=p(st),u(t(x),k2(kc('\\'),x)))//!< override 2*x as right shift /x and return
@@ -58,7 +58,7 @@ K p(ST st){K x,y;I a,b;    //!< a operator, x/y operands, b return type
  P(qt(),x)                  //<! if reached expr end, return the parse tree
  if('+'-c(a=*Ss++))AB(Ss-1);//<! otherwise next char should be an operator, bail if not
  if(':'==*Ss)++Ss,a+=128;   //<! for assignment, set high bit of op char byte
- y=p(st);b=t(y);            //<! parse right argument into y and get its type into b
+ y=p(st);b=t(y);            //<! parse right operand into y and get its type into b
  $(':'==a&&Ax,T[xi-'a']=b)  //<! for assignment, set result type to the type of the right operand
  b='%'-a?MX(b,t(x)):KF;     //<! for div, force it to float, for the rest, use the widest one (KF>KJ>KI>KC)
 
