@@ -59,9 +59,11 @@ K1(se){
  P(Ax,
    KS==Ax?c2('`','a'+xi):
    KC==Ax?X0(c(x=c1(xi))):
-   kp(KI==Ax?pi(xi):
-   KF==Ax?pf(xf):
-   (S)"+"+!xi))
+   kp(
+    KI==Ax?pi(xi):
+    KF==Ax?pf(xf):
+    (S)"+"+!xi)
+ )
  P(8==xt,l2(x))//< fixme nyi
  P(1==xn,cj(',',se(Li(x,0))))
  I t=KS<xt?0:xt;

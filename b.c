@@ -105,7 +105,7 @@ K pcle(S tp,I dbg){Ss=tp;pst t={{0},{0},0,{1,1},8,0};ST st=&t;//pst t;ST st=&t;s
  z=k2(kp(Ss-!!k),NL);//<!(src;bin)
  //if(!Ss[1]&&26u>*Ss-'a')r1(G[*Ss-'a']);
  if(r){X(k,k2(r1(zx),u(KI,c2(1,1))));N(r-Ss-1,L[23+i]=D0++,T[23+i]=l(" chijefs CHIJEFS",Ss[i]))Ss=r;}//!< fixme 23 aka increase argcount limit
- K x=p(st);if(dbg)R x;//o(x);//!< dump parse tree
+ K x=p(st);if(dbg)R r0(z),x;//o(x);//!< dump parse tree
  N(23,if(Ti)Li=D[KF==Ti]++)//!< inner scope masks outer
  I qfv=Ax||'$'-*x;//<! f/v compile or print
  zy=j2(X0(qfv?f(0,x,st):v(0,x,0,st)),c3(RET,D0,D1));
