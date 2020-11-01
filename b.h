@@ -2,14 +2,14 @@
 
 typedef union{V*code;K(*k)();F(*f)();J(*j)();}obj; //!<signatures of compiled funs
 
-// local scope:
-// D0 local vars/args, D1 local floats
-// L/T values and types of D
-// N loop counter var name (i,j,k,l..) 
-// M used register count
+// local scope
+// D0   local vars/args, D1 local floats
+// L/T  values and types of D
+// N    loop counter var name (i,j,k,l..)
+// M    used register count
 typedef struct{C L[26];C T[26];I M;C D[2];C N;I A;}pst;typedef pst*ST;
 
-//! shortcuts for scope:
+//! scope accessors
 #define L  st->L
 #define D  st->D
 #define T  st->T
