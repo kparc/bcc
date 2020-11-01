@@ -68,7 +68,7 @@ ZK1(se){
  R!t?cj('(',jc(x,')')):x;}
 
 K1(o){K y=QQ-Ax?se(x):j2(kp((K)"err: "),kp((S)(-1UL>>16&(J)x)));Y0(write(2,y,yn)),nl();R x;}K1(pr){if(NL-x)r0(o(x));R x;}
-ZS1(ld){J n;Q(s=mf(s,&n))S t=s,u;I a,d=0;W(t<s+n&&d>=0){u=sc(t,10),*u++=0,a=t[1]?0:(*t=='/')-(*t=='\\');if(!d&&!a&&'/'-*t)Q(pr(es(t)))d+=a,t=u;}if(n)munmap(s,n);R NL;}
+ZS1(ld){J n;Q(s=mf(s,&n))S t=s,u;I a,d=0;W(u=sc(t,10),t<s+n&&d>=0){if(u)*u++=0;a=t[1]?0:(*t=='/')-(*t=='\\');if(!d&&!a&&'/'-*t)Q(pr(es(t)))d+=a,t=u;if(!t)break;}if(n)munmap(s,n);R NL;}
 ZS1(tm){S t=sc(s,' ');Qs(!t,s)*t=0;I n=':'-*s++?1:10u>*s-'0'?ip(s,t-s):(J)es(s);K x='\\'-*++t?ps(t):0,r;F a=ms();N(n,Q(r=x?ex(x):ld(t+3))r0(r))if(x)r0(x);R ki(ms()-a);}
 S1(es){K x;P('\\'-*s,!*s?NL:(x=ps(s))&&NL-x?X0(ex(x)):x)if(!*++s||'\\'==*s)exit(0);R!s[1]?'w'==*s?ki(W):sc("vf",*s)?vf('f'==*s):qs(s):'t'==*s?tm(s+1):'l'==*s?ld(s+2):qs(s);}
 V init(){csr();N(26,G[i]=NL)*(K*)(K0=kK(0))=c0();}K enm(J x){K r=kI(xi);N(rn,Ri=i)R r;}
