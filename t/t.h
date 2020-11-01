@@ -6,7 +6,7 @@
 
 extern V init();K1(enm);K1(pr);K Li(K x,I i);S1(es);K pcle(S tp,I dbg);K1(se);//!< NB never forget signatures
 
-C xQ(K x){R QQ==A(x);}ZS str(K x){R(S)es(x);}ZS ptree(S s){R se(pcle(s,1));}
+C xQ(K x){R QQ==A(x);}ZS str(K x){R(S)es(x);}ZS ptree(S s){K x=pcle(s,1);R X0(se(x));}
 //ZK out(S x){R pr(es(x));}
 V setUp(V){}V tearDown(V){}//!< before/after each test
 
