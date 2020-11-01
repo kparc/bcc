@@ -30,7 +30,7 @@ UNIT(smoke,//<! basic sanity
    _("f[ii]{x-y}",  NONE, "reassign an exisiting function")
    WS(               144, "reassigning a global shouldn't leak memory")
 
-   _("f[40;2]",       38, "reassigned function should quack")
+   _("f[40;2]",       38, "reassigned function should work as expected")
 
    r0(x);WS(          80, "r0(x) should return memory to the heap")
 
@@ -41,15 +41,15 @@ UNIT(smoke,//<! basic sanity
 
 UNIT(parser,//<! parse trees
 
- PT("#x",    "(\"#\";\"x\")\x01",        "ptree of basic monadic op")
- WS(         0,                          "PT() shouldn't leak memory #1")
+ PT("#x",    "(\"#\";\"x\")",        "ptree of basic monadic op")
+ WS(         0,                      "PT() shouldn't leak memory #1")
 
- PT("2*x",   "(\"\\\";\"x\")\x01",       "2*x should translate to \\x")
- PT("40+2",  "(\"+\";0xa8;0x82)",        "simple inline expression")
- WS(         0,                          "PT() shouldn't leak memory #2")
+ PT("2*x",   "(\"\\\";\"x\")",       "2*x should translate to \\x")
+ PT("40+2",  "(\"+\";0xa8;0x82)",    "simple inline expression")
+ WS(         0,                      "PT() shouldn't leak memory #2")
 
- PT("#x",    "(\"#\";\"x\")",            "ptree of monadic op")
- PT("x+y",   "(\"+\";\"x\";\"y\")",      "ptree of dyadic op")
+ PT("#x",    "(\"#\";\"x\")",        "ptree of monadic op")
+ PT("x+y",   "(\"+\";\"x\";\"y\")",  "ptree of dyadic op")
 )
 
 TESTS(

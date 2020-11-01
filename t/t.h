@@ -6,9 +6,9 @@
 
 ZJ W0=0;//!< wssize
 
-extern V init();K1(enm);K1(pr);K Li(K x,I i);S1(es);K pcle(S tp,I dbg);K1(se);//!< NB never forget signatures
+extern V init();K1(enm);K1(pr);K Li(K x,I i),sS(I c,K x);S1(es);K pcle(S tp,I dbg);K1(se);//!< NB never forget signatures
 
-C xQ(K x){R QQ==A(x);}ZS str(K x){R(S)es(x);}ZK ptree(S s){K x=pcle(s,1);R X0(se(x));}
+C xQ(K x){R QQ==A(x);}ZS str(K x){R(S)es(x);}ZK ptree(S s){K x=pcle(s,1);R X0(jc(se(x),0));}
 //ZK out(S x){R pr(es(x));}
 V setUp(V){}V tearDown(V){}//!< before/after each test
 
@@ -33,7 +33,7 @@ V setUp(V){}V tearDown(V){}//!< before/after each test
   if(xQ(x)){TEST_ASSERT_EQUAL_STRING_MESSAGE(qs(exp),qs(x),msg);r0(x);}\
   else{ASSERT(x,exp,msg)}}else{ASSERT(act,exp,msg)};cleanup;
 
-#define PT(act,exp,msg) {K pt=ptree(act);TEST_ASSERT_EQUAL_STRING_MESSAGE(exp,pt,msg);r0(pt);}
+#define PT(act,exp,msg) {K x=ptree(act);TEST_ASSERT_EQUAL_STRING_MESSAGE(exp,(S)x,msg);r0(x);}
 #define WS(exp,msg)     {TEST_ASSERT_EQUAL_INT_MESSAGE(exp,ws()-W0,msg);}
 
 #define TESTS(units...) I main(I a,char**c){init();UNITY_BEGIN();units;R UNITY_END();}
