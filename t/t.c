@@ -25,9 +25,9 @@ UNIT(smoke,//<! basic sanity
 UNIT(parser,//<! parse trees
 
  PT("40+2", "(\"+\";0xa8;0x82)",        "simple inline expression")
- PT("2*x", "(\"\\\";\"x\")\x01",        "2*x translates to \\x FIXME trailing gunk")
- PT("x+y", "(\"+\";\"x\";\"y\")",       "dyadic operator") 
-
+ PT("#x",   "(\"#\";\"x\")\x01",        "basic monadic op ptree should be sane")
+ PT("x+y",  "(\"+\";\"x\";\"y\")",      "basic dyadic op ptree should be sane") 
+ PT("2*x",  "(\"\\\";\"x\")",           "2*x should translate to \\x FIXME trailing gunk")
 )
 
 TESTS(
