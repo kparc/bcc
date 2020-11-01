@@ -27,7 +27,7 @@ V setUp(V){}V tearDown(V){}//!< before/after each test
   C('L',EQ_I(I(act),exp,msg)) \
   ,TEST_ASSERT_MESSAGE(0,"unknown type"))
 
-#define _(act,exp,msg,cleanup...) if(TYPE(act)=='S'){K x=str((S)(J)act);\
+#define _(act,exp,msg,cleanup...) if(TYPE(act)=='S'){K x=str((S)(J)(act));\
   if(xQ(x)){TEST_ASSERT_EQUAL_STRING_MESSAGE(qs(exp),qs(x),msg);r0(x);}\
   else{ASSERT(x,exp,msg)}}else{ASSERT(act,exp,msg)};cleanup;
 

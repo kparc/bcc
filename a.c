@@ -11,13 +11,10 @@
 ZF ms(){J a,d;asm volatile("rdtsc":"=a"(a),"=d"(d));R((d<<32)+a)*.58e-6;}//<! fixme .58e-6
 V w2(S s){write(2,s,strlen((char*)s));}ZS r2(S s){ZC b[256];R w2(s),b[read(0,b,256)-1]=0,b;}
 
-ZS ma(I d,J n){ZJ p=0x70000000L;p+=d?0:n;
-	V*r=mmap((V*)(d?0:p-n),n,PROT_READ|PROT_WRITE|PROT_EXEC,d?MAP_PRIVATE:(MAP_ANON|MAP_PRIVATE|MAP_FIXED),d-!d,0);
-	P(r==MAP_FAILED,O("%s\n",strerror(errno)),(S)0)R r;}
-
+ZS ma(I d,J n){ZJ p=0x70000000L;p+=d?0:n;V*r=mmap((V*)(d?0:p-n),n,PROT_READ|PROT_WRITE|PROT_EXEC,d?MAP_PRIVATE:(MAP_ANON|MAP_PRIVATE|MAP_FIXED),d-!d,0);P(r==MAP_FAILED,O("%s\n",strerror(errno)),(S)0)R r;}
 ZS mf(S s,J*n){struct stat b;I d=open(s,0);Qs(0>d,s)R fstat(d,&b),s=(*n=b.st_size)?ma(d,*n):s,close(d),s;}
 
-//! printf scanf (almost:)
+//! printf/scanf (almost:)
 ZC b[24];ZS ng(S s){R*--s='-',s;}
 ZS pu(S s,J i){J j;do*--s='0'+i-10*(j=i/10);W(i=j);R s;}
 ZF x(I n){F e=1;N(n,e*=10)R e;}//P(NI==f||0>(j|k),nf)
@@ -41,7 +38,7 @@ ZK m1(J n){K x,r;I i=clzl(n+7),j;P(x=M[i],M[i]=xx,x)j=i;
 
 //      0 1 2 3 4 5 6 7
 //!     K c h i j e f s (arr int8 int16 int32 int64 real double sym)
-J nt[]={8,1,2,4,8,4,8,4};ZJ W=-32;ZV l0();V1(r0){if(Ax||!x)R;if(8==xt){l0(x);R;}if(xr){--xr;R;}if(!xt||KS<xt)N1(xn,r0(Xx))W-=16L<<xm,xx=M[xm],M[xm]=x;}K1(r1){P(Ax,x)R++xr?x:AB("r1");}
+J nt[]={8,1,2,4,8,4,8,4};ZJ W=-32;J ws(){R W;}ZV l0();V1(r0){if(Ax||!x)R;if(8==xt){l0(x);R;}if(xr){--xr;R;}if(!xt||KS<xt)N1(xn,r0(Xx))W-=16L<<xm,xx=M[xm],M[xm]=x;}K1(r1){P(Ax,x)R++xr?x:AB("r1");}
 
 K tn(I t,I n){K x=m1(MX(1,n)*nt[KS<t?0:t]);R W+=16L<<xm,xu=0,xt=t,xn=n,x;}
 ZK xiy(K x,I i,K y){memcpy(x+NX*i,y,NX*yn);if(!yt)N(yn,r1(Yx))R Y0(x);}
@@ -56,10 +53,16 @@ K3(l1){K r=m1(24);R rt=8,rn=3,rx=x,ry=y,rz=z,r;}
 K G[26];V dis(K,I);K es();ZK K0;K k0(){R r1(K0);}ZK vf(I f){K r=kS(0);N(26,K x=G[i];if(NL-x)if(f^(Ax||xt))r=j2(r,ks(i)))R r;}
 K Li(K x,I i){R!xt||KS<xt?Xx:KC==xt?kc(Xc):KI==xt?ki(Xi):ks(Xi);}ZK e1(K(*f)(),K x){K r=kK(xn);N1(rn,Rx=f?f(Li(x,i)):Li(x,i))R r;}
 K sS(I c,K x){I n=c?xn:0;N(xn,K y=Xx;n+=yn)K r=kC(n);if(c)--rn;S s=r;N(xn,K y=Xx;s=memcpy(s,y,yn)+yn;if(c)*s++=c)R X0(r);}
+
 ZK1(c){N(xn,if(94u<Xc-32){K r=kC(2*xn);N(xn,hh(r+2*i,Xc))R j2(c2('0'+xu,'x'),r);})R cj('"',jc(r1(x),'"'));}
 K1(se){
- P(Ax,KS==Ax?c2('`','a'+xi):KC==Ax?X0(c(x=c1(xi))):kp(KI==Ax?pi(xi):KF==Ax?pf(xf):(S)"+"+!xi))
- P(8==xt,l2(x))
+ P(Ax,
+   KS==Ax?c2('`','a'+xi):
+   KC==Ax?X0(c(x=c1(xi))):
+   kp(KI==Ax?pi(xi):
+   KF==Ax?pf(xf):
+   (S)"+"+!xi))
+ P(8==xt,l2(x))//< fixme nyi
  P(1==xn,cj(',',se(Li(x,0))))
  I t=KS<xt?0:xt;
  P(KC==t,c(x))
