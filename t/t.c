@@ -22,8 +22,15 @@ UNIT(smoke,//<! basic sanity
 
    r0(x))
 
+UNIT(parser,//<! parse trees
+
+ PT("40+2", "(\"+\";0xa8;0x82)", "inline expression")
+
+)
+
 TESTS(
  RUN(smoke)
+ RUN(parser)
 )
 
 //:~

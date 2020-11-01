@@ -4,9 +4,10 @@
 
 #define NONE 0
 
-extern V init();K1(enm);K1(pr);K Li(K x,I i);S1(es);//!< NB never forget signatures
+extern V init();K1(enm);K1(pr);K Li(K x,I i);S1(es);K pcle(S tp,I dbg);K1(se);//!< NB never forget signatures
 
-C xQ(K x){R QQ==A(x);}ZS str(K x){R(S)es(x);}//ZK out(S x){R pr(es(x));}
+C xQ(K x){R QQ==A(x);}ZS str(K x){R(S)es(x);}ZS ptree(S s){R se(pcle(s,1));}
+//ZK out(S x){R pr(es(x));}
 V setUp(V){}V tearDown(V){}//!< before/after each test
 
 #define TYPE(expr) (_Generic((expr), \
@@ -29,6 +30,8 @@ V setUp(V){}V tearDown(V){}//!< before/after each test
 #define _(act,exp,msg,cleanup...) if(TYPE(act)=='S'){K x=str((S)(J)act);\
   if(xQ(x)){TEST_ASSERT_EQUAL_STRING_MESSAGE(qs(exp),qs(x),msg);r0(x);}\
   else{ASSERT(x,exp,msg)}}else{ASSERT(act,exp,msg)};cleanup;
+
+#define PT(act,exp,msg) {S pt=ptree(act);TEST_ASSERT_EQUAL_STRING_MESSAGE(exp,pt,msg);}
 
 #define TESTS(units...) I main(I a,char**c){init();UNITY_BEGIN();units;R UNITY_END();}
 #define UNIT(name,tests...) V test##_##name(V){tests;};

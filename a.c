@@ -57,7 +57,7 @@ K G[26];V dis(K,I);K es();ZK K0;K k0(){R r1(K0);}ZK vf(I f){K r=kS(0);N(26,K x=G
 K Li(K x,I i){R!xt||KS<xt?Xx:KC==xt?kc(Xc):KI==xt?ki(Xi):ks(Xi);}ZK e1(K(*f)(),K x){K r=kK(xn);N1(rn,Rx=f?f(Li(x,i)):Li(x,i))R r;}
 K sS(I c,K x){I n=c?xn:0;N(xn,K y=Xx;n+=yn)K r=kC(n);if(c)--rn;S s=r;N(xn,K y=Xx;s=memcpy(s,y,yn)+yn;if(c)*s++=c)R X0(r);}
 ZK1(c){N(xn,if(94u<Xc-32){K r=kC(2*xn);N(xn,hh(r+2*i,Xc))R j2(c2('0'+xu,'x'),r);})R cj('"',jc(r1(x),'"'));}
-ZK1(se){
+K1(se){
  P(Ax,KS==Ax?c2('`','a'+xi):KC==Ax?X0(c(x=c1(xi))):kp(KI==Ax?pi(xi):KF==Ax?pf(xf):(S)"+"+!xi))
  P(8==xt,l2(x))
  P(1==xn,cj(',',se(Li(x,0))))
