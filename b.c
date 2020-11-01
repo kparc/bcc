@@ -51,7 +51,6 @@ ZV lnk(K x,K z,I a){S s=x;W(s<x+xn){I n=ln(s+=4==*s/16),p=0xc5==*s?2:0x0f==*s;S 
 //!disasm: pretty print opcodes and ret type
 V dis(K x){S s=x;W(s<x+xn-2){N(ln(s),w2(px(*s++)))oc(' ');}N(2,w2(px(*s++)))oc(' ');oc(KS<xu?'K':KF==xu?'f':'j');nl();}
 
-K u(I u,K x){R xu=u,x;}
 ZK jmp(I n){R n<-128||n>127?c5(JJ[4],0>n?n-3:n):c2(*JJ,n);}
 ZK O2(I t,I f,I r,K x,K y){I i=Ay?yi:yu;R u(r,j3(Ay?c0():y,x,U('<')>f?o2(t,f,r,xu,i):j2(cm(t,xu,i),16>r?cc(f-9,r):c1(f-9))));}
 ZK SH(I t,K y){R u(yu,j2(y,sh(t,yu)));}
