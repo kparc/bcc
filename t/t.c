@@ -1,7 +1,7 @@
 #include"t.h"
 
 UNIT(smoke,//<! basic sanity
-   WS(         0, "workspace should initally be empty")
+   _(W0,       0, "workspace should initally be empty")
 
    K x=enm(ki(10)), //!< !10
      y=Li(x,5);     //!< list item
@@ -39,7 +39,7 @@ UNIT(parser,//<! parse trees
 
  PT("2*x",   "(\"\\\";\"x\")",           "2*x should translate to \\x")
  PT("40+2",  "(\"+\";0xa8;0x82)",        "simple inline expression")
- WS(         0,                          "PT() shouldn't leak memory #1")
+ WS(         0,                          "PT() shouldn't leak memory #2")
 
  PT("#x",    "(\"#\";\"x\")",            "ptree of monadic op")
  PT("x+y",   "(\"+\";\"x\";\"y\")",      "ptree of dyadic op")
