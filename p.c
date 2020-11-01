@@ -29,7 +29,7 @@ K p(ST st){K x,y;I a,b;    //!< a operator, x/y operands, b return type
   case'$':++Ss;            //!< $[ctf], fallthrough
   C('{',R E(0,a))          //!< inner scope, return enclosed expression
   C('+',R x=p(st),         //!< operator
-   //!rettype: #x is int (count), x%y is float (div), *x is list type (first), others retain operand type
+   //!rettype: #x is int (count), x%y is float (div), *x is list type (first), others retain right operand type
    u('#'==a?KI:'%'==a?KF:t(x)-8*('*'==a),k2(kc(a),x)))
   C('[',R E(12,a))
   C('(',x=p(st),++Ss)      //!< parse fenced expression
