@@ -51,28 +51,28 @@ K3(l1){K r=m1(24);R rt=8,rn=3,rx=x,ry=y,rz=z,r;}
 //! repl daz ftz \wtfvl: \w wssize \t[:n] timer[ntimes] \f funs \v vars \l loadfile
 //! \G global namespace \fixme 1char literals are tough on the ego
 K G[26];V dis(K,I);K es();ZK K0;K k0(){R r1(K0);}ZK vf(I f){K r=kS(0);N(26,K x=G[i];if(NL-x)if(f^(Ax||xt))r=j2(r,ks(i)))R r;}
-K Li(K x,I i){R!xt||KS<xt?Xx:KC==xt?kc(Xc):KI==xt?ki(Xi):ks(Xi);}ZK e1(K(*f)(),K x){K r=kK(xn);N1(rn,Rx=f?f(Li(x,i)):Li(x,i))R r;}
+K Li(K x,I i){R!xt||KS<xt?Xx:KC==xt?kc(Xc):KI==xt?ki(Xi):ks(Xi);}ZK e1(K(*f)(),K x,K y){K r=kK(xn);N1(rn,Rx=f?f(Li(x,i),y):Li(x,i))R r;}
 K sS(I c,K x){I n=c?xn:0;N(xn,K y=Xx;n+=yn)K r=kC(n);if(c)--rn;S s=r;N(xn,K y=Xx;s=memcpy(s,y,yn)+yn;if(c)*s++=c)R X0(r);}
 
-ZK1(c){N(xn,if(94u<Xc-32){K r=kC(2*xn);N(xn,hh(r+2*i,Xc))R j2(c2('0'+xu,'x'),r);})R cj('"',jc(r1(x),'"'));}
-K1(se){
+ZK c(K x,K pt){N(xn,if(94u<Xc-32){K r=kC(2*xn);N(xn,hh(r+2*i,Xc))R j2(c2('0'+xu,'x'),r);})R pt?r1(x):cj('"',jc(r1(x),'"'));}
+K se(K x,K pt){//! string repr of a K object, pt - parse tree mode (skip quotes)
  P(Ax,
    KS==Ax?c2('`','a'+xi):
-   KC==Ax?X0(c(x=c1(xi))):
+   KC==Ax?X0(c(x=c1(xi),pt)):
    kp(
     KI==Ax?pi(xi):
     KF==Ax?pf(xf):
     (S)"+"+!xi)
  )
  P(8==xt,l2(x))//< fixme nyi
- P(1==xn,cj(',',se(Li(x,0))))
+ P(1==xn,cj(',',se(Li(x,0),pt)))
  I t=KS<xt?0:xt;
- P(KC==t,c(x))
+ P(KC==t,c(x,pt))
  P(!xn,c2("!("[!t],")  0   `"[t]))
- x=sS(";      "[t],e1(se,x));
+ x=sS(";      "[t],e1(se,x,pt));
  R!t?cj('(',jc(x,')')):x;}
 
-K1(o){K y=QQ-Ax?se(x):j2(kp((K)"err: "),kp((S)(-1UL>>16&(J)x)));Y0(write(2,y,yn)),nl();R x;}K1(pr){if(NL-x)r0(o(x));R x;}
+K1(o){K y=QQ-Ax?se(x,0):j2(kp((K)"err: "),kp((S)(-1UL>>16&(J)x)));Y0(write(2,y,yn)),nl();R x;}K1(pr){if(NL-x)r0(o(x));R x;}
 ZS1(ld){J n;Q(s=mf(s,&n))S t=s,u;I a,d=0;W(u=sc(t,10),t<s+n&&d>=0){if(u)*u++=0;a=t[1]?0:(*t=='/')-(*t=='\\');if(!d&&!a&&'/'-*t)Q(pr(es(t)))d+=a,t=u;if(!t)break;}if(n)munmap(s,n);R NL;}
 ZS1(tm){S t=sc(s,' ');Qs(!t,s)*t=0;I n=':'-*s++?1:10u>*s-'0'?ip(s,t-s):(J)es(s);K x='\\'-*++t?ps(t):0,r;F a=ms();N(n,Q(r=x?ex(x):ld(t+3))r0(r))if(x)r0(x);R ki(ms()-a);}
 S1(es){K x;P('\\'-*s,!*s?NL:(x=ps(s))&&NL-x?X0(ex(x)):x)if(!*++s||'\\'==*s)exit(0);R!s[1]?'w'==*s?ki(W):sc("vf",*s)?vf('f'==*s):qs(s):'t'==*s?tm(s+1):'l'==*s?ld(s+2):qs(s);}

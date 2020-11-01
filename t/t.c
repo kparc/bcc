@@ -40,15 +40,15 @@ UNIT(smoke,//<! basic sanity
 )
 
 UNIT(parser,//<! parse trees
- PT("#x",    "(\"#\";\"x\")",        "ptree of basic monadic op")
+ PT("#x",    "(#;x)",          "ptree of basic monadic op")
  WS0("PT() shouldn't leak memory #1")
 
- PT("2*x",   "(\"\\\";\"x\")",       "2*x should translate to \\x")
- PT("40+2",  "(\"+\";0xa8;0x82)",    "simple inline expression")
+ PT("2*x",   "(\\;x)",         "2*x should translate to monadic left shift")
+ PT("40+2",  "(+;0xa8;0x82)",  "simple inline expression")
  WS0("PT() shouldn't leak memory #2")
 
- PT("#x",    "(\"#\";\"x\")",        "ptree of monadic op")
- PT("x+y",   "(\"+\";\"x\";\"y\")",  "ptree of dyadic op")
+ PT("#x",    "(#;x)",          "ptree of monadic op")
+ PT("x+y",   "(+;x;y)",        "ptree of dyadic op")
 )
 
 TESTS(
