@@ -38,12 +38,12 @@ K p(ST st){K x,y;I a,b;    //!< a operator, x/y operands, b return type
     --Ss;x=n(Na()))        //<! parse number
   C('a',                   //<! identifier:
     x='['==*Ss?++Ss,E(     //<! a) if followed by [exp], it is an array indexing or a function call:
-     T[b=a-'a']?T[b]-8:    //<! if varname has no type, it is a func call; for arrays, unset high bit
-      (x=G[b],x=xy,        //<! xx is the string, xy the code
-       D0=MX(D0,x[xn-2]),  //<! D[0] and D[1] are stored after RET
+     T[b=a-'a']?T[b]-8:    //<!  if varname has no type, it is a func call; for arrays, unset high bit
+      (x=G[b],x=xy,        //<!  xx is the string, xy is the code
+       D0=MX(D0,x[xn-2]),  //<!  D[0] and D[1] are stored after RET
        D1=MX(D1,x[xn-1]),xu),
-     a                     //<! op is the array|function name
-    ):kc(a))               //<! b) it is variable reference
+     a                     //<!  op is the array|function name
+    ):kc(a))               //<! b) it is variable reference.
   ,AB(Ss-1);}              //<! default: bail on unmapped class or whitespace
 
  P(qt(),x)                  //<! if reached expr end, return the parse tree
@@ -53,7 +53,7 @@ K p(ST st){K x,y;I a,b;    //!< a operator, x/y operands, b return type
  $(':'==a&&Ax,T[xi-'a']=b)  //<! for assignment, set result type to the type of the right operand
  b='%'-a?MX(b,t(x)):KF;     //<! for div force it to float, for the rest take the widest (KF>KJ>KI>KC)
 
- R u(9<U(a)?KI:b,           //<! if U(a)>9 (<=> comparison) force rettype to int
+ R u(9<U(a)?KI:b,           //<! if U(a)>9 (<=> ie comparisons), force rettype to int
   k3(kc(a),f(x,b),f(y,b)));}//<! return (op,left,right)
 
 //S('0'-c('-'==(a=*s++)?s['.'==*s]:'.'==a?*s:a)?c(a):'0',case'N':T[sN++]=KI;
