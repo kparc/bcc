@@ -104,8 +104,22 @@ S bb(S x){C b[BLIM];I n=0,a;S s;x-=1;W(*++x){$(m2(" /",x),s=sc(x,'\n');P(!s,n?x:
 //! parse[->compile->link->exec]
 K pcle(S tp,I dbg){Ss=tp;pst t={{0},{0},0,{1,1},8,0};ST st=&t;//pst t;ST st=&t;sA=M=0;sN=8;D0=D1=1;N(26,L[i]=T[i]=0)N(26,O("%d %d\n",L[i],T[i]))
  S b;P(b=bb(tp),qs(*b?b:(S)"balance"))
+
+#ifdef SYMS
+ K g='a'==cl(*Ss)?sym():NL;
+#endif
+
  if(!tp[1])$(26u>*tp-'a',K x=G[*tp-'a'];Qs(NL==x,tp)P(FN(x),os(xx),dis(xy),NL))R qs(tp);
- S r='['==Ss[1]&&(r=sc(Ss,']'))&&*++r?r:0;K*k=r||':'==Ss[1]?sA=*Ss,Ss+=2,G+sA-'a':0;
+ //if(!*++Ss&&NL!=var){O("RET VARIABLE\n");P(!*GG(var),qs("val"))R*GG(var);}
+
+ S r='['==Ss[1]&&(r=sc(Ss,']'))&&*++r?r:0;
+
+#ifdef SYMS
+ K*k=r||':'==*Ss?sA=g,Ss+=1,GG(g):0;
+#else
+ K*k=r||':'==Ss[1]?sA=*Ss,Ss+=2,G+sA-'a':0;
+#endif
+
  P('!'==*Ss,++Ss,X(k,enm(ki(ip(Ss,strlen(Ss))))))
  z=k2(kp(Ss-!!k),NL);//<!(src;bin)
  if(!Ss[1]&&26u>*Ss-'a')r1(G[*Ss-'a']);

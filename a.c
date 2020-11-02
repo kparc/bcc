@@ -55,15 +55,16 @@ K Li(K x,I i){R!xt||KS<xt?Xx:KC==xt?kc(Xc):KI==xt?ki(Xi):ks(Xi);}ZK e1(K(*f)(),K
 K sS(I c,K x){I n=c?xn:0;N(xn,K y=Xx;n+=yn)K r=kC(n);if(c)--rn;S s=r;N(xn,K y=Xx;s=memcpy(s,y,yn)+yn;if(c)*s++=c)R X0(r);}
 
 ZK c(K x,K pt){N(xn,if(94u<Xc-32){K r=kC(2*xn);N(xn,hh(r+2*i,Xc))R j2(c2('0'+xu,'x'),r);})
-C qt='"';if(pt)qt=2>xn&&'a'==cl(*x)?0:'\'';R!qt?r1(x):cj(qt,jc(r1(x),qt));}
+ C qt='"';if(pt)qt=2>xn&&'a'==cl(*x)?0:'\'';R!qt?r1(x):cj(qt,jc(r1(x),qt));}
 K se(K x,K pt){//! string repr of a K object, pt - parse tree mode (don't use "", skip '' for identifiers)
  P(Ax,
+#ifdef SYMS
+   KS==Ax?cj('`',val(x)):
+#else
    KS==Ax?c2('`','a'+xi):
+#endif
    KC==Ax?X0(c(x=c1(xi),pt)):
-   kp(
-    KI==Ax?pi(xi):
-    KF==Ax?pf(xf):
-    (S)"+"+!xi)
+   kp(KI==Ax?pi(xi):KF==Ax?pf(xf):(S)"+"+!xi)
  )
  P(8==xt,l2(x))//< fixme nyi
  P(1==xn,cj(',',se(Li(x,0),pt)))
