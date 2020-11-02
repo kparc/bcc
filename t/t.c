@@ -120,10 +120,19 @@ UNIT(syms,
    W0=ws();        //! FIXME variable identifiers should probably be excluded from wssize
 )
 
+UNIT(disk,
+   ERR("\\l t/blah.b",   "t/blah.b",      "missing file should report an error")
+     _("\\l t/t.b",       NONE,           "successful file compilation shouldn't report")
+     _("#x",              100,            "loaded and compiled source should produce result")
+     _("\\-x",            NONE,           "releasing the result of compilation should empty the ws")
+)
+
 TESTS(
+
 #ifndef SYMS
    RUN(smoke)RUN(malloc)RUN(errors)RUN(brackets)
    RUN(parser)
+   RUN(disk)
 #else
    RUN(syms)
 #endif
