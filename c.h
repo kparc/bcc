@@ -1,7 +1,7 @@
 #include<string.h>
 #include<stdio.h>
 
-typedef unsigned char C,*S,*K;typedef int I;typedef long long J;typedef double F;typedef void V;
+typedef unsigned char C,*S,*K;typedef int I;typedef long long J;typedef double F;typedef void V;typedef unsigned int UI;
 //V*memcpy();strlen(const char*);//#define P(b,a...)   if(b)return(a);
 
 #define R return
