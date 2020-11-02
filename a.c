@@ -48,7 +48,7 @@ ZK1(l2){R kp("[]");}//!< struct/fixedarray experiment
 ZV1(l0){if((J)xy)l0(xy),l0(xz);xx=M[xm],M[xm]=x;}
 K3(l1){K r=m1(24);R rt=8,rn=3,rx=x,ry=y,rz=z,r;}
 
-//! repl daz ftz \wtfvl: \w wssize \t[:n] timer[ntimes] \f funs \v vars \l loadfile
+//! repl daz ftz \wtfvl: \w wssize \t[:n] timer[ntimes] \f funs \v vars \l loadfile \-var release
 //! \G global namespace \fixme 1char literals are tough on the ego
 K G[26];V dis(K,I);K es();ZK K0;K k0(){R r1(K0);}ZK vf(I f){K r=kS(0);N(26,K x=G[i];if(NL-x)if(f^(Ax||xt))r=j2(r,ks(i)))R r;}
 K Li(K x,I i){R!xt||KS<xt?Xx:KC==xt?kc(Xc):KI==xt?ki(Xi):ks(Xi);}ZK e1(K(*f)(),K x,K y){K r=kK(xn);N1(rn,Rx=f?f(Li(x,i),y):Li(x,i))R r;}
@@ -76,7 +76,8 @@ K se(K x,K pt){//! string repr of a K object, pt - parse tree mode (don't use ""
 K1(o){K y=QQ-Ax?se(x,0):j2(kp((K)"err: "),kp((S)(-1UL>>16&(J)x)));Y0(write(2,y,yn)),nl();R x;}K1(pr){if(NL-x)r0(o(x));R x;}
 ZS1(ld){J n;Q(s=mf(s,&n))S t=s,u;I a,d=0;W(u=sc(t,10),t<s+n&&d>=0){if(u)*u++=0;a=t[1]?0:(*t=='/')-(*t=='\\');if(!d&&!a&&'/'-*t)Q(pr(es(t)))d+=a,t=u;if(!t)break;}if(n)munmap(s,n);R NL;}
 ZS1(tm){S t=sc(s,' ');Qs(!t,s)*t=0;I n=':'-*s++?1:10u>*s-'0'?ip(s,t-s):(J)es(s);K x='\\'-*++t?ps(t):0,r;F a=ms();N(n,Q(r=x?ex(x):ld(t+3))r0(r))if(x)r0(x);R ki(ms()-a);}
-S1(es){K x;P('\\'-*s,!*s?NL:(x=ps(s))&&NL-x?X0(ex(x)):x)if(!*++s||'\\'==*s)exit(0);R!s[1]?'w'==*s?ki(W):sc("vf",*s)?vf('f'==*s):qs(s):'t'==*s?tm(s+1):'l'==*s?ld(s+2):qs(s);}
+ZS1(rg){I r,i=(*s)-'a';K x=94u>i?G[i]:0;P(x&&!(r=X0(xr)),G[i]=NL)R NL;}//!<release global var
+S1(es){K x;P('\\'-*s,!*s?NL:(x=ps(s))&&NL-x?X0(ex(x)):x)if(!*++s||'\\'==*s)exit(0);R!s[1]?'w'==*s?ki(W):sc("vf",*s)?vf('f'==*s):qs(s):'t'==*s?tm(s+1):'-'==*s?rg(s+1):'l'==*s?ld(s+2):qs(s);}
 V init(){csr();N(26,G[i]=NL)*(K*)(K0=kK(0))=c0();}K enm(J x){K r=kI(xi);N(rn,Ri=i)R r;}
 ZV km(S*a){init();if(*++a)pr(ld(*a));os("kparc/b x64");W(1)pr(es(r2(" ")));}
 
