@@ -54,7 +54,7 @@ UNIT(parser,//<! parse trees
 
  PT("l[i]{r:0;N(x){r+:2};r}",  "('{';(':';r;0x80);('N';x;('{';(0xab;r;0x82)));r)", "loop function decl ptree")
 
- W0=ws();  //ignore wssize check FIXME implement global var release
+ _("\\-l",   NONE, "release l[] should return memory to the heap")
 
 )
 
