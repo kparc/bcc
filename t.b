@@ -1,3 +1,4 @@
+\w
 /r[ii]{x^y}
 /a[ii]{x&y}
 /o[ii]{x|y}
@@ -26,6 +27,8 @@ t[ii]$[y;[x;t[-x*2;y];t[x*2;y-:1]];[x;;]]
 c[J]$[x[1];(*x)+c[x[1]]-c[x[2]];*x]
 m[i]{k:0;N(x){r:-1.5+2*i%x;N(x){s:-1+2*j%x;p:q:0.;m:50;W(m*4>(t:p*p)+u:q*q){m-:1;q:s+2*p*q;p:r+t-u};k+:0=m}};k}
 
+\w
+
 /test
 l[10]
 a[3;4]
@@ -38,6 +41,8 @@ w:t[0;2]
 c[w]
 m[10]
 
+/\w
+
 /time
 \t:2000 a[3;4]
 x:!1000
@@ -49,10 +54,23 @@ z:!8
 w:t[0;13]
 \t:100 c[w]
 \t:30 m[100]
-
-\w
 \v
 \f
 
-l
+\-w
+\-x
+\-y
+\-z
+\-a
+\-b
+\-c
+\-f
+\-m
+\-t
+\-l
+\v
+\f
+
+/FIXME two bare ctf functions leak 16 bytes each
+\w
 \\
