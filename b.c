@@ -99,11 +99,11 @@ ZK d(I r,K x,ST st){
 
 //! parse[->compile->link->exec]
 K pcle(S tp,I dbg){Ss=tp;pst t={{0},{0},0,{1,1},8,0};ST st=&t;//pst t;ST st=&t;sA=M=0;sN=8;D0=D1=1;N(26,L[i]=T[i]=0)N(26,O("%d %d\n",L[i],T[i]))
+ if(!tp[1])$(26u>*tp-'a',K x=G[*tp-'a'];Qs(NL==x,tp)P(FN(x),os(xx),dis(xy),NL))R qs(tp);
  S r='['==Ss[1]&&(r=sc(Ss,']'))&&*++r?r:0;K*k=r||':'==Ss[1]?sA=*Ss,Ss+=2,G+sA-'a':0;
  P('!'==*Ss,++Ss,X(k,enm(ki(ip(Ss,strlen(Ss))))))
- if(!Ss[1]&&26u>*Ss-'a'){K x=G[*Ss-'a'];P(NL==x,w2("err: "),oc(*Ss),nl(),x)P(!Ax&&!xt,os(xx),dis(xy),NL)}
  z=k2(kp(Ss-!!k),NL);//<!(src;bin)
- //if(!Ss[1]&&26u>*Ss-'a')r1(G[*Ss-'a']);
+ if(!Ss[1]&&26u>*Ss-'a')r1(G[*Ss-'a']);
  if(r){X(k,k2(r1(zx),u(KI,c2(1,1))));N(r-Ss-1,L[23+i]=D0++,T[23+i]=l(" chijefs CHIJEFS",Ss[i]))Ss=r;}//!< fixme 23 aka increase argcount limit
  K x=p(st);if(dbg)R r0(z),x;//o(x);//!< dump parse tree
  N(23,if(Ti)Li=D[KF==Ti]++)//!< inner scope masks outer

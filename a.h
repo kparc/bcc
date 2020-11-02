@@ -46,6 +46,7 @@ Z_ K c3(C x,C y,C z){K r=kC(3);R*r=x,r[1]=y,r[2]=z,r;}
 Z_ K jc(K x,C c){R j2(x,kc(c));}
 
 #define A(x) ({J _j=(J)(x);!_j||_j>>52?KF:15&_j>>48;})
+#define FN(x) (!Ax&&!xt)
 #define I(x) (I)(J)(x) //(-1UL>>16&(J)(x))
 #define Q(x)        P(QQ==A(x),x) //#define Q(c,i)      P(c,qi(i))  //error index(nyi,rank,length,type,..)
 #define Qs(c,s)     P(c,qs(s))  //error string
