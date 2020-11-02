@@ -43,6 +43,10 @@ UNIT(malloc,
 
    _("x:!10",       NONE, "declare a global vector")
    _("\\-x",        NONE, "releasing existing global vector should be ok")
+
+   _("c[i]$[x;1;2]",NONE, "declare a ctf function (omitted brackets)")
+   _("\\-c",        NONE, "release a bare ctf function")
+   WS(0, "releasing a bare ctf function shouldn't leak memory FIXME")
 )
 
 UNIT(errors,
@@ -63,10 +67,11 @@ UNIT(parser,//<! parse trees
  PT("#x",    "('#';x)",          "ptree of monadic op")
  PT("x+y",   "('+';x;y)",        "ptree of dyadic op")
 
- WS0("PT() shouldn't leak memory")
+ //PT("c[i]$[x;1;2]", "('$';x;0x81;0x82)",          "declare a ctf function (omitted brackets)")
+ //PT("c[x]{$[x;1;2]}", "('{';('$';x;0x81;0x82))",  "declare a ctf function (omitted brackets)")
+ //_("\\-c",        NONE, "release a ctf function")
 
  PT("l[i]{r:0;N(x){r+:2};r}",  "('{';(':';r;0x80);('N';x;('{';(0xab;r;0x82)));r)", "loop function decl ptree")
-
  _("\\-l",   NONE, "release l[] should return memory to the heap")
 
 )
