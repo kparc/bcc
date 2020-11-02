@@ -53,7 +53,6 @@ UNIT(errors,
    ERR("\\-f",       "f", "releasing a non-existent global should name-error")
    ERR("\\-A",       "A", "releasing an invalid identifier should name-error")
    ERR("x",          "x", "referencing an non-existent global should name-error")
-
    _("x:2",         NONE, "declare a test scalar")
    ERR("\\-x",     "nyi", "releasing a scalar should nyi")
 )
@@ -69,13 +68,13 @@ UNIT(parser,//<! parse trees
 
  PT("c[i]$[x;1;2]", "('$';x;0x81;0x82)",          "declare a ctf function (omitted brackets)")
  _("\\-c",        NONE, "release a ctf function")
- WS(0, "parsing a bare ctf function doesn't leak memory")
- //PT("c[x]{$[x;1;2]}", "('{';('$';x;0x81;0x82))",  "declare a ctf function (omitted brackets)")
+ WS(0, "parsing a bare ctf function shouldn't leak memory")
 
+ //PT("c[x]{$[x;1;2]}", "('{';('$';x;0x81;0x82))",  "declare a ctf function (omitted brackets)")
  //_("\\-c",        NONE, "release a ctf function")
 
  PT("l[i]{r:0;N(x){r+:2};r}",  "('{';(':';r;0x80);('N';x;('{';(0xab;r;0x82)));r)", "loop function decl ptree")
- _("\\-l",   NONE, "release l[] should return memory to the heap")
+ _("\\-l",   NONE, "release of l[] should return memory to the heap")
 )
 
 UNIT(brackets,
@@ -90,7 +89,6 @@ UNIT(brackets,
    fail("[}]",'}')
    fail("[\"]",'\"')
    fail("[\"\"",0)
-
 )
 
 TESTS(RUN(smoke)RUN(malloc)RUN(errors)RUN(parser)RUN(brackets))
