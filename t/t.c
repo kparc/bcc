@@ -109,9 +109,8 @@ UNIT(syms,
    K g=*GG(hsh(SYM,strlen(SYM)));os(SYM);o(g);
    r0(x);del(h);    //!< cleanup
 
-   PT("ccall+go_fn+42",  "('+';`ccall;('+';`go_fn;0xaa))",   "basic multichar identifiers supported by parser")
-
-   PT("x+Not+Wha",  "('+';`x;('+';`Not;`Wha))",              "special case: if leading N|W is not followed by (, force class to identifier")
+   PT("ccall+go_fn+42",  "('+';`ccall;('+';`go_fn;0xaa))",   "basic multichar identifiers are supported by parser")
+   PT("x+Not+Wha",       "('+';`x;('+';`Not;`Wha))",         "special case: if leading N|W is not followed by (, force class to identifier")
 
    //! TODO
    //_("asdf:42",   NONE, "ok")

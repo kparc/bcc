@@ -26,7 +26,7 @@ F fp(S p,I n){P('-'==*p,-fp(p+1,n-1))I l=scn(p,'e',n),m=scn(p,'.',l),f=l<n?ip(p+
 #if (__x86_64__||i386)&&!__TINYC__
 ZI clzl(I n){R 60-__builtin_clzl(n);}V csr(){R;asm("movl $0x9fc0,-4(%rsp);ldmxcsr -4(%rsp);");}//V csr(){volatile I mxcsr=0x9fc0;asm("ldmxcsr %0":"=m"(mxcsr));}
 #else
-ZI clzl(I n){I i=0;W(n)n/=2,++i;R i-4;}V csr(){R;}//<! \fixme tcc ldmxcsr nyi
+ZI clzl(I n){I i=0;W(n)n/=2,++i;R i-4;}V csr(){R;}//<! FIXME tcc ldmxcsr nyi
 #endif
 
 // malloc free:  mturnnnn list join (k[cifs] k[CIFS])

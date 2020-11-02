@@ -14,7 +14,7 @@ l:
 
 # gcc
 g:
-	gcc $O $(LF) $(SRC) -o bg $(CF)
+	gcc $O $(LF) $(SRC) -o bg $(CF) -Wno-unused-value -Wno-misleading-indentation
 	./bg t.b
 
 # tcc
