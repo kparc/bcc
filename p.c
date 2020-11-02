@@ -53,9 +53,9 @@ K p(ST st){K x,y;I a,b;    //!< a operator, x/y operands, b return type
   C('0',                   //!< numeral
     P('2'==a&&'*'==*Ss,++Ss,x=p(st),u(t(x),k2(kc('\\'),x)))//!< override 2*x as monadic left shift (\x) and return
     --Ss;x=n(Na()))        //<! parse number
-  case'a':                   //<! identifier:
+  case'a':                 //<! identifier:
 #ifdef SYMS
-    {--Ss;K y=sym();//o(y);
+    {--Ss;K y=sym();//o(y);//<! sym() parses the complete identifier and stores it in the hash table
 #endif
     x='['==*Ss?++Ss,E(     //<! a) if followed by [exp], it is an array indexing or a function call:
      T[b=a-'a']?T[b]-8:    //<! if varname has no type, it is a func call; for arrays, unset high bit
