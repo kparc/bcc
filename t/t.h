@@ -7,7 +7,7 @@
 
 ZJ W0=0,Wprev;//!< wssize
 
-extern V init();K1(enm);K1(pr);K Li(K x,I i),sS(I c,K x);S1(es);K pcle(S tp,I dbg);K se(K x,K pt);//!< NB never forget signatures
+extern V init();K1(enm);K1(pr);K Li(K x,I i),sS(I c,K x);S1(es);K pcle(S tp,I dbg);K se(K x,K pt);S bb(S x);//!< NB never forget signatures
 
 C xQ(K x){R QQ==A(x);}ZS str(K x){R(S)es(x);}ZK ptree(S s){K x=pcle(s,1);R X0(jc(se(x,1),0));}
 //ZK out(S x){R pr(es(x));}

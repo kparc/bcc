@@ -76,9 +76,20 @@ UNIT(parser,//<! parse trees
 
  PT("l[i]{r:0;N(x){r+:2};r}",  "('{';(':';r;0x80);('N';x;('{';(0xab;r;0x82)));r)", "loop function decl ptree")
  _("\\-l",   NONE, "release l[] should return memory to the heap")
-
 )
 
-TESTS(RUN(smoke)RUN(malloc)RUN(errors)RUN(parser))
+UNIT(brackets,
+   #define pass(s) _(bb(s),0,s)
+   #define fail(s,exp) {S b=bb(s);_(exp==(b?(C)*b:(C)b),1,exp)}
+   pass("")
+   pass("\n")
+   pass("[]")
+   pass("[]\n")
+   fail("[}]",'}')
+   fail("[\"]",'\"')
+   fail("[\"\"",0)
+)
+
+TESTS(RUN(smoke)RUN(malloc)RUN(errors)RUN(parser)RUN(brackets))
 
 //:~
