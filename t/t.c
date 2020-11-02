@@ -16,15 +16,19 @@ UNIT(smoke,//<! basic sanity
    _(Ay,      KI, "5th item should be an int")
    _(yi,       5, "5th item should be eq 5")
 
+   r0(x);    //unit will bail if wss>0
+)
+
+UNIT(malloc,
    _("2+2",    4, "basic ex #1")
    _("2=2",    1, "basic ex #2")
 
    WS0("non-assigning repl expressions shouldn't leak memory")
 
    _("f[ii]{x+y}",  NONE, "declare a global function")
-   WS(144, "workspace usage should increase to 144 bytes")
+   WS(80, "workspace usage should be 80 bytes")
 
-   _("f[40;2]",       42, "function call should work as expected")
+   _("f[40;2]",       42, "function calls should work as expected")
    WS0("calling a function shouldn't leak memory")
 
    _("f[ii]{x-y}",  NONE, "reassign an exisiting function")
@@ -32,12 +36,10 @@ UNIT(smoke,//<! basic sanity
 
    _("f[40;2]",       38, "reassigned function should work as expected")
 
-   r0(x);WS(80, "r0(x) should return memory to the heap")
+   _("\\-f",        NONE, "releasing existing global variable should be ok")
+)
 
-   _("\\-f",       NONE,  "release global var should be ok")
-
-   WS(0, "workspace should be empty after global release")
-
+UNIT(errors,
    //_("x", expressioR_VALUE, "basic eval should be sane #3")//!< todo
 )
 
@@ -58,9 +60,6 @@ UNIT(parser,//<! parse trees
 
 )
 
-TESTS(
- RUN(smoke)
- RUN(parser)
-)
+TESTS(RUN(smoke)RUN(malloc)RUN(parser))
 
 //:~
