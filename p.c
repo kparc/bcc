@@ -24,12 +24,12 @@ ZK pF(K x,I b,ST st){R KF-b||KF==t(x)?x:Ax&&126<xi?n(kf(xi-128)):u(KF,k2(kc('%')
 #include"p.h"//pE->E,pF->f
 
 //! class          !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
-I c(I c){R 128>c?"   +$++ ()++ + +0000000000+;+++  aaaaaaaaaaaaaNaaaaaaaaWaaa[+]+ `aaaaaaaaaaaaaaaaaaaaaaaaaa{+} "[c-32]:0;}
+I cl(I c){R 128>c?"   +$++ ()++ + +0000000000+;+++  aaaaaaaaaaaaaNaaaaaaaaWaaa[+]+ `aaaaaaaaaaaaaaaaaaaaaaaaaa{+} "[c-32]:0;}
 
 //! parse next token on tape
 K p(ST st){K x,y;I a,b;    //!< a operator, x/y operands, b return type
- C qn='0'-c('-'==(a=*Ss++)?Ss['.'==*Ss]:'.'==a?*Ss:a);//<!special case: if expr starts with a minus, dot or a minus-dot, it may be a number
- switch(qn?c(a):'0'){      //!< current char class:
+ C qn='0'-cl('-'==(a=*Ss++)?Ss['.'==*Ss]:'.'==a?*Ss:a);//<!special case: if expr starts with a minus, dot or a minus-dot, it may be a number
+ switch(qn?cl(a):'0'){      //!< current char class:
   case'N':T[sN++]=KI;      //!< 'for' loop, declare a loop variable and fallthrough to W
   C('W',R                  //!< W|N(cnd){body}
    ++Ss,x=p(st),++Ss,      //<! parse cnd expr into x
@@ -56,7 +56,7 @@ K p(ST st){K x,y;I a,b;    //!< a operator, x/y operands, b return type
   default:AB(Ss-1);}       //<! bail on unmapped class or whitespace
 
  P(qt(),x)                  //<! if reached expr end, return the parse tree
- if('+'-c(a=*Ss++))AB(Ss-1);//<! otherwise next char should be an operator, bail if not
+ if('+'-cl(a=*Ss++))AB(Ss-1);//<! otherwise next char should be an operator, bail if not
  if(':'==*Ss)++Ss,a+=128;   //<! for assignment, set high bit of op char byte
  y=p(st);b=t(y);            //<! parse right operand into y and get its type into b
  $(':'==a&&Ax,T[xi-'a']=b)  //<! for assignment, set result type to the type of the right operand

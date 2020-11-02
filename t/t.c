@@ -40,15 +40,20 @@ UNIT(smoke,//<! basic sanity
 )
 
 UNIT(parser,//<! parse trees
- PT("#x",    "(#;x)",          "ptree of basic monadic op")
- WS0("PT() shouldn't leak memory #1")
+ PT("#x",    "('#';x)",          "ptree of basic monadic op")
 
- PT("2*x",   "(\\;x)",         "2*x should translate to monadic left shift")
- PT("40+2",  "(+;0xa8;0x82)",  "simple inline expression")
- WS0("PT() shouldn't leak memory #2")
+ PT("2*x",   "('\\';x)",         "2*x should translate to monadic left shift")
+ PT("40+2",  "('+';0xa8;0x82)",  "simple inline expression")
 
- PT("#x",    "(#;x)",          "ptree of monadic op")
- PT("x+y",   "(+;x;y)",        "ptree of dyadic op")
+ PT("#x",    "('#';x)",          "ptree of monadic op")
+ PT("x+y",   "('+';x;y)",        "ptree of dyadic op")
+
+ WS0("PT() shouldn't leak memory")
+
+ PT("l[i]{r:0;N(x){r+:2};r}",  "('{';(':';r;0x80);('N';x;('{';(0xab;r;0x82)));r)", "loop function decl ptree")
+
+ W0=ws();  //ignore wssize check FIXME implement global var release
+
 )
 
 TESTS(

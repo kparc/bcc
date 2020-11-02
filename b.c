@@ -85,7 +85,7 @@ ZK g(I c,K x,ST st){K y=c0(),z,r=c0();I i=0,l=sA?M:0;W(++i<xn){z=Xx;I l=M&1<<i,b
 ZI dh(K x,ST st){I t=T[xi-'a'];R 14==t?-2:13==t?-4:2*t-26;}
 ZK d(I r,K x,ST st){
  P(Ax,(r=q(x))?M|=1<<r,u(r,c0()):x)
- I s=15&r,a;K y,z;S((y=xy,c(a=*x)),
+ I s=15&r,a;K y,z;S((y=xy,cl(a=*x)),
   case'N':C('W',R w(x,st))C('$',R u(r,v(r,x,1,st)))
   C('{',R E(r,x,st))C('[',R g(26,x,st))
   C('a',R T[a-'a']?O2(0,1+dh(xx,st),s,d(0,xx,st),d(0,y,st)):g(a-'a',x,st))
