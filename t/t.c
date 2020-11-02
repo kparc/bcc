@@ -23,6 +23,9 @@ UNIT(malloc,
    _("2+2",    4, "basic ex #1")
    _("2=2",    1, "basic ex #2")
 
+   //_("\\f", "!`", "global function namespace should be empty FIXME")
+   //_("\\v", "!`", "global variable namespace should be empty FIXME")
+
    WS0("non-assigning repl expressions shouldn't leak memory")
 
    _("f[ii]{x+y}",  NONE, "declare a global function")
@@ -36,7 +39,10 @@ UNIT(malloc,
 
    _("f[40;2]",       38, "reassigned function should work as expected")
 
-   _("\\-f",        NONE, "releasing existing global variable should be ok")
+   _("\\-f",        NONE, "releasing existing global function should be ok")
+
+   _("x:!10",       NONE, "declare a global vector")
+   _("\\-x",        NONE, "releasing existing global vector should be ok")
 )
 
 UNIT(errors,
