@@ -34,7 +34,9 @@ UNIT(smoke,//<! basic sanity
 
    r0(x);WS(80, "r0(x) should return memory to the heap")
 
-   W0=ws();  //ignore wssize check FIXME implement global var release
+   _("\\-f",       NONE,  "release global var should be ok")
+
+   WS(0, "workspace should be empty after global release")
 
    //_("x", expressioR_VALUE, "basic eval should be sane #3")//!< todo
 )
