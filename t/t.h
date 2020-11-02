@@ -3,6 +3,7 @@
 #include"../a.h"
 
 #define NONE 0
+#define ES(x) ((S)(-1UL>>16&(J)x))
 
 ZJ W0=0,Wprev;//!< wssize
 
@@ -30,8 +31,13 @@ V setUp(V){}V tearDown(V){}//!< before/after each test
   ,TEST_ASSERT_MESSAGE(0,"unknown type"))
 
 #define _(act,exp,msg,cleanup...) Wprev=ws();if(TYPE(act)=='S'){K x=str((S)(J)(act));\
-  if(xQ(x)){TEST_ASSERT_EQUAL_STRING_MESSAGE(qs(exp),qs(x),msg);r0(x);}\
-  else{ASSERT(x,exp,msg)}}else{ASSERT(act,exp,msg)};cleanup;
+  if(xQ(x)){TEST_ASSERT_EQUAL_STRING_MESSAGE("ok",ES(x),"unexpected error");r0(x);}\
+  else{ASSERT(X0(x),exp,msg)}}else{ASSERT(act,exp,msg)};cleanup;
+
+#define ERR(act,exp,msg,cleanup...) Wprev=ws();{K x=str((S)(J)(act));\
+  if(!xQ(x)){TEST_ASSERT_EQUAL_STRING_MESSAGE(exp,"ok","expected an error");r0(x);}\
+  else{TEST_ASSERT_EQUAL_STRING_MESSAGE(ES(x),exp,msg);r0(0);}cleanup;}
+
 
 #define PT(act,exp,msg) {Wprev=ws();K x=ptree(act);TEST_ASSERT_EQUAL_STRING_MESSAGE(exp,(S)x,msg);r0(x);}
 #define WS(exp,msg)     {TEST_ASSERT_EQUAL_INT_MESSAGE(exp,ws()-W0,msg);}
