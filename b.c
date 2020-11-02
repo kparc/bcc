@@ -97,8 +97,8 @@ ZK d(I r,K x,ST st){
   P(!Ay&&!q(y)&&!Az&&!q(y),M|=1<<(m=D[KF==b]++),y=e(0,y,st),M&=~(1<<m),z=O2(b,a,r,y,f(m,z,st)),--D[KF==b],z)
   R Ay&&!q(y)&&2-a&&4-a?O2(b,9<a?11-a+11:a,r,e(s,z,st),y):O2(b,a,r,e(s,y,st),d(s,z,st)))}
 
-Z_ I m2(S s,S t){R*s==*t&&s[1]==t[1];}ZS bq(S x){W((x=sc(++x,'"'))&&!({I i=0;W('\\'==x[--i]);1&i;})){};R x;}
-S bb(S x){C b[32];I n=0,a;S s;x-=1;W(*++x){$(m2(" /",x),s=sc(x,'\n');P(!s,n?x:0)x=s)$('"'==(a=cl(*x)),s=bq(x);P(!s,x)x=s)$(sc("{[(",a),P(99==++n,x)b[n]=*x)if(sc("}])",a))P(!n||b[n--]!=*x-1-*x/64,x)}R n?x:0;}//kpc
+Z_ I m2(S s,S t){R*s==*t&&s[1]==t[1];}ZS bq(S x){W((x=sc(++x,'"'))&&!({I i=0;W('\\'==x[--i]);1&i;})){};R x;}//!< parse quoted string with esc sequences
+S bb(S x){C b[16];I n=0,a;S s;x-=1;W(*++x){$(m2(" /",x),s=sc(x,'\n');P(!s,n?x:0)x=s)$('"'==(a=cl(*x)),s=bq(x);P(!s,x)x=s)$(sc("{[(",a),P(99==++n,x)b[n]=*x)if(sc("}])",a))P(!n||b[n--]!=*x-1-*x/64,x)}R n?x:0;}//!< bracket balancer
 
 //! parse[->compile->link->exec]
 K pcle(S tp,I dbg){Ss=tp;pst t={{0},{0},0,{1,1},8,0};ST st=&t;//pst t;ST st=&t;sA=M=0;sN=8;D0=D1=1;N(26,L[i]=T[i]=0)N(26,O("%d %d\n",L[i],T[i]))
