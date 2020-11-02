@@ -26,7 +26,7 @@ typedef union{V*code;K(*k)();F(*f)();J(*j)();}obj; //!<signatures of compiled fu
 #ifndef SYMS
 typedef struct{C L[26];C T[26];I M;C D[2];C N;I A;}pst;typedef pst*ST;
 #else
-typedef struct{C L[26];C T[26];I M;C D[2];C N;K A;}pst;typedef pst*ST;
+typedef struct{C L[26];C T[26];I M;C D[2];C N;K A;}pst;typedef pst*ST; //<! assignment target (A) must be K to hold KS
 #endif
 
 extern K sym(),*GG(K h),val(K h),nme(K h);//!< symtable manager

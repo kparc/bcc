@@ -36,9 +36,15 @@ ZK m1(J n){K x,r;I i=clzl(n+7),j;P(x=M[i],M[i]=xx,x)j=i;
  W(!(x=++j<31?M[j]:8+ma(0,16L<<(j=MX(18,i)))));
  xm=i,M[j]=xx,r=x;W(i<j)x+=16L<<xm,M[*(J*)(x-8)=i++]=x,xx=0;R r;}
 
+#ifdef SYMS
+#define SYMSZ 8 //!< symbol is countains a UI djbhash of the underlying string extended to K, see ks()
+#else
+#define SYMSZ 4
+#endif
+
 //      0 1 2 3 4 5 6 7
 //!     K c h i j e f s (arr int8 int16 int32 int64 real double sym)
-J nt[]={8,1,2,4,8,4,8,4};ZJ W=-32;J ws(){R W;}ZV l0();V1(r0){if(Ax||!x)R;if(8==xt){l0(x);R;}if(xr){--xr;R;}if(!xt||KS<xt)N1(xn,r0(Xx))W-=16L<<xm,xx=M[xm],M[xm]=x;}K1(r1){P(Ax,x)R++xr?x:AB("r1");}
+J nt[]={8,1,2,4,8,4,8,SYMSZ};ZJ W=-32;J ws(){R W;}ZV l0();V1(r0){if(Ax||!x)R;if(8==xt){l0(x);R;}if(xr){--xr;R;}if(!xt||KS<xt)N1(xn,r0(Xx))W-=16L<<xm,xx=M[xm],M[xm]=x;}K1(r1){P(Ax,x)R++xr?x:AB("r1");}
 
 K tn(I t,I n){K x=m1(MX(1,n)*nt[KS<t?0:t]);R W+=16L<<xm,xu=0,xt=t,xn=n,x;}
 ZK xiy(K x,I i,K y){memcpy(x+NX*i,y,NX*yn);if(!yt)N(yn,r1(Yx))R Y0(x);}
@@ -59,7 +65,7 @@ ZK c(K x,K pt){N(xn,if(94u<Xc-32){K r=kC(2*xn);N(xn,hh(r+2*i,Xc))R j2(c2('0'+xu,
 K se(K x,K pt){//! string repr of a K object, pt - parse tree mode (don't use "", skip '' for identifiers)
  P(Ax,
 #ifdef SYMS
-   KS==Ax?cj('`',nme(x)):
+   KS==Ax?cj('`',nme(x)): //<! for proper syms, we must lookup the actual string by its hash value
 #else
    KS==Ax?c2('`','a'+xi):
 #endif

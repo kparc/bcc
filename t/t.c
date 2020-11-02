@@ -122,8 +122,9 @@ TESTS(
 #ifndef SYMS
    RUN(smoke)RUN(malloc)RUN(errors)RUN(brackets)
    RUN(parser)
-#endif
+#else
    RUN(syms)
+#endif
 )
 
 //:~
