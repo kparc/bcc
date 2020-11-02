@@ -36,8 +36,12 @@ V del(K h){I i=bkt(h);$(-1<i,K x=ids[i];$(!xr,ids[i]=idh[i]=NL);r0(x));}K*GG(K h
 
 //! parse next token on tape
 K p(ST st){K x,y;I a,b;    //!< a operator, x/y operands, b return type
- C qn='0'-cl('-'==(a=*Ss++)?Ss['.'==*Ss]:'.'==a?*Ss:a);//<!special case: if expr starts with a minus, dot or a minus-dot, it may be a number
- switch(qn?cl(a):'0'){     //!< current char class:
+ C qn='0'-cl('-'==(a=*Ss++)?Ss['.'==*Ss]:'.'==a?*Ss:a); //<!special case: if expr starts with a minus, dot or a minus-dot, it may be a number
+ C cls=qn?cl(a):'0';
+#ifdef SYMS
+ cls=sc("NW",cls)&&'('-Ss[1]?'a':cls; //<!special case: if N|W is not followed by (, force class to identifier
+#endif
+ switch(cls){              //!< current char class:
   case'N':T[sN++]=KI;      //!< 'for' loop, declare a loop variable and fallthrough to W
   C('W',R                  //!< W|N(cnd){body}
    ++Ss,x=p(st),++Ss,      //<! parse cnd expr into x
