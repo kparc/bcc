@@ -44,7 +44,8 @@ V setUp(V){}V tearDown(V){}//!< before/after each test
 #define WS0(msg)        {TEST_ASSERT_EQUAL_INT_MESSAGE(0,ws()-Wprev,msg);}
 
 #define TESTS(units...) I main(I a,char**c){init();UNITY_BEGIN();units;R UNITY_END();}
-#define UNIT(name,tests...) V test##_##name(V){W0=ws();tests;WS(0,"test unit shouldn't leak memory")};
+#define UNIT(name,tests...) V test##_##name(V){W0=ws();tests;WS(0,"test unit shouldn't leak memory")};\
+
 #define RUN(unit) RUN_TEST(test##_##unit);
 
 

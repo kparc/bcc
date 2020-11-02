@@ -1,7 +1,7 @@
 #include"t.h"
 
 UNIT(smoke,//<! basic sanity
-   _(W0,       0, "workspace should initally be empty")
+   WS(0,          "workspace should initally be empty")
 
    K x=enm(ki(10)), //!< !10
      y=Li(x,5);     //!< list item
@@ -16,7 +16,7 @@ UNIT(smoke,//<! basic sanity
    _(Ay,      KI, "5th item should be an int")
    _(yi,       5, "5th item should be eq 5")
 
-   r0(x);    //unit will bail if wss>0
+   r0(x);    //units bail if wss>0
 )
 
 UNIT(malloc,
@@ -90,6 +90,9 @@ UNIT(brackets,
    fail("[\"]",'\"')
    fail("[\"\"",0)
 )
+#undef pass
+#undef fail
+
 
 TESTS(RUN(smoke)RUN(malloc)RUN(errors)RUN(parser)RUN(brackets))
 
