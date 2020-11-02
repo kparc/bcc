@@ -24,12 +24,20 @@ ZK pF(K x,I b,ST st){R KF-b||KF==t(x)?x:Ax&&126<xi?n(kf(xi-128)):u(KF,k2(kc('%')
 #include"p.h"//pE->E,pF->f
 
 //! class           !""#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
-I cl(I c){R 128>c?"  \"+$++ ()++ + +0000000000+;+++  aaaaaaaaaaaaaNaaaaaaaaWaaa[+]+ `aaaaaaaaaaaaaaaaaaaaaaaaaa{+} "[c-32]:0;}
+I cl(I c){R 128>c?"  \"+$++ ()++ + +0000000000+;+++  aaaaaaaaaaaaaNaaaaaaaaWaaa[+]+_`aaaaaaaaaaaaaaaaaaaaaaaaaa{+} "[c-32]:0;}
 
+/*
+K ids[128]={NL},idh[128]={NL};C cid=0;
+C chk(K h,L s){(N(128,P(NL==idh[i],0)P(idh[i]==h,memcmp(s,ids[i],)ids[i]))R)
+K id(S x){Qs(cid==128,"symlimit");
+ I c;S n=x;W((c=cl(*++x),x&&sc("aNW0_",c))){}K r=pn(n,x-n);K h=ks(djb((S)r,rn));Qs(chk(h,n,rn),"clash");
+ ids[cid]=r;r=idh[cid++]=h;R r;}//!< parse and store identifier
+K sym(K h){N(128,P(idh[i],ids[i]))R NL;}
+*/
 //! parse next token on tape
 K p(ST st){K x,y;I a,b;    //!< a operator, x/y operands, b return type
  C qn='0'-cl('-'==(a=*Ss++)?Ss['.'==*Ss]:'.'==a?*Ss:a);//<!special case: if expr starts with a minus, dot or a minus-dot, it may be a number
- switch(qn?cl(a):'0'){      //!< current char class:
+ switch(qn?cl(a):'0'){     //!< current char class:
   case'N':T[sN++]=KI;      //!< 'for' loop, declare a loop variable and fallthrough to W
   C('W',R                  //!< W|N(cnd){body}
    ++Ss,x=p(st),++Ss,      //<! parse cnd expr into x
@@ -46,12 +54,14 @@ K p(ST st){K x,y;I a,b;    //!< a operator, x/y operands, b return type
     P('2'==a&&'*'==*Ss,++Ss,x=p(st),u(t(x),k2(kc('\\'),x)))//!< override 2*x as monadic left shift (\x) and return
     --Ss;x=n(Na()))        //<! parse number
   C('a',                   //<! identifier:
+    //K z=id(Ss-1);Ss+=zn-1;
     x='['==*Ss?++Ss,E(     //<! a) if followed by [exp], it is an array indexing or a function call:
      T[b=a-'a']?T[b]-8:    //<! if varname has no type, it is a func call; for arrays, unset high bit
       (x=G[b],x=xy,        //<! xx is the string, xy is the code
        D0=MX(D0,x[xn-2]),  //<! D[0] and D[1] are stored after RET
        D1=MX(D1,x[xn-1]),xu),
      a                     //<! op is the array|function name
+    //):z)                 //<! b) it is variable reference.
     ):kc(a))               //<! b) it is variable reference.
   default:AB(Ss-1);}       //<! bail on unmapped class or whitespace
 
