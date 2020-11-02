@@ -85,9 +85,12 @@ UNIT(brackets,
    pass("\n")
    pass("[]")
    pass("[]\n")
+   pass("[\"asdf]asdf{\"]")
+   pass("$[x&1;(\\x)+x+1;/x]")
    fail("[}]",'}')
    fail("[\"]",'\"')
    fail("[\"\"",0)
+
 )
 
 TESTS(RUN(smoke)RUN(malloc)RUN(errors)RUN(parser)RUN(brackets))
