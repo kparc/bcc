@@ -26,14 +26,13 @@ ZK pF(K x,I b,ST st){R KF-b||KF==t(x)?x:Ax&&126<xi?n(kf(xi-128)):u(KF,k2(kc('%')
 //! class           !""#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
 I cl(I c){R 128>c?"  \"+$++ ()++ + +0000000000+;+++  aaaaaaaaaaaaaNaaaaaaaaWaaa[+]+_`aaaaaaaaaaaaaaaaaaaaaaaaaa{+} "[c-32]:0;}
 
-/*
-K ids[128]={NL},idh[128]={NL};C cid=0;
-C chk(K h,L s){(N(128,P(NL==idh[i],0)P(idh[i]==h,memcmp(s,ids[i],)ids[i]))R)
-K id(S x){Qs(cid==128,"symlimit");
- I c;S n=x;W((c=cl(*++x),x&&sc("aNW0_",c))){}K r=pn(n,x-n);K h=ks(djb((S)r,rn));Qs(chk(h,n,rn),"clash");
- ids[cid]=r;r=idh[cid++]=h;R r;}//!< parse and store identifier
-K sym(K h){N(128,P(idh[i],ids[i]))R NL;}
-*/
+#define SMX 32
+#define ID(x) sc("aNW0_",cl(x))
+static UI idh[SMX]={0};ZK ids[SMX]={NL};Z_ UI hsh(S s,UI n){UI h=5381;N(n,h=(h<<5)+h+*s++);R h;}//Z_ UI djb(S x,UI n){UI h=5381;N(n,h=33*(h^x[i]));R h;}
+ZI bkt(UI h){N(SMX,P(h==idh[i],i))R-1;}ZK val(UI h){I i=bkt(h);R-1<i?ids[i]:NL;}ZI chk(I i,S s,I n){K x=ids[i];R memcmp(x,s,MN(n,xn));}
+K set(S s){S r=s;UI h;I i,n;W(s&&ID(*++s)){}h=hsh(r,n=s-r),i=bkt(h);$(-1<i,Qs(chk(i,r,n),"clash");R ids[i]);i=bkt(0);Qs(0>i,"limit")R idh[i]=h,ids[i]=pn(r,n);}
+K get(S s){R val(hsh(s,strlen(s)));}V del(S s){I i=bkt(hsh(s,strlen(s)));$(-1<i,r0(ids[i]);ids[i]=NL;idh[i]=0);}
+
 //! parse next token on tape
 K p(ST st){K x,y;I a,b;    //!< a operator, x/y operands, b return type
  C qn='0'-cl('-'==(a=*Ss++)?Ss['.'==*Ss]:'.'==a?*Ss:a);//<!special case: if expr starts with a minus, dot or a minus-dot, it may be a number
@@ -54,7 +53,7 @@ K p(ST st){K x,y;I a,b;    //!< a operator, x/y operands, b return type
     P('2'==a&&'*'==*Ss,++Ss,x=p(st),u(t(x),k2(kc('\\'),x)))//!< override 2*x as monadic left shift (\x) and return
     --Ss;x=n(Na()))        //<! parse number
   C('a',                   //<! identifier:
-    //K z=id(Ss-1);Ss+=zn-1;
+    //K z=set(Ss-1);Ss+=zn-1;
     x='['==*Ss?++Ss,E(     //<! a) if followed by [exp], it is an array indexing or a function call:
      T[b=a-'a']?T[b]-8:    //<! if varname has no type, it is a func call; for arrays, unset high bit
       (x=G[b],x=xy,        //<! xx is the string, xy is the code

@@ -24,7 +24,7 @@ typedef union{V*code;K(*k)();F(*f)();J(*j)();}obj; //!<signatures of compiled fu
 // M    used register count
 typedef struct{C L[26];C T[26];I M;C D[2];C N;I A;}pst;typedef pst*ST;
 
-extern J nt[],ip();extern K G[],ex(K),ps(S),r1(),tn(),j2(),k0(),sS(),enm(),o(),sym(K h);I cl(I c);V exit(),w2(),r0();S pi(),pf(),px();J ws();F fp();Z_ K X(K*k,K y){R r0(*k),*k=y,NL;}
+extern J nt[],ip();extern K G[],ex(K),ps(S),r1(),tn(),j2(),k0(),sS(),enm(),o();I cl(I c);V exit(),w2(),r0();S pi(),pf(),px();J ws();F fp();Z_ K X(K*k,K y){R r0(*k),*k=y,NL;}
 Z_ I oc(I i){R w2((S)&i),i;}Z_ V nl(){w2("\n");}Z_ S os(S s){R w2(s),nl(),s;}Z_ J oi(J j){R os(pi(j)),j;}Z_ F of(F f){R os(pf(f)),f;}Z_ J ox(J j){R os(px(j)),j;}
 Z_ S sc(S s,I c){W(*s-c)P(!*s++,(S)0)R s;}
 Z_ I scn(S s,I c,I n){N(n,P(c==s[i],i))R n;}//_ K P1(J x){R(K)(X1<<48|x);}_ K P2(J x){R(K)(X2<<48|x);}_ K P3(J x){R(K)(X3<<48|x);}
@@ -44,12 +44,6 @@ Z_ K c1(C x){K r=kC(1);R*r=x,r;}
 Z_ K c2(C x,C y){K r=kC(2);R*r=x,r[1]=y,r;}
 Z_ K c3(C x,C y,C z){K r=kC(3);R*r=x,r[1]=y,r[2]=z,r;}
 Z_ K jc(K x,C c){R j2(x,kc(c));}
-
-//! djbhash \see http://www.burtleburtle.net/bob/hash/doobs.html
-//! one of the best known hash functions for strings, due to djb
-//! Computes very fast and distributes very well, yields uint32
-//Z_ UI djb(S x,UI n){UI h=5381;N(n,h=33*(h^x[i]));R h;}
-Z_ UI djb(S s,UI n){UI h=5381;N(n,h=(h<<5)+h+*s++);R h;}
 
 #define A(x) ({J _j=(J)(x);!_j||_j>>52?KF:15&_j>>48;})
 #define FN(x) (!Ax&&!xt)
@@ -84,6 +78,7 @@ Z_ UI djb(S s,UI n){UI h=5381;N(n,h=(h<<5)+h+*s++);R h;}
 #define Ay A(y)
 #define yi I(y)
 #define yj (J)(y)
+#define yr y[-7] //ref
 #define yu y[-6]
 #define yt y[-5]
 #define yn yI[-1]

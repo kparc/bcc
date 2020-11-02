@@ -94,7 +94,17 @@ UNIT(brackets,
 #undef pass
 #undef fail
 
+K set(S x);K get(S x);V del(S x);
+#define testsym(s) {K x=set(s),y=get(s);O("sym set %s(%p) get %s(%p)\n",(S)x,x,(S)y,y);}
+UNIT(syms,
+   N(2,testsym("asdf"))
+   testsym("a")
+   testsym("x123")
+   del("asdf");del("a");del("x123");
+)
 
-TESTS(RUN(smoke)RUN(malloc)RUN(errors)RUN(parser)RUN(brackets))
+TESTS(
+   RUN(smoke)RUN(malloc)RUN(errors)RUN(parser)RUN(brackets)RUN(syms)
+)
 
 //:~
