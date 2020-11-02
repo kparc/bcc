@@ -59,7 +59,7 @@ ZK c(K x,K pt){N(xn,if(94u<Xc-32){K r=kC(2*xn);N(xn,hh(r+2*i,Xc))R j2(c2('0'+xu,
 K se(K x,K pt){//! string repr of a K object, pt - parse tree mode (don't use "", skip '' for identifiers)
  P(Ax,
 #ifdef SYMS
-   KS==Ax?cj('`',val(x)):
+   KS==Ax?cj('`',nme(x)):
 #else
    KS==Ax?c2('`','a'+xi):
 #endif

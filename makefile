@@ -32,8 +32,14 @@ test: cleantest
 	-fprofile-instr-generate -fcoverage-mapping -fdebug-macro -Wno-int-conversion
 	@./test
 
+syms: cleansyms
+	@clang -std=gnu99 -DTST -DSYMS $O $(LF) t/t.c t/lib/unity.c $(SRC) -o syms $(CF) -fmacro-backtrace-limit=0 -Wno-int-conversion
+	@./syms
+
 cleantest:
 	@rm -f test
+cleansyms:
+	@rm -f syms
 
 all: l g t
 

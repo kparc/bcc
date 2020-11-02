@@ -96,24 +96,33 @@ UNIT(brackets,
 
 extern S Ss;extern K z;//!< \Ss tape \z zx source zy 0xrtype:opcodes:stack
 K sym(),nme(K h);K*GG(K h),hsh(S s,UI n);V del(K h);
-#define SYM "xyz"
+
+
 UNIT(syms,
-   //_("asdf:42",   NONE, "ok")
-   //_("asdf",      42, "ok")
-   Ss=(S)SYM;       //!< set parser tape to SYM
-   K h=sym();       //!< scan symbol from the tape and return hash (KS)
-   K x=nme(h);      //!< get symbol name string
-   K*v=GG(h);       //!< get pointer to the sym value slot
+   #define SYM "xyz"
+   Ss=(S)SYM;       //!< set the parser tape to string SYM
+   K h=sym(),       //!< scan an identifier from the tape and return hash (KS)
+     x=nme(h),      //!< lookup literal symbol name string (KC)
+    *v=GG(h);       //!< look up a pointer to the global sym value slot
    *v=ki(42);       //!< assign a value
 
    K g=*GG(hsh(SYM,strlen(SYM)));os(SYM);o(g);
+   r0(x);del(h);    //!< cleanup
 
-   r0(x);del(h);
+   PT("ccall+go_fn+42",  "('+';`ccall;('+';`go_fn;0xaa))",   "basic multichar identifiers supported by parser")
+
+   //! TODO
+   //_("asdf:42",   NONE, "ok")
+   //_("asdf",      42,   "ok")
+
+   W0=ws();        //! FIXME variable identifiers should probably be excluded from wssize
 )
 
 TESTS(
+#ifndef SYMS
    RUN(smoke)RUN(malloc)RUN(errors)RUN(brackets)
    RUN(parser)
+#endif
    RUN(syms)
 )
 

@@ -7,3 +7,4 @@ r
 tmp
 *.profraw
 test
+syms

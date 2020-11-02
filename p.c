@@ -55,7 +55,7 @@ K p(ST st){K x,y;I a,b;    //!< a operator, x/y operands, b return type
     --Ss;x=n(Na()))        //<! parse number
   case'a':                   //<! identifier:
 #ifdef SYMS
-    {--Ss;K y=set();//z=val(y);Ss+=zn-1;//o(z);
+    {--Ss;K y=sym();//o(y);
 #endif
     x='['==*Ss?++Ss,E(     //<! a) if followed by [exp], it is an array indexing or a function call:
      T[b=a-'a']?T[b]-8:    //<! if varname has no type, it is a func call; for arrays, unset high bit
@@ -64,7 +64,7 @@ K p(ST st){K x,y;I a,b;    //!< a operator, x/y operands, b return type
        D1=MX(D1,x[xn-1]),xu),
      a                     //<! op is the array|function name
 #ifdef SYMS
-    //):y;};break;           //<! b) it is variable reference.
+    ):y;};break;           //<! b) it is variable reference.
 #else
     ):kc(a);break;         //<! b) it is variable reference.
 #endif

@@ -67,7 +67,11 @@ ZK b(I f,K x,ST st){K y=d(16,x,st);R Ay?AB("b"):16==yu?y[yn-1]=JJ[y[yn-1]+f*4],y
 ZK f(I r,K x,ST st){K y=e(r,x,st);R r-yu?MV(t(x),r,y):y;}
 ZK E(I r,K x,ST st){I i=xn-1;K z=e(r,Xx,st),y=kK(i--);r=zu,Yx=z;W(i--)Yx=e(0,xK[i+1],st);R u(r,sS(0,y));}
 ZK vh(K x,I n,I r,ST st){R++Ss,1<n?e(0,x,st):f(r,x,st);}
+#ifndef SYMS
 ZK v(I r,K x,I n,ST st){K y=xz,z;I c=!n&&!Ay&&sA==*y,l=M;
+#else
+ZK v(I r,K x,I n,ST st){K y=xz,z;I c=!n&&!Ay&&sA==y,l=M;
+#endif
  z=vh(xK[3],n,r,st),M=l,y=vh(y,n,r,st),x=b(1,xy,st);yn-=c*B;I jj=1-n?n-xn-yn-3:zn;K j=jmp(jj);y=j2(y,n||c?yn,j:c1(RET));R j3(jc(x,yn),y,z);}
 
 K p(ST);
@@ -106,29 +110,38 @@ K pcle(S tp,I dbg){Ss=tp;pst t={{0},{0},0,{1,1},8,0};ST st=&t;//pst t;ST st=&t;s
  S b;P(b=bb(tp),qs(*b?b:(S)"balance"))
 
 #ifdef SYMS
- K g='a'==cl(*Ss)?sym():NL;
+ //K g='a'==cl(*Ss)?sym():NL;//{K x=nme(g);Ss-=xn;} // for now, undo the lookahead identifier scan
 #endif
 
- if(!tp[1])$(26u>*tp-'a',K x=G[*tp-'a'];Qs(NL==x,tp)P(FN(x),os(xx),dis(xy),NL))R qs(tp);
- //if(!*++Ss&&NL!=var){O("RET VARIABLE\n");P(!*GG(var),qs("val"))R*GG(var);}
+ if(!tp[1])$(26u>*tp-'a',K x=G[*tp-'a'];Qs(NL==x,tp)P(FN(x),os(xx),dis(xy),NL))R qs(tp);//!< KPC FIXME quick temporary hack to pretty print-opcodes by referencing function name
+ //if(!*++Ss&&NL!=var){O(P(!*GG(var),qs("val"))R*GG(var);}
 
- S r='['==Ss[1]&&(r=sc(Ss,']'))&&*++r?r:0;
+ S r='['==Ss[1]&&(r=sc(Ss,']'))&&*++r?r:0; //!< FIXME function assignment is a lookahead hack
 
 #ifdef SYMS
- K*k=r||':'==*Ss?sA=g,Ss+=1,GG(g):0;
+ //K*k=r||':'==*Ss?sA=g,Ss+=1,GG(g):0;
+ K*k=0;
 #else
+ //! FIXME this is fundamentally incorrect:
+ //  we should just inform the parser that
+ //  its entry point is the global scope.
  K*k=r||':'==Ss[1]?sA=*Ss,Ss+=2,G+sA-'a':0;
 #endif
 
  P('!'==*Ss,++Ss,X(k,enm(ki(ip(Ss,strlen(Ss))))))
  z=k2(kp(Ss-!!k),NL);//<!(src;bin)
- if(!Ss[1]&&26u>*Ss-'a')r1(G[*Ss-'a']);
- if(r){X(k,k2(r1(zx),u(KI,c2(1,1))));N(r-Ss-1,L[23+i]=D0++,T[23+i]=l(" chijefs CHIJEFS",Ss[i]))Ss=r;}//!< fixme 23 aka increase argcount limit
+ if(!Ss[1]&&26u>*Ss-'a')r1(G[*Ss-'a']);//!< inc xr of the referenced global var
+ if(r){X(k,k2(r1(zx),u(KI,c2(1,1))));  //!< set types for xyz args
+  N(r-Ss-1,L[23+i]=D0++,T[23+i]=l(" chijefs CHIJEFS",Ss[i]))Ss=r;} //!< FIXME increase argcount limit, more than 3 argdecls is a segv
  K x=p(st);P(dbg,r0(z),x)//o(x);//!< dump parse tree
- N(23,if(Ti)Li=D[KF==Ti]++)//!< inner scope masks outer
+ N(23,if(Ti)Li=D[KF==Ti]++)//<! set addresses of global vars (i>23 is xyz)
+
  I qfv=Ax||'$'-*x;//<! f/v compile or print
  zy=j2(X0(qfv?f(0,x,st):v(0,x,0,st)),c3(RET,D0,D1));
  zy=u(t(x),zy);lnk(zy,z,sA);//dis(zy);//!< disasm
+ // k!=0 is an assignment: function values are (src;bin) tuples,
+ // everything else gets assigned with the evaluation result.
+ // non-assignining expressions return their value to the printer.
  R k?X(k,r?z:Z0(ex(z))):z;}
 
 //! p->c->l->e
