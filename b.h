@@ -1,5 +1,13 @@
 #include"a.h"
 
+#ifdef ISOMORPH
+#define ARGOPN '('
+#define ARGCLS ')'
+#else
+#define ARGOPN '['
+#define ARGCLS ']'
+#endif
+
 //! scope accessors
 #define L  st->L
 #define D  st->D

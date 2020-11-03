@@ -2,6 +2,7 @@ CF=-minline-all-stringops -fno-asynchronous-unwind-tables -fno-stack-protector -
 #LF=-nostdlib -c a.S
 SRC=a.c b.c p.c
 O=-O0 -g
+#O+= -DISOMORPH
 
 ifeq ($(shell uname),Darwin)
  CF+= -pagezero_size 1000
