@@ -68,7 +68,7 @@ ZV compact() {
         ptr = ptr->n;}}
 #endif
 
-C ta_free(S free){
+C ta_free(V*free){
     B b=hp->u,prev=0;
     W(b){
         P(free==b->a,$(prev,prev->n=b->n)hp->u=b->n;INSERT(b)1)
@@ -113,9 +113,9 @@ static B alloc_block(SZ n){ALGN(n)
         hp->top   = new_top,
         ptr:0;}
 
-S ta_alloc(SZ n){B b=alloc_block(n);R b?b->a:0;}
+V*ta_alloc(SZ n){B b=alloc_block(n);R b?b->a:0;}
 ZV ta_memclear(V*p,SZ n){SZ*ptrw=(SZ*)p,numw=(n&-SZT)/SZT;W(numw--)*ptrw++=0;n&=SZT-1;S ptrb=(S)ptrw;W(n--)*ptrb++=0;}
-S ta_calloc(SZ n,SZ sz){B b=alloc_block(n*=sz);P(b,ta_memclear(b->a,n),b->a)R 0;}
+V*ta_calloc(SZ n,SZ sz){B b=alloc_block(n*=sz);P(b,ta_memclear(b->a,n),b->a)R 0;}
 
 static SZ ta_count(B b){SZ c=0;W(b)b=b->n,c++;R c;}
 CNT(ta_avail,f)CNT(ta_used,u)CNT(ta_fresh,frsh)

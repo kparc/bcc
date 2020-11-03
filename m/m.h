@@ -13,8 +13,8 @@
 #endif
 
 V ta_init(S base,S max,SZ heap_blocks,SZ split_thresh,SZ alignment);
-S ta_alloc(SZ num),ta_calloc(SZ num,SZ size);
-C ta_free(S ptr),ta_check();
+V*ta_alloc(SZ num),*ta_calloc(SZ num,SZ size);
+C ta_free(V*ptr),ta_check();
 
 #define CNT(f,x) SZ f(){R ta_count(hp->x);}
 SZ ta_avail(),ta_used(),ta_fresh();
