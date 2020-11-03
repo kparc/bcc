@@ -1,11 +1,13 @@
 #include"a.h"
 
-#ifdef ISOMORPH
+#ifdef ISOMRPH
 #define ARGOPN '('
 #define ARGCLS ')'
+#define LOOP(x) sc("WN",x)
 #else
 #define ARGOPN '['
 #define ARGCLS ']'
+#define LOOP(x) 0
 #endif
 
 //! scope accessors

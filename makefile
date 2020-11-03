@@ -2,7 +2,12 @@ CF=-minline-all-stringops -fno-asynchronous-unwind-tables -fno-stack-protector -
 #LF=-nostdlib -c a.S
 SRC=a.c b.c p.c
 O=-O0 -g
-#O+= -DISOMORPH
+T=t.b
+
+ifeq ($(ISOMRPH),1)
+ O+= -DISOMRPH
+ T=tiso.b
+endif
 
 ifeq ($(shell uname),Darwin)
  CF+= -pagezero_size 1000
@@ -11,17 +16,17 @@ endif
 # llvm
 l:
 	clang $O $(LF) $(SRC) -o bl $(CF)
-	./bl t.b
+	./bl $T
 
 # gcc
 g:
 	gcc $O $(LF) $(SRC) -o bg $(CF) -Wno-unused-value -Wno-misleading-indentation
-	./bg t.b
+	./bg $T
 
 # tcc
 t:
 	tcc -std=c99 $O $(SRC) -o bt
-	./bt t.b
+	./bt $T
 
 # ref
 r:

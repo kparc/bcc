@@ -28,13 +28,13 @@ UNIT(malloc,
 
    WS0("non-assigning repl expressions shouldn't leak memory")
 
-   _("f[ii]{x+y}",  NONE, "declare a global function")
+   _("f(ii){x+y}",  NONE, "declare a global function")
    WS(80, "workspace usage should be 80 bytes")
 
    _("f[40;2]",       42, "function calls should work as expected")
    WS0("calling a function shouldn't leak memory")
 
-   _("f[ii]{x-y}",  NONE, "reassign an exisiting function")
+   _("f(ii){x-y}",  NONE, "reassign an exisiting function")
    WS0("reassigning a global function shouldn't leak memory")
 
    _("f[40;2]",       38, "reassigned function should work as expected")
@@ -66,14 +66,14 @@ UNIT(parser,//<! parse trees
    PT("#x",    "('#';x)",          "ptree of monadic op")
    PT("x+y",   "('+';x;y)",        "ptree of dyadic op")
 
-   PT("c[i]$[x;1;2]", "('$';x;0x81;0x82)",          "declare a ctf function (omitted brackets)")
+   PT("c(i)$[x;1;2]", "('$';x;0x81;0x82)",          "declare a ctf function (omitted brackets)")
    _("\\-c",        NONE, "release a ctf function")
    WS(0, "parsing a bare ctf function shouldn't leak memory")
 
-   PT("c[x]{$[x;1;2]}", "('{';('$';x;0x81;0x82))",  "declare a ctf function (omitted brackets)")
+   PT("c(x){$[x;1;2]}", "('{';('$';x;0x81;0x82))",  "declare a ctf function (omitted brackets)")
    _("\\-c",        NONE, "release a ctf function")
 
-   PT("l[i]{r:0;N(x){r+:2};r}",  "('{';(':';r;0x80);('N';x;('{';(0xab;r;0x82)));r)", "loop function decl ptree")
+   PT("l(i){r:0;N(x){r+:2};r}",  "('{';(':';r;0x80);('N';x;('{';(0xab;r;0x82)));r)", "loop function decl ptree")
    _("\\-l",   NONE, "release of l[] should return memory to the heap")
 )
 
@@ -152,7 +152,9 @@ UNIT(syms,
 TESTS(
 
 #ifndef SYMS
-   RUN(smoke)RUN(malloc)RUN(errors)RUN(brackets)
+   RUN(smoke)RUN(malloc)
+   RUN(errors)
+   RUN(brackets)
    RUN(parser)
    RUN(disk)
    RUN(shortsyms)
