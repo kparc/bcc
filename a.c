@@ -11,7 +11,13 @@
 ZF ms(){J a,d;asm volatile("rdtsc":"=a"(a),"=d"(d));R((d<<32)+a)*.58e-6;}//<! fixme .58e-6
 V w2(S s){write(2,s,strlen((char*)s));}ZS r2(S s){ZC b[256];R w2(s),b[read(0,b,256)-1]=0,b;}
 
-ZS ma(I d,J n){ZJ p=0x70000000L;p+=d?0:n;V*r=mmap((V*)(d?0:p-n),n,PROT_READ|PROT_WRITE|PROT_EXEC,d?MAP_PRIVATE:(MAP_ANON|MAP_PRIVATE|MAP_FIXED),d-!d,0);P(r==MAP_FAILED,O("%s\n",strerror(errno)),(S)0)R r;}
+#ifndef __APPLE__
+#define BASE 0x700000
+#else
+#define BASE 0x70000000L
+#endif
+
+ZS ma(I d,J n){ZJ p=BASE;p+=d?0:n;V*r=mmap((V*)(d?0:p-n),n,PROT_READ|PROT_WRITE|PROT_EXEC,d?MAP_PRIVATE:(MAP_ANON|MAP_PRIVATE|MAP_FIXED),d-!d,0);P(r==MAP_FAILED,O("%s\n",strerror(errno)),(S)0)R r;}
 ZS mf(S s,J*n){struct stat b;I d=open(s,0);Qs(0>d,s)R fstat(d,&b),s=(*n=b.st_size)?ma(d,*n):s,close(d),s;}
 
 //! printf/scanf (almost:)
