@@ -3,11 +3,11 @@
 #ifdef ISOMRPH
 #define ARGOPN '('
 #define ARGCLS ')'
-#define LOOP(x) sc("WN",x)
+#define LP(x) sc("WN",x) //<! is x a loop reserved "word"
 #else
 #define ARGOPN '['
 #define ARGCLS ']'
-#define LOOP(x) 0
+#define LP(x) 0
 #endif
 
 //! scope accessors
