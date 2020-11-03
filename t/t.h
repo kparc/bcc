@@ -22,6 +22,12 @@ V setUp(V){}V tearDown(V){}//!< before/after each test
 #define EQ_I(act,exp,msg) TEST_ASSERT_EQUAL_INT_MESSAGE(exp,act,msg);
 #define EQ_F(act,exp,msg) TEST_ASSERT_EQUAL_FLOAT_MESSAGE(exp,act,msg);
 #define EQ_S(act,exp,msg) TEST_ASSERT_EQUAL_STRING_MESSAGE(exp,str(act),msg);
+#define STR(act,exp,msg) TEST_ASSERT_EQUAL_STRING_MESSAGE(exp,act,msg);
+
+#define SYMVAL(s) (S)se(*GG(hsh(s,strlen(s))),0)
+#define EQ_SYM(act,exp,msg) {K x=SYMVAL(act);TEST_ASSERT_MESSAGE(!memcmp(x,exp,MN(strlen(exp),xn)), "variable value should match expected");}
+
+
 //#define EQ_NL(act,msg)    TEST_ASSERT_MESSAGE(out(act)==NL,msg);
 
 #define ASSERT(act,exp,msg) S(TYPE(exp),\

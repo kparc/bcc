@@ -94,31 +94,6 @@ UNIT(brackets,
 #undef pass
 #undef fail
 
-extern S Ss;extern K z;//!< \Ss tape \z zx source zy 0xrtype:opcodes:stack
-K sym(),nme(K h);K*GG(K h),hsh(S s,UI n);V del(K h);
-
-
-UNIT(syms,
-   #define SYM "xyz"
-   Ss=(S)SYM;       //!< set the parser tape to string SYM
-   K h=sym(),       //!< scan an identifier from the tape and return hash (KS)
-     x=nme(h),      //!< lookup literal symbol name string (KC)
-    *v=GG(h);       //!< look up a pointer to the global sym value slot
-   *v=ki(42);       //!< assign a value
-
-   K g=*GG(hsh(SYM,strlen(SYM)));os(SYM);o(g);
-   r0(x);del(h);    //!< cleanup
-
-   PT("ccall+go_fn+42",  "('+';`ccall;('+';`go_fn;0xaa))",   "basic multichar identifiers are supported by parser")
-   PT("x+Not+Wha",       "('+';`x;('+';`Not;`Wha))",         "special case: if leading N|W is not followed by (, force class to identifier")
-
-   //! TODO
-   //_("asdf:42",   NONE, "ok")
-   //_("asdf",      42,   "ok")
-
-   W0=ws();        //! FIXME variable identifiers should probably be excluded from wssize
-)
-
 UNIT(disk,
    ERR("\\l t/blah.b",   "t/blah.b",      "missing file should report an error")
      _("\\l t/t.b",       NONE,           "successful file compilation shouldn't report")
@@ -126,12 +101,61 @@ UNIT(disk,
      _("\\-x",            NONE,           "releasing the result of compilation should empty the ws")
 )
 
+UNIT(shortsyms,
+   PT("a:42",   "0xaa",  "parse tree of a scalar assignment is its literal value")
+   PT("s:2+1",           "('+';0x82;0x81)", "parse tree of a simple expression #1")
+   PT("s+s",             "('+';s;s)",       "parse tree of a simple expression #2")
+
+   _("s:2+1",             0,                "scalar expr assignment")
+   _("s",                 3,                "parse tree of a simple expression #2")
+
+)
+
+extern S Ss;extern K z;//!< \Ss tape \z zx source zy 0xrtype:opcodes:stack
+K sym(I a),nme(K h);K*GG(K h),hsh(S s,UI n);V del(K h);
+UNIT(syms,
+   #define SYM "xyz"
+
+   Ss=(S)SYM;       //!< set the parser tape to string SYM
+   K h=sym(0),       //!< scan an identifier from the tape and return hash (KS)
+     x=nme(h),      //!< lookup literal symbol name string (KC)
+    *v=GG(h);       //!< look up a pointer to the global sym value slot
+   *v=ki(42);       //!< assign a value
+
+   //K g=*GG(hsh(SYM,strlen(SYM)));os(SYM);o(g);
+   r0(x);del(h);    //!< cleanup
+
+   PT("ccall+go_fn+42",  "('+';`ccall;('+';`go_fn;0xaa))",   "basic multichar identifiers are supported by parser")
+   PT("x+Not+Wha",       "('+';`x;('+';`Not;`Wha))",         "special case: if leading N|W is not followed by (, force class to identifier")
+
+   PT("asdf:42",         "0xaa",            "parse tree of a scalar assignment is its literal value")
+   PT("sum:2+1",         "('+';0x82;0x81)", "parse tree of a simple expression #1")
+   PT("sum+sum",         "('+';`sum;`sum)", "parse tree of a simple expression #2")
+   //PT("fun[i]{x}",       "asdf",            "function declaration FIXME segv")
+
+   _("til:!3",            0,                "vector expr assignment")
+   _("sum:2+1",           0,                "scalar expr assignment")
+   _("prd:sum*sum",       0,                "product of two global variables")
+   //_("fun[i]{x}",         0,                "function declaration FIXME segv")
+
+   //_("sum",               3,                "get value of a global variable FIXME")
+
+   EQ_SYM("sum",         "3",      "sum holds the correct scalar value in the htable slot")
+   EQ_SYM("til",     "0 1 2",      "til holds the correct vector value in the htable slot")
+
+   //EQ_VAL("prd",         "9",      "prd holds the correct vector value in the slot FIXME")
+
+   W0=ws();        //! FIXME variable identifiers should probably be excluded from wssize
+)
+
+
 TESTS(
 
 #ifndef SYMS
    RUN(smoke)RUN(malloc)RUN(errors)RUN(brackets)
    RUN(parser)
    RUN(disk)
+   RUN(shortsyms)
 #else
    RUN(syms)
 #endif

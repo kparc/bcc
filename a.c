@@ -32,7 +32,7 @@ ZI clzl(I n){I i=0;W(n)n/=2,++i;R i-4;}V csr(){R;}//<! FIXME tcc ldmxcsr nyi
 // malloc free:  mturnnnn list join (k[cifs] k[CIFS])
 //! K is mturnnnn: membucket, type, flags, refcount, length
 ZK M[31];//!< malloc is a classic pow2 buddy allocator w/o coalescing
-ZK m1(J n){K x,r;I i=clzl(n+7),j;P(x=M[i],M[i]=xx,x)j=i;
+ZK m1(J n){K x,r;I i=clzl(n+7),j;P((x=M[i]),M[i]=xx,x)j=i;
  W(!(x=++j<31?M[j]:8+ma(0,16L<<(j=MX(18,i)))));
  xm=i,M[j]=xx,r=x;W(i<j)x+=16L<<xm,M[*(J*)(x-8)=i++]=x,xx=0;R r;}
 

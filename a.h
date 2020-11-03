@@ -29,7 +29,7 @@ typedef struct{C L[26];C T[26];I M;C D[2];C N;I A;}pst;typedef pst*ST;
 typedef struct{C L[26];C T[26];I M;C D[2];C N;K A;}pst;typedef pst*ST; //<! assignment target (A) must be K to hold KS
 #endif
 
-extern K sym(),*GG(K h),val(K h),nme(K h);//!< symtable manager
+extern K sym(I a),*GG(K h),val(K h),nme(K h);//!< symtable manager
 extern J nt[],ip();extern K G[],ex(K),ps(S),r1(),tn(),j2(),k0(),sS(),enm(),o();I cl(I c);V exit(),w2(),r0();S pi(),pf(),px();J ws();F fp();Z_ K X(K*k,K y){R r0(*k),*k=y,NL;}
 Z_ I oc(I i){R w2((S)&i),i;}Z_ V nl(){w2("\n");}Z_ S os(S s){R w2(s),nl(),s;}Z_ J oi(J j){R os(pi(j)),j;}Z_ F of(F f){R os(pf(f)),f;}Z_ J ox(J j){R os(px(j)),j;}
 Z_ S sc(S s,I c){W(*s-c)P(!*s++,(S)0)R s;}
@@ -39,7 +39,7 @@ Z_ K kC(I n){R tn(KC,n);}
 Z_ K kI(I n){R tn(KI,n);}
 Z_ K kJ(I n){R tn(KJ,n);}
 Z_ K kS(I n){R tn(KS,n);}
-Z_ K pn(S s,I n){R memcpy(kC(n),s,n);}Z_ K kp(S s){R pn(s,strlen((char*)s));}
+Z_ K pn(S s,I n){R memcpy(kC(n),s,n);}Z_ K kp(S s){R pn((S)s,strlen((char*)s));}
 Z_ K kc(J x){R(K)(KC<<48|x);}
 Z_ K ki(unsigned x){R(K)(KI<<48|(J)x);}
 Z_ K kf(F f){R*(K*)&f;}
@@ -55,7 +55,7 @@ Z_ K jc(K x,C c){R j2(x,kc(c));}
 #define FN(x) (!Ax&&!xt)
 #define I(x) (I)(J)(x) //(-1UL>>16&(J)(x))
 #define Q(x)        P(QQ==A(x),x) //#define Q(c,i)      P(c,qi(i))  //error index(nyi,rank,length,type,..)
-#define Qs(c,s)     P(c,qs(s))  //error string
+#define Qs(c,s)     P(c,qs((S)s))  //error string
 #define N1(n,a...)  {I i=0,_n=(n);do{a;}while(++i<_n);}
 
 // access x y z r

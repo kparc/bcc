@@ -110,7 +110,7 @@ K pcle(S tp,I dbg){Ss=tp;pst t={{0},{0},0,{1,1},8,0};ST st=&t;//pst t;ST st=&t;s
  S b;P(b=bb(tp),qs(*b?b:(S)"balance"))
 
 #ifdef SYMS
- //K g='a'==cl(*Ss)?sym():NL;//{K x=nme(g);Ss-=xn;} // for now, skip the lookahead identifier scan for assign
+ K g='a'==cl(*Ss)?sym(1):NL;//{K x=nme(g);Ss-=xn;} // for now, skip the lookahead identifier scan for assign
 #endif
 
  if(!tp[1])$(26u>*tp-'a',K x=G[*tp-'a'];Qs(NL==x,tp)P(FN(x),os(xx),dis(xy),NL))R qs(tp);//!< KPC FIXME quick temporary hack to pretty print-opcodes by referencing function name
@@ -119,8 +119,7 @@ K pcle(S tp,I dbg){Ss=tp;pst t={{0},{0},0,{1,1},8,0};ST st=&t;//pst t;ST st=&t;s
  S r='['==Ss[1]&&(r=sc(Ss,']'))&&*++r?r:0; //!< FIXME function assignment is a lookahead hack
 
 #ifdef SYMS
- //K*k=r||':'==*Ss?sA=g,Ss+=1,GG(g):0;
- K*k=0;
+ K*k=r||':'==*Ss?sA=g,Ss+=1,GG(g):0;
 #else
  //! FIXME this is fundamentally incorrect:
  //  we should just inform the parser that
