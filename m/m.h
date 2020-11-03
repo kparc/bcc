@@ -1,3 +1,4 @@
+#pragma once
 //#include <stddef.h>
 //#include <stdint.h>
 #include"../c.h"
@@ -19,27 +20,12 @@ C ta_free(V*ptr),ta_check();
 #define CNT(f,x) SZ f(){R ta_count(hp->x);}
 SZ ta_avail(),ta_used(),ta_fresh();
 
-#ifdef TA_TEST
-#include<stdlib.h>
-#include<sys/types.h>
-#include<sys/sysctl.h>
-#include<sys/mman.h>
-#include<errno.h>
-
-#define GB(n) (n>>30)
-
-SZ phy(){SZ m=0;
-#if defined(__EMSCRIPTEN__)
- m=__builtin_wasm_memory_size(0)*64*1024;
-#elif defined(__linux__) || defined(__OpenBSD__)
- m=sysconf(_SC_PHYS_PAGES))*sysconf(_SC_PAGE_SIZE);
-#elif defined(__APPLE__)
- SZ ln=sizeof(m);sysctlbyname("hw.memsize",&m,&ln, NULL, 0);
+#ifdef TA_MAIN
+#define TA_TEST
 #endif
- R m;}
 
-S ma(SZ n){S r=mmap(0,n,PROT_READ|PROT_WRITE,MAP_ANON|MAP_PRIVATE,0,0);$(r==MAP_FAILED,O("%s (n=%zu)\n",strerror(errno),n),exit(1))R r;}
-
+#ifdef TA_TEST
+SZ phy();S ma(SZ n);
 #endif
 
 //:~

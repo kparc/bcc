@@ -1,3 +1,5 @@
 m
 *.dSYM
 bench
+leak
+stress

@@ -6,7 +6,29 @@ typedef struct {B f;B u;B frsh;SZ top;}pHP;typedef pHP*HP;//!< heap: first free 
 static HP hp;ZS HMAX;static SZ heap_split_thresh,heap_alignment,heap_max_blocks;
 
 #ifdef TA_TEST
+#include<stdlib.h>
+#include<sys/types.h>
+#include<sys/sysctl.h>
+#include<sys/mman.h>
+#include<errno.h>
 
+#define GB(n) (n>>30)
+
+SZ phy(){SZ m=0;
+#if defined(__EMSCRIPTEN__)
+ m=__builtin_wasm_memory_size(0)*64*1024;
+#elif defined(__linux__) || defined(__OpenBSD__)
+ m=sysconf(_SC_PHYS_PAGES))*sysconf(_SC_PAGE_SIZE);
+#elif defined(__APPLE__)
+ SZ ln=sizeof(m);sysctlbyname("hw.memsize",&m,&ln, NULL, 0);
+#endif
+ R m;}
+
+S ma(SZ n){S r=mmap(0,n,PROT_READ|PROT_WRITE,MAP_ANON|MAP_PRIVATE,0,0);$(r==MAP_FAILED,O("%s (n=%zu)\n",strerror(errno),n),exit(1))R r;}
+
+#endif
+
+#ifdef TA_MAIN
 I ta_test(){
   S base;SZ
     phys=phy(),

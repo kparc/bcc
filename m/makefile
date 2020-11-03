@@ -10,13 +10,19 @@ ifeq ($(shell uname),Darwin)
 endif
 
 m:
-	@$C $O $S $T $(LF) -o m $(CF) $(GNU)
+	@$C $O $S -DTA_MAIN $(LF) -o m $(CF) $(GNU)
 
 clean:
-	@rm -f m
+	@rm -f m leak stress
 
 t:
 	@./m
+
+stress: clean
+	@$C -DNO_REALLOC -DUSE_TINY_MALLOC -DSTRESS $O $S stress.c $T $(LF) -o stress $(CF) $(GNU)
+
+leak: clean
+	@$C -DNO_REALLOC -DUSE_TINY_MALLOC          $O $S stress.c $T $(LF) -o leak $(CF) $(GNU)
 
 all: clean m t
 
