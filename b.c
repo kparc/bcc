@@ -107,10 +107,10 @@ S bb(S x){C b[BLIM];I n=0,a;S s;x-=1;W(*++x){$(m2(" /",x),s=sc(x,'\n');P(!s,n?x:
 
 //! parse[->compile->link->exec]
 K pcle(S tp,I dbg){Ss=tp;pst t={{0},{0},0,{1,1},8,0};ST st=&t;//pst t;ST st=&t;sA=M=0;sN=8;D0=D1=1;N(26,L[i]=T[i]=0)N(26,O("%d %d\n",L[i],T[i]))
- S b;P(b=bb(tp),qs(*b?b:(S)"balance"))
+ S b;P(b=bb(tp),qs(*b?b:(S)"balance")) //<! scan the whole tape and bail on unbalanced "{[( or excessive nesting
 
 #ifdef SYMS
- K g='a'==cl(*Ss)?sym(1):NL;//{K x=nme(g);Ss-=xn;} // for now, skip the lookahead identifier scan for assign
+ K g='a'==cl(*Ss)?sym(1):NL;//{K x=nme(g);Ss-=xn;} // read an indentifier, if not followed by assign (:), rewind to start
 #endif
 
  if(!tp[1])$(26u>*tp-'a',K x=G[*tp-'a'];Qs(NL==x,tp)P(FN(x),os(xx),dis(xy),NL))R qs(tp);//!< KPC FIXME quick temporary hack to pretty print-opcodes by referencing function name
