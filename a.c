@@ -86,7 +86,7 @@ ZS1(tm){S t=sc(s,' ');Qs(!t,s)*t=0;I n=':'-*s++?1:10u>*s-'0'?ip(s,t-s):(J)es(s);
 ZS1(rg){I i=*s-'a';K x;Qs(26u<i||!(NL!=(x=G[i])),s)Qs(Ax,"nyi")P(!xr,G[i]=X0(NL))R qs("0<xr");}//!<release global function or vector if refcount is 0
 S1(es){K x;P('\\'-*s,!*s?NL:(x=ps(s))&&NL-x&&QQ-Ax?X0(ex(x)):x)if(!*++s||'\\'==*s)exit(0);R!s[1]?'w'==*s?ki(W):sc("vf",*s)?vf('f'==*s):qs(s):'t'==*s?tm(s+1):'-'==*s?rg(s+1):'l'==*s?ld(s+2):qs(s);}
 V init(){csr();N(26,G[i]=NL)*(K*)(K0=kK(0))=c0();}K enm(J x){K r=kI(xi);N(rn,Ri=i)R r;}
-ZV km(S*a){init();if(*++a)pr(ld(*a));os("kparc/b x64");W(1)pr(es(r2(" ")));}
+ZV km(S*a){init();if(*++a)pr(ld(*a));os("kparc/b x64");W(1)pr(es(r2((S)" ")));}
 
 #ifdef TST
 #define main b_main
