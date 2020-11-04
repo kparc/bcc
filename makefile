@@ -50,7 +50,7 @@ cleantest:
 cleansyms:
 	@rm -f syms
 
-all: l g t test syms
+all: l g test syms t
 
 clean:
 	@rm -f test bl bg bt r
