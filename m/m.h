@@ -15,8 +15,8 @@
 #define INSERT(b) insert_block(b);
 #endif
 
-V ta_init(S base,S max,SZ heap_blocks,SZ split_thresh,SZ alignment),
- *ta_alloc(SZ num),
+V ta_init(V*base,V*max,SZ heap_blocks,SZ split_thresh,SZ alignment),
+ *ta_malloc(SZ num),
  *ta_calloc(SZ num,SZ size),
   ta_free(V*ptr);
 
@@ -25,10 +25,10 @@ V ta_init(S base,S max,SZ heap_blocks,SZ split_thresh,SZ alignment),
 #endif
 
 #ifdef TA_TEST
-SZ phy();S ma(SZ n);
+SZ phy();V*ma(SZ n);
 #define CNT(f,x) SZ f(){R ta_count(hp->x);}
 SZ ta_avail(),ta_used(),ta_fresh();
-C ta_check();
+C ta_check();V EXP ta_test_init();
 #endif
 
 //:~
