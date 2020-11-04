@@ -32,7 +32,7 @@ K2(j2){I m=xn,n=m+(Ay?1:yn); //!< m is the old size, n is the new one (inc n by 
     if(xr||8+NX*n>16L<<xm)   //!< if x has references, or there is not enough space left in the x's ram block...
       x=xiy(tn(xt,n),0,x);   //!< ..copy it to a new array of the size n
     else xu=0,xn=n;          //!< otherwise, the size of x to the new size, then:
-    Ay?memcpy(x+NX*m,&y,NX)  //<! for atoms, append a new item via memcpy
+    Ay?memcpy(x+NX*m,&y,NX)  //<! for atoms, append the new item via memcpy
       :xiy(x,m,y);R x;}      //<! for lists, use xiy to append y items to the x's tail
 
 //! arch|sys
