@@ -5,13 +5,13 @@ GNU=-Wno-variadic-macros -Wno-dollar-in-identifier-extension -Wno-gnu-statement-
 SRC=m.c
 OREL=-O0
 ODBG=-O0 -g
-OTST=-O3 -DTA_TEST -DNDEBUG
+OTST=-O0 -DTA_TEST -DNDEBUG
 
 #TINYOPTS=-DTA_NO_COMPACT -DTA_NO_SPLIT
 
 MI=-Ibench/extern/mimalloc/include -Lbench/extern/mimalloc/out/release -lmimalloc -Wno-int-conversion -Wno-extra-semi
-LEAKOPTS=1 10 10000
-STRESSOPTS=1 10 100
+LEAKOPTS=1 100 10000
+STRESSOPTS=1 100 16
 TM=LD_LIBRARY_PATH=bench/extern/mimalloc/out/release
 
 OSO=-shared -lpthread
@@ -32,25 +32,29 @@ so:
 t:
 	@./m
 
+stress: clean
+	$C $(OTST) -DUSE_TM_MALLOC -DSTRESS $(SRC) stress.c -o stress $(CF) $(GNU) $(MI)
+	$(TM) ./stress $(STRESSOPTS)
+
 stresssys: clean
-	$C $(OTST) -DUSE_MI_MALLOC -DSTRESS $(SRC) stress.c -o stress $(CF) $(GNU) $(MI)
+	$C $(OTST) -DUSE_STD_MALLOC -DSTRESS $(SRC) stress.c -o stress $(CF) $(GNU) $(MI)
 	$(TM) ./stress $(STRESSOPTS)
 
 stressmi: clean
-	$C $(OTST) -DUSE_MI_MALLOC -DSTRESS $(SRC) stress.c -o stress $(CF) $(GNU) $(MI)
+	$C $(OTST) -DUSE_MI_MALLOC  -DSTRESS $(SRC) stress.c -o stress $(CF) $(GNU) $(MI)
 	$(TM) ./stress $(STRESSOPTS)
 
 leak: clean
-	$C $(OTST) -DUSE_TINY_MALLOC        $(SRC) stress.c -o leak $(CF) $(GNU) $(MI)
+	$C $(OTST) -DUSE_TM_MALLOC         $(SRC) stress.c -o leak $(CF) $(GNU) $(MI)
 	$(TM) ./leak $(LEAKOPTS)
 
 leaksys: clean
-	$C $(OTST) -DUSE_STD_MALLOC         $(SRC) stress.c -o leak $(CF) $(GNU) $(MI)
+	$C $(OTST) -DUSE_STD_MALLOC        $(SRC) stress.c -o leak $(CF) $(GNU) $(MI)
 	@#threads scale iter
 	$(TM) ./leak $(LEAKOPTS)
 
 leakmi: clean
-	$C $(OTST) -DUSE_MI_MALLOC          $(SRC) stress.c -o leak $(CF) $(GNU) $(MI)
+	$C $(OTST) -DUSE_MI_MALLOC         $(SRC) stress.c -o leak $(CF) $(GNU) $(MI)
 	@#threads scale iter
 	$(TM) ./leak $(LEAKOPTS)
 

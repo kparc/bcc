@@ -40,7 +40,7 @@ terms of the MIT license.
 #define custom_free(p)        mi_free((S)(V*)p)
 #endif
 
-#ifdef USE_TINY_MALLOC
+#ifdef USE_TM_MALLOC
 #include"m.h"
 V ta_test_init(){
   S base;SZ
