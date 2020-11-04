@@ -42,18 +42,6 @@ terms of the MIT license.
 
 #ifdef USE_TM_MALLOC
 #include"m.h"
-V ta_test_init(){
-  S base;SZ
-    phys=phy(),
-    heap=phys>>2,
-    nblk=256,
-    splt=16,
-    algn=sizeof(S);
-    base=ma(heap);
- ta_init(base,base+heap,nblk,splt,algn);
- O("tinymalloc init ok\n");
-}
-
 #define custom_init           ta_test_init()
 #define custom_calloc(n,s)    ta_calloc(n,s)
 #define custom_realloc(p,s)   (O("nyi ta_realloc\n"),exit(1),(V*)0)
