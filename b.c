@@ -59,7 +59,13 @@ ZK MV(I t,I r,K y){R O2(t,0,r,u(r,c0()),y);}
  K Na(){S r=Ss;W(10u>*++Ss-'0'||'.'==*Ss){};I f=0;N(Ss-r,f|='.'==r[i])R f?kf(fp(r,Ss-r)):ki(ip(r,Ss-r));}
 
 ZI _q(K x,S sL){I i=xi-'a';R Ax?26u>i&&sL[i]?sL[i]:0:':'==*x?I(xy):0;}
- I _t(K x,S sT){I a=xi-'a';R!Ax?xu:126<xi?KI:26u>a&&sT[a]?sT[a]:A(x=26u>a?G[a]:zK[2+xi-16])?Ax:xt+8;}
+I  _t(K x,S sT){I a=xi-'a'; //!< determine type of x
+  R!Ax?xu:                  //!< not an atom is a function: xu holds rettype
+   126<xi?KI:               //!< small integer atom encoded in a single byte
+   26u>a&&sT[a]?sT[a]:      //!< local variable
+   A(x=26u>a?G[a]:          //!< global variable
+    zK[2+xi-16])?Ax:        //!< function argument (additional element of z)
+    xt+8;}                  //!< array (element type + 4th bit)
 
 ZK e(I r,K x,ST st){K y=d(r,x,st);R Ay?128==yi||32>yi&&!zK[2+yi-16]?ZR(t(x),r):MV(t(x),r,y):y;}
 ZK b(I f,K x,ST st){K y=d(16,x,st);R Ay?AB("b"):16==yu?y[yn-1]=JJ[y[yn-1]+f*4],y:j3(y,tst(t(x),yu),c1(JJ[f?2:6]));}
@@ -67,17 +73,21 @@ ZK b(I f,K x,ST st){K y=d(16,x,st);R Ay?AB("b"):16==yu?y[yn-1]=JJ[y[yn-1]+f*4],y
 ZK f(I r,K x,ST st){K y=e(r,x,st);R r-yu?MV(t(x),r,y):y;}
 ZK E(I r,K x,ST st){I i=xn-1;K z=e(r,Xx,st),y=kK(i--);r=zu,Yx=z;W(i--)Yx=e(0,xK[i+1],st);R u(r,sS(0,y));}
 ZK vh(K x,I n,I r,ST st){R++Ss,1<n?e(0,x,st):f(r,x,st);}
+
+//! translate $[ctf]
+ZK v(I r,K x,I n,ST st){
 #ifndef SYMS
-ZK v(I r,K x,I n,ST st){K y=xz,z;I c=!n&&!Ay&&sA==*y,l=M;
+ K y=xz,z;I c=!n&&!Ay&&sA==*y,l=M;
 #else
-ZK v(I r,K x,I n,ST st){K y=xz,z;I c=!n&&!Ay&&sA==y,l=M;
+ K y=xz,z;I c=!n&&!Ay&&sA==y,l=M;
 #endif
- z=vh(xK[3],n,r,st),M=l,y=vh(y,n,r,st),x=b(1,xy,st);yn-=c*B;I jj=1-n?n-xn-yn-3:zn;K j=jmp(jj);y=j2(y,n||c?yn,j:c1(RET));R j3(jc(x,yn),y,z);}
+ z=vh(xK[3],n,r,st),M=l,y=vh(y,n,r,st),x=b(1,xy,st);yn-=c*B;I jj=1-n?n-xn-yn-3:zn;
+ K j=jmp(jj);y=j2(y,n||c?yn,j:c1(RET));R j3(jc(x,yn),y,z);}
 
 K p(ST);
 
+//! w() translate W|N loop
 ZV mm(K x,ST st){I i;$(Ax,if(26u>xi-'a'&&L[i=xi-'a'])M|=1<<L[i])$(':'==*x&&A(xy),i=I(xy)-'a',M&=~(1<<L[i]),mm(xz,st))N(xn,mm(sc("{WNC",*x)?xK[xn-1-i]:Xx,st))}
-
 ZK w(K x,ST st){I i='N'==*x?L[sN++]:0,j=0;mm(x,st);K y=xy,z=xz;I jj;
  P(!i&&!Az&&'$'==*z,x=b(1,y,st),z=v(0,z,-xn-1,st),jj=-xn-1-zn-2,j3(jc(x,zn+2),z,jmp(jj)))
  x=i?M|=1<<i,jc(cm(0,i,j=(j=q(y))?j:D0),JJ[1]):b(0,y,st),z=i?j2(e(0,z,st),o2(0,1,i,i,129)):e(0,z,st);
