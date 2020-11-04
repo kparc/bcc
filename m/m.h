@@ -3,6 +3,8 @@
 //#include <stdint.h>
 #include"../c.h"
 
+#define EXP __attribute__ ((visibility("default")))
+
 #define SZ size_t
 #define SZT sizeof(size_t)
 #define ALGN(x) x=(x+heap_alignment-1)&-heap_alignment;
