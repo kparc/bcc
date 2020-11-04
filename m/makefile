@@ -1,4 +1,4 @@
-C=clang -std=c11
+C=clang -std=gnu11
 
 CF=-Wall -Wextra -pedantic -fno-asynchronous-unwind-tables -fvisibility=hidden -fno-stack-protector -fno-common
 GNU=-Wno-variadic-macros -Wno-dollar-in-identifier-extension -Wno-gnu-statement-expression -Wno-unused-parameter -Wno-format-pedantic
@@ -9,7 +9,7 @@ OTST=-O0 -DTA_TEST -DNDEBUG
 
 #TINYOPTS=-DTA_NO_COMPACT -DTA_NO_SPLIT
 
-MI=-Ibench/extern/mimalloc/include -Lbench/extern/mimalloc/out/release -lmimalloc -Wno-int-conversion -Wno-extra-semi
+MI=-lpthread -Ibench/extern/mimalloc/include -Lbench/extern/mimalloc/out/release -lmimalloc -Wno-int-conversion -Wno-extra-semi
 LEAKOPTS=1 100 10000
 STRESSOPTS=1 100 16
 TM=LD_LIBRARY_PATH=bench/extern/mimalloc/out/release

@@ -27,13 +27,14 @@ SZ phy(){SZ m=0;
 #if defined(__EMSCRIPTEN__)
  m=__builtin_wasm_memory_size(0)*64*1024;
 #elif defined(__linux__) || defined(__OpenBSD__)
- m=sysconf(_SC_PHYS_PAGES))*sysconf(_SC_PAGE_SIZE);
+#include<unistd.h>
+ m=sysconf(_SC_PHYS_PAGES)*sysconf(_SC_PAGE_SIZE);
 #elif defined(__APPLE__)
  SZ ln=sizeof(m);sysctlbyname("hw.memsize",&m,&ln, NULL, 0);
 #endif
  R m;}
 
-S ma(SZ n){S r=mmap(0,n,PROT_READ|PROT_WRITE,MAP_ANON|MAP_PRIVATE,0,0);$(r==MAP_FAILED,O("%s (n=%zu)\n",strerror(errno),n),exit(1))R r;}
+S ma(SZ n){S r=mmap(0,n,PROT_READ|PROT_WRITE,MAP_NORESERVE|MAP_ANON|MAP_PRIVATE,0,0);$(r==MAP_FAILED,O("%s (n=%zu)\n",strerror(errno),n),exit(1))R r;}
 
 #else
 #define DBG(a...)
