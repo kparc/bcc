@@ -6,10 +6,14 @@ typedef struct {B f;B u;B frsh;SZ top;}pHP;typedef pHP*HP;//!< heap: first free 
 static HP hp;ZS HMAX;static SZ heap_split_thresh,heap_alignment,heap_max_blocks;
 
 #ifdef TA_TEST
-
 //#define DBG(a...) O(a)
 #define DBG(a...)
+
+#ifndef STRESS
+#define CHK(fn)
+#else
 #define CHK(fn) if(!ta_check())O("ta_check() fail %s\n",fn),exit(1);
+#endif
 
 #include<stdlib.h>
 #include<sys/types.h>
@@ -50,7 +54,7 @@ I ta_test(){
 
  O("phys %zug heap %zug base %p hmax %p\n",GB(phys),GB(heap),base,base+heap);
 
- R 1;}
+ R 0;}
 
 I main(I c,char**v){R ta_test();}
 #endif
@@ -71,12 +75,12 @@ V ta_init(S base,S max,SZ hpb,SZ splt,SZ algn) {
     W(i--)b->n=b+1,++b;
     b->n=0;}
 
-ZV insert_block(B b) {
+ZV insert_block(B b){
     DBG("insert_block %p\n",b);
 #ifndef TA_NO_COMPACT
-    B p=hp->f,pre=0;//< if compaction is enabled, insert block into free list, sorted by addr
-    W(p)$((SZ)b->a<=(SZ)p->a,break)pre=p,p=p->n;
-    $(pre,pre->n=b)hp->f=b;
+    B p=hp->f,prev=0;//< if compaction is enabled, insert block into free list, sorted by addr
+    W(p){$((SZ)b->a<=(SZ)p->a,DBG("insert %p\n",p);break);prev=p,p=p->n;}
+    $(prev,prev->n=b){hp->f=b;}
     b->n=p;}
 #else
     b->n=hp->f,hp->f=b;}//<! if disabled, add block has new head of the free list
@@ -84,17 +88,19 @@ ZV insert_block(B b) {
 
 #ifndef TA_NO_COMPACT
 ZV release_blocks(B sc,B to){DBG("release_blocks %p %p\n",sc,to);B nxt;W(sc!=to)nxt=sc->n,sc->n=hp->frsh,hp->frsh=sc,sc->a=(S)0,sc->s=0,sc=nxt;}
-ZV compact() {
+ZV compact(){
+    DBG("compact()\n");
     B ptr=hp->f,prev,scan;
     W(ptr){
         prev=ptr;scan=ptr->n;
-        W(scan&&(SZ)prev->a+prev->s==(SZ)scan->a)prev=scan,scan=scan->n;//merge
+        W(scan&&(SZ)prev->a+prev->s==(SZ)scan->a){DBG("compact() merge=%p\n",scan);prev=scan,scan=scan->n;}//merge
         if(prev!=ptr){
             SZ new_size = (SZ)prev->a-(SZ)ptr->a + prev->s;
+            DBG("compact() new_size=%zu\n",new_size);
             ptr->s = new_size;
             B next = prev->n;
             release_blocks(ptr->n,prev->n);
-            ptr->n=next;// relink
+            ptr->n=next;//relink
         }
         ptr = ptr->n;}}
 #endif
@@ -135,6 +141,7 @@ static B alloc_block(SZ n){DBG("alloc_block(%zu):\n",n);ALGN(n)
                     B split  = hp->frsh;
                     hp->frsh  = split->n;
                     split->a = (S)((SZ)ptr->a+n);
+                    DBG("split %p\n",split->a);
                     split->s = excess;
                     INSERT(split)
                 );//else;
