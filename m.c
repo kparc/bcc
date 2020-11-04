@@ -19,8 +19,21 @@ J nt[]={8,1,2,4,8,4,8,KSSZ};ZJ W=-32;
 J ws(){R W;}K1(r1){P(Ax,x)R++xr?x:(O("r1\n"),exit(1),(S)0L);/*AB("r1");*/}
 V1(r0){if(Ax||!x)R;if(8==xt){l0(x);R;}if(xr){--xr;R;}if(!xt||KS<xt)N1(xn,r0(Xx))W-=16L<<xm,xx=M[xm],M[xm]=x;}
 K tn(I t,I n){K x=m1(MX(1,n)*nt[KS<t?0:t]);R W+=16L<<xm,xu=0,xt=t,xn=n,x;}
-K xiy(K x,I i,K y){memcpy(x+NX*i,y,NX*yn);if(!yt)N(yn,r1(Yx))R Y0(x);}
-K2(j2){I m=xn,n=m+(Ay?1:yn);P(!m&&!xt,X0(y))$(xr||8+NX*n>16L<<xm,x=xiy(tn(xt,n),0,x))xu=0,xn=n;Ay?memcpy(x+NX*m,&y,NX):xiy(x,m,y);R x;}
+
+//! append items of y after the i-th element of x
+K xiy(K x,I i,K y){
+ memcpy(x+NX*i,y,NX*yn);//!< NX is the width of x item type
+ if(!yt)N(yn,r1(Yx))    //!< increase refcounts of items in y
+ R Y0(x);}              //!< recursively decrease refcounts of y and return x
+
+//! join two lists
+K2(j2){I m=xn,n=m+(Ay?1:yn); //!< m is the old size, n is the new one (inc n by 1 if y is an atom)
+	P(!m&&!xt,X0(y))         //!< if x is empty, decrease refcount of x and return y
+	if(xr||8+NX*n>16L<<xm)   //!< if x has references, or there is not enough space lext in the x's ram block...
+	  x=xiy(tn(xt,n),0,x);   //!< ..copy it to a new array of the size n
+	else xu=0,xn=n;          //!< otherwise, the size of x to the new size, then:
+	Ay?memcpy(x+NX*m,&y,NX)  //<! for atoms, append a new item via memcpy
+	  :xiy(x,m,y);R x;}      //<! for lists, use xiy to append y items to the x's tail
 
 //! arch|sys
 #if (__x86_64__||i386)&&!__TINYC__
