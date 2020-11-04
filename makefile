@@ -1,6 +1,6 @@
 CF=-minline-all-stringops -fno-asynchronous-unwind-tables -fno-stack-protector -Wall -Wno-parentheses -Wno-pointer-sign
 #LF=-nostdlib -c a.S
-SRC=a.c b.c p.c
+SRC=a.c b.c m.c p.c
 O=-O0 -g
 T=t.b
 
@@ -34,12 +34,12 @@ r:
 	@#objdump -d r
 
 test: cleantest
-	@clang -std=gnu99 -DTST $O $(LF) t/t.c t/lib/unity.c $(SRC) -o test $(CF) -fmacro-backtrace-limit=0 \
+	@clang -std=gnu99 -DISOMRPH -DTST $O $(LF) t/t.c t/lib/unity.c $(SRC) -o test $(CF) -fmacro-backtrace-limit=0 \
 	-fprofile-instr-generate -fcoverage-mapping -fdebug-macro -Wno-int-conversion
 	@./test
 
 syms: cleansyms
-	@clang -std=gnu99 -DTST -DSYMS $O $(LF) t/t.c t/lib/unity.c $(SRC) -o syms $(CF) -fmacro-backtrace-limit=0 -Wno-int-conversion
+	@clang -std=gnu99 -DISOMRPH -DTST -DSYMS $O $(LF) t/t.c t/lib/unity.c $(SRC) -o syms $(CF) -fmacro-backtrace-limit=0 -Wno-int-conversion
 	@./syms
 
 cleantest:

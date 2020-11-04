@@ -9,6 +9,12 @@
 #define KF 6L
 #define KS 7L
 
+#ifdef SYMS
+#define KSSZ 8 //!< symbol is countains a UI djbhash of the underlying string extended to K, see ks()
+#else
+#define KSSZ 4
+#endif
+
 #define NL (K)(X1<<48)
 #define X1 11L
 #define X2 12L
