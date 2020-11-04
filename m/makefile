@@ -71,11 +71,16 @@ cfrac: clean
 	@clang $(OCFRAC) $(OCFRAC_TA) m.c -o cf_tm_ns  -DTA_NO_SPLIT
 	@clang $(OCFRAC) $(OCFRAC_TA) m.c -o cf_tm_ncs -DTA_NO_COMPACT -DTA_NO_SPLIT
 
-	             time ./cf_sys    $(OCFRAC_IN)
-	TA_NBLK=2048 time ./cf_tm     $(OCFRAC_IN)
-	TA_NBLK=2048 time ./cf_tm_ns  $(OCFRAC_IN)
-	TA_NBLK=4096 time ./cf_tm_nc  $(OCFRAC_IN)
-	TA_NBLK=4096 time ./cf_tm_ncs $(OCFRAC_IN)
+	@echo;echo "cfrac malloc";echo
+	@             time ./cf_sys    $(OCFRAC_IN)
+	@echo;echo "cfrac ta_malloc (split+compact)";echo	          
+	@TA_NBLK=2048 time ./cf_tm     $(OCFRAC_IN)
+	@echo;echo "cfrac ta_malloc (no split)";echo
+	@TA_NBLK=2048 time ./cf_tm_ns  $(OCFRAC_IN)
+	@echo;echo "cfrac ta_malloc (no compact)";echo
+	@TA_NBLK=4096 time ./cf_tm_nc  $(OCFRAC_IN)
+	@echo;echo "cfrac ta_malloc (no split/compact)";echo
+	@TA_NBLK=4096 time ./cf_tm_ncs $(OCFRAC_IN)
 
 all: clean m t so
 
