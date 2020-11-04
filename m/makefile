@@ -13,11 +13,14 @@ TINYOPTS=-DTA_TEST
 
 OSO=-shared -lpthread -fPIC
 TSO=libtm.so
+TIME=/usr/bin/time
+
 ifeq ($(shell uname),Darwin)
  OSO=-dynamiclib -undefined dynamic_lookup
  TSO=libtm.dylib
  PGFIX=-pagezero_size 1000
  CF+=$(PGFIX)
+ TIME=time -l
 endif
 
 m:
@@ -38,7 +41,7 @@ NBLK=128
 
 OSTRESS=-O2 -DTA_TEST -DNDEBUG -DNO_MI_STATS -lpthread $(PGFIX)
 OMI=-Ibench/extern/mimalloc/include -Lbench/extern/mimalloc/out/release -lmimalloc -Wno-int-conversion -Wno-extra-semi
-TM=TA_NBLK=$(NBLK) LD_LIBRARY_PATH=bench/extern/mimalloc/out/release time
+TM=TA_NBLK=$(NBLK) LD_LIBRARY_PATH=bench/extern/mimalloc/out/release $(TIME)
 
 STRESSCFG=1 100 16
 stress: clean
@@ -69,19 +72,19 @@ leak: clean
 	@#$C $(OSTRESS) -DUSE_MI_MALLOC  $(SRC_TA)  stress.c -o leak_mi        $(CF) $(GNU) $(OMI)
 
 	@echo;echo "leak ta_malloc (split+compact)";echo
-	@time ./leak_ta  $(LEAKCFG)
+	@$(TIME) ./leak_ta  $(LEAKCFG)
 
 	@echo;echo "leak ta_malloc (no split)";echo
-	@time ./leak_ta_ns  $(LEAKCFG)
+	@$(TIME) ./leak_ta_ns  $(LEAKCFG)
 
 	@#echo;echo "leak ta_malloc (w/check)";echo
-	@#time ./leak_ta_chk  $(LEAKCFG)
+	@#$(TIME) ./leak_ta_chk  $(LEAKCFG)
 
 	@echo;echo "leak sys_malloc";echo
-	@time ./leak_sys $(LEAKCFG)
+	@$(TIME) ./leak_sys $(LEAKCFG)
 
 	@echo;echo "leak aw_malloc";echo
-	@time ./leak_aw $(LEAKCFG)
+	@$(TIME) ./leak_aw $(LEAKCFG)
 
 	@#echo;echo "leak mi_malloc";echo
 	@#$(TM) ./leak_mi  $(LEAKCFG)
@@ -105,22 +108,22 @@ cfrac: clean
 	@clang $(OCFRAC) $(OCFRAC_TA) -o cfrac_ta_ncs -DTA_NO_COMPACT -DTA_NO_SPLIT
 
 	@echo;echo "cfrac ta_malloc (split+compact)";echo
-	@TA_NBLK=2048 time ./cfrac_ta     $(OCFRAC_IN)
+	@TA_NBLK=2048 $(TIME) ./cfrac_ta     $(OCFRAC_IN)
 
 	@echo;echo "cfrac ta_malloc (no split)";echo
-	@TA_NBLK=2048 time ./cfrac_ta_ns  $(OCFRAC_IN)
+	@TA_NBLK=2048 $(TIME) ./cfrac_ta_ns  $(OCFRAC_IN)
 
 	@echo;echo "cfrac sys_malloc";echo
-	@             time ./cfrac_sys    $(OCFRAC_IN)
+	@             $(TIME) ./cfrac_sys    $(OCFRAC_IN)
 
 	@echo;echo "cfrac aw_malloc";echo
-	@             time ./cfrac_aw     $(OCFRAC_IN)
+	@             $(TIME) ./cfrac_aw     $(OCFRAC_IN)
 
 	@#echo;echo "cfrac ta_malloc (no compact)";echo
-	@#TA_NBLK=4096 time ./cfrac_ta_nc  $(OCFRAC_IN)
+	@#TA_NBLK=4096 $(TIME) ./cfrac_ta_nc  $(OCFRAC_IN)
 
 	@#echo;echo "cfrac ta_malloc (no split/compact)";echo
-	@#TA_NBLK=4096 time ./cfrac_ta_ncs $(OCFRAC_IN)
+	@#TA_NBLK=4096 $(TIME) ./cfrac_ta_ncs $(OCFRAC_IN)
 
 all: clean m t so 
 
