@@ -43,9 +43,9 @@ terms of the MIT license.
 #include"../a.h"
 #include"../m.h"
 #define MLC "aw_malloc"
-#define custom_init           c0()
+#define custom_init           aw_malloc_init()
 #define custom_calloc(n,s)    aw_calloc(n,s)
-#define custom_realloc(p,s)   (O("`nyi aw_realloc()\n"),exit(1),(V*)0)
+#define custom_realloc(p,n)   aw_realloc(p,n)
 #define custom_free(p)        aw_free(p)
 #endif
 

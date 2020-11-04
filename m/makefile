@@ -39,24 +39,29 @@ t:
 
 NBLK=128
 
-OSTRESS=-O2 -DTA_TEST -DNDEBUG -DNO_MI_STATS -lpthread $(PGFIX)
+OSTRESS=-O2 -g -DTA_TEST -DNDEBUG -DNO_MI_STATS -lpthread $(PGFIX)
 OMI=-Ibench/extern/mimalloc/include -Lbench/extern/mimalloc/out/release -lmimalloc -Wno-int-conversion -Wno-extra-semi
 TM=TA_NBLK=$(NBLK) LD_LIBRARY_PATH=bench/extern/mimalloc/out/release $(TIME)
 
 STRESSCFG=1 100 16
 stress: clean
-	@$C $(OSTRESS) -DUSE_STD_MALLOC -DSTRESS $(SRC_TA) stress.c -o stress_sys $(CF) $(GNU)
+	@$C $(OSTRESS) -DUSE_AW_MALLOC  -DSTRESS $(SRC_AW) stress.c -o stress_aw  $(CF) $(GNU) -Wno-language-extension-token -Wno-pointer-sign
 	@$C $(OSTRESS) -DUSE_MI_MALLOC  -DSTRESS $(SRC_TA) stress.c -o stress_mi  $(CF) $(GNU) $(OMI)
-	@$C $(OSTRESS) -DUSE_TA_MALLOC  -DSTRESS $(SRC_TA) stress.c -o stress_ta  $(CF) $(GNU)
+	@$C $(OSTRESS) -DUSE_STD_MALLOC -DSTRESS $(SRC_TA) stress.c -o stress_sys $(CF) $(GNU)
 
-	@echo;echo "stress realloc";echo
-	@$(TM) ./stress_sys $(STRESSCFG)
+	@#$C $(OSTRESS) -DUSE_TA_MALLOC  -DSTRESS $(SRC_TA) stress.c -o stress_ta  $(CF) $(GNU)
 
-	@echo;echo "stress mi_realloc";echo
-	@$(TM) ./stress_mi  $(STRESSCFG)
+	@echo;echo "stress sys_realloc";echo
+	@$(TIME) ./stress_sys $(STRESSCFG)
 
-	@echo;echo "stress ta_realloc (nyi)";echo
-	@$(TM) ./stress_ta  $(STRESSCFG)
+	@echo;echo "stress aw_realloc";echo
+	@$(TIME) ./stress_aw  $(STRESSCFG)
+
+	@#echo;echo "stress mi_realloc";echo
+	@#$(MI)   ./stress_mi  $(STRESSCFG)
+
+	@#echo;echo "stress ta_realloc (nyi)";echo
+	@#$(TM) ./stress_ta  $(STRESSCFG)
 
 ##############
 # memleak test
