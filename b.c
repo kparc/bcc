@@ -126,7 +126,7 @@ K pcle(S tp,I dbg){Ss=tp;pst t={{0},{0},0,{1,1},8,0};ST st=&t;//pst t;ST st=&t;s
  if(!tp[1])$(26u>*tp-'a',K x=G[*tp-'a'];Qs(NL==x,tp)P(FN(x),os(xx),dis(xy),NL))R qs(tp);//!< KPC FIXME quick temporary hack to pretty print-opcodes by referencing function name
  //if(!*++Ss&&NL!=var){O(P(!*GG(var),qs("val"))R*GG(var);}
 
- S r='['==Ss[1]&&(r=sc(Ss,']'))&&*++r?r:0; //!< FIXME function assignment is a lookahead hack
+ S r=!LP(*Ss)&&ARGOPN==Ss[1]&&(r=sc(Ss,ARGCLS))&&*++r?r:0; //!< FIXME function assignment is a lookahead hack
 
 #ifdef SYMS
  K*k=r||':'==*Ss?sA=g,Ss+=1,GG(g):0;
@@ -139,7 +139,11 @@ K pcle(S tp,I dbg){Ss=tp;pst t={{0},{0},0,{1,1},8,0};ST st=&t;//pst t;ST st=&t;s
 
  P('!'==*Ss,++Ss,X(k,enm(ki(ip(Ss,strlen(Ss))))))
  z=k2(kp(Ss-!!k),NL);//<!(src;bin)
+#ifdef SYMS
+ if(!Ss[1]&&26u>*Ss-'a')r1(GG(g));//!< inc xr of the referenced global var
+#else
  if(!Ss[1]&&26u>*Ss-'a')r1(G[*Ss-'a']);//!< inc xr of the referenced global var
+#endif
  if(r){X(k,k2(r1(zx),u(KI,c2(1,1))));  //!< set types for xyz args
   N(r-Ss-1,L[23+i]=D0++,T[23+i]=l(" chijefs CHIJEFS",Ss[i]))Ss=r;} //!< FIXME increase argcount limit, more than 3 argdecls is a segv
  K x=p(st);P(dbg,r0(z),x)//o(x);//!< dump parse tree

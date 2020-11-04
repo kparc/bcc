@@ -43,7 +43,7 @@ K p(ST st){K x,y;I a,b;    //!< a operator, x/y operands, b return type
  C qn='0'-cl('-'==(a=*Ss++)?Ss['.'==*Ss]:'.'==a?*Ss:a); //<!special case: if expr starts with a minus, dot or a minus-dot, it may be a number
  C cls=qn?cl(a):'0';
 #ifdef SYMS
- cls=sc("NW",cls)&&'('-Ss[1]?'a':cls; //<!special case: if N|W is not followed by (, force class to identifier
+ cls=LP(cls)&&'('-Ss[1]?'a':cls; //<!special case: if N|W is not followed by (, force class to identifier
 #endif
  switch(cls){              //!< current char class:
   case'N':T[sN++]=KI;      //!< 'for' loop, declare a loop variable and fallthrough to W

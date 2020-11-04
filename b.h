@@ -1,5 +1,15 @@
 #include"a.h"
 
+#ifdef ISOMRPH
+#define ARGOPN '('
+#define ARGCLS ')'
+#define LP(x) sc("WN",x) //<! is x a loop reserved "word"
+#else
+#define ARGOPN '['
+#define ARGCLS ']'
+#define LP(x) 0
+#endif
+
 //! scope accessors
 #define L  st->L
 #define D  st->D
