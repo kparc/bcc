@@ -3,3 +3,4 @@ m
 bench
 leak
 stress
+libtm*

@@ -21,6 +21,10 @@ terms of the MIT license.
 #include <stdbool.h>
 #include <string.h>
 
+#ifndef NO_MI_STATS
+#include<mimalloc.h>
+#endif
+
 #ifdef USE_STD_MALLOC
 #define custom_init
 #define custom_calloc(n,s)    calloc(n,s)
@@ -29,7 +33,7 @@ terms of the MIT license.
 #else
 
 #ifdef USE_MI_MALLOC
-#include <mimalloc.h>
+#include"m.h"
 #define custom_init
 #define custom_calloc(n,s)    mi_calloc(n,(S)s)
 #define custom_realloc(p,s)   mi_realloc((S)p,s)
@@ -233,7 +237,9 @@ static void test_leak(void) {
   for (int n = 0; n < ITER; n++) {
     run_os_threads(THREADS, &leak);
 
-    //mi_collect(false);
+#ifndef NO_MI_STATS
+    mi_collect(false);
+#endif
 
 #ifndef NDEBUG
     if ((n + 1) % 10 == 0) { printf("- iterations left: %3d\n", ITER - (n + 1)); }
@@ -279,8 +285,9 @@ int main(int argc, char** argv) {
 
   // mi_collect(true);
 
-  //mi_stats_print(NULL);
-
+#ifndef NO_MI_STATS
+  mi_stats_print(NULL);
+#endif
   //bench_end_program();
   return 0;
 }
