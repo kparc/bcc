@@ -105,7 +105,7 @@ ZV compact(){
         ptr = ptr->n;}}
 #endif
 
-C ta_free(V*p){
+V ta_free(V*p){
     DBG("ta_free %p:\n",p);
     B b=hp->u,prev=0;
     W(b){//DBG("...ta_free b=%p -> ",b);
@@ -117,12 +117,10 @@ C ta_free(V*p){
             }
             INSERT(b)
             DBG("1\n");CHK("ta_free1");
-            R 1;
         }
         prev=b;b=b->n;
     }
-    DBG("0\n");CHK("ta_free0");
-    R 0;}
+    DBG("0\n");CHK("ta_free0");}
 
 static B alloc_block(SZ n){DBG("alloc_block(%zu):\n",n);ALGN(n)
     B ptr=hp->f,prev=0;SZ tp=hp->top;
@@ -167,8 +165,10 @@ V*ta_alloc(SZ n){DBG("ta_alloc %zu...\n",n);B b=alloc_block(n);S r=b?b->a:0;DBG(
 ZV*ta_memclear(V*p,SZ n){SZ*ptrw=(SZ*)p,numw=(n&-SZT)/SZT;W(numw--)*ptrw++=0;n&=SZT-1;S ptrb=(S)ptrw;W(n--)*ptrb++=0;R p;}
 V*ta_calloc(SZ n,SZ sz){DBG("ta_calloc(%zu,%zu)\n",n,sz);B b=alloc_block(n*=sz);S r=b?ta_memclear(b->a,n):(S)0;DBG("ta_calloc -> %p\n",r);CHK("ta_calloc");R r;}
 
+#ifdef TA_TEST
 static SZ ta_count(B b){SZ c=0;W(b)b=b->n,c++;R c;}
 CNT(ta_avail,f)CNT(ta_used,u)CNT(ta_fresh,frsh)
 C ta_check(){R heap_max_blocks==ta_avail()+ta_used()+ta_fresh();}
+#endif
 
 //:~
