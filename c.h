@@ -1,7 +1,15 @@
 #include<string.h>
 #include<stdio.h>
 
-typedef unsigned char C,*S,*K;typedef int I;typedef long long J;typedef double F;typedef void V;typedef unsigned int UI;
+#define ptr(x) (*(S*)&x)
+#define xC ptr(x)
+#define yC ptr(y)
+#define zC ptr(z)
+#define fC ptr(f)
+#define rC ptr(r)
+
+typedef unsigned long long K;
+typedef unsigned char C,*S;typedef int I;typedef long long J;typedef double F;typedef void V;typedef unsigned int UI;
 //V*memcpy();strlen(const char*);//#define P(b,a...)   if(b)return(a);
 
 #define R return
@@ -26,7 +34,7 @@ typedef unsigned char C,*S,*K;typedef int I;typedef long long J;typedef double F
 #define ZV static V
 
 #define Z_ static inline
-#define AB(s)       (os(s),exit(1),(V*)0L) //abort string
+#define AB(s)       (os((S)s),exit(1),(K)0L) //abort string
 
 //#ifndef __APPLE__
 #if 0

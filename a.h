@@ -38,23 +38,26 @@ typedef struct{C L[26];C T[26];I M;C D[2];C N;K A;}pst;typedef pst*ST; //<! assi
 extern K sym(I a),*GG(K h),val(K h),nme(K h);//!< symtable manager
 extern J nt[],ip();extern K G[],ex(K),ps(S),r1(),tn(),j2(),k0(),sS(),enm(),o();I cl(I c);V exit(),w2(),r0();S pi(),pf(),px();J ws();F fp();Z_ K X(K*k,K y){R r0(*k),*k=y,NL;}
 Z_ I oc(I i){R w2((S)&i),i;}Z_ V nl(){w2("\n");}Z_ S os(S s){R w2(s),nl(),s;}Z_ J oi(J j){R os(pi(j)),j;}Z_ F of(F f){R os(pf(f)),f;}Z_ J ox(J j){R os(px(j)),j;}
-Z_ S sc(S s,I c){W(*s-c)P(!*s++,(S)0)R s;}
-Z_ I scn(S s,I c,I n){N(n,P(c==s[i],i))R n;}//_ K P1(J x){R(K)(X1<<48|x);}_ K P2(J x){R(K)(X2<<48|x);}_ K P3(J x){R(K)(X3<<48|x);}
+Z_ S _sc(S s,I c){W(*s-c)P(!*s++,(S)0)R s;}
+#define sc(s,c) _sc((S)s,c)
+Z_ I _scn(S s,I c,I n){N(n,P(c==s[i],i))R n;}//_ K P1(J x){R(K)(X1<<48|x);}_ K P2(J x){R(K)(X2<<48|x);}_ K P3(J x){R(K)(X3<<48|x);}
+#define scn(s,c,n) _scn((S)s,c,n)
 Z_ K kK(I n){R tn(0,n);}
 Z_ K kC(I n){R tn(KC,n);}
 Z_ K kI(I n){R tn(KI,n);}
 Z_ K kJ(I n){R tn(KJ,n);}
 Z_ K kS(I n){R tn(KS,n);}
-Z_ K pn(S s,I n){R memcpy(kC(n),s,n);}Z_ K kp(S s){R pn((S)s,strlen((char*)s));}
+Z_ K pn(S s,I n){R(K)memcpy((V*)kC(n),s,n);}Z_ K kp(S s){R pn((S)s,strlen((char*)s));}
 Z_ K kc(J x){R(K)(KC<<48|x);}
 Z_ K ki(unsigned x){R(K)(KI<<48|(J)x);}
 Z_ K kf(F f){R*(K*)&f;}
 Z_ K ks(J x){R(K)(KS<<48|x);}
-Z_ K qs(S s){R(K)(QQ<<48|(J)s);}
+Z_ K _qs(S s){R(K)(QQ<<48|(J)s);}
+#define qs(s) _qs((S)(s))
 Z_ K c0(){R kC(0);}
-Z_ K c1(C x){K r=kC(1);R*r=x,r;}
-Z_ K c2(C x,C y){K r=kC(2);R*r=x,r[1]=y,r;}
-Z_ K c3(C x,C y,C z){K r=kC(3);R*r=x,r[1]=y,r[2]=z,r;}
+Z_ K c1(C x){K r=kC(1);R*rC=x,r;}
+Z_ K c2(C x,C y){K r=kC(2);R*rC=x,rC[1]=y,r;}
+Z_ K c3(C x,C y,C z){K r=kC(3);R*rC=x,rC[1]=y,rC[2]=z,r;}
 Z_ K jc(K x,C c){R j2(x,kc(c));}
 
 #define A(x) ({J _j=(J)(x);!_j||_j>>52?KF:15&_j>>48;})
@@ -69,20 +72,20 @@ Z_ K jc(K x,C c){R j2(x,kc(c));}
 #define xi I(x)
 #define xj (J)(x)
 #define xf *(F*)&x
-#define xm x[-8] //mem
-#define xr x[-7] //ref
-#define xu x[-6]
-#define xt x[-5]
+#define xm xC[-8] //mem
+#define xr xC[-7] //ref
+#define xu xC[-6]
+#define xt xC[-5]
 #define xn xI[-1]
 #define xx xK[0]
 #define xy xK[1]
 #define xz xK[2]
-#define xxu xx[-6]
-#define xyu xy[-6]
+#define xxu ptr(xx)[-6]
+#define xyu ptr(xy)[-6]
 #define xI ((I*)x)
 #define xF ((F*)x)
 #define xK ((K*)x)
-#define Xc  x[i]
+#define Xc ((S)x)[i]
 #define Xi xI[i]
 #define Xj xJ[i]
 #define Xx xK[i]
@@ -90,43 +93,43 @@ Z_ K jc(K x,C c){R j2(x,kc(c));}
 #define Ay A(y)
 #define yi I(y)
 #define yj (J)(y)
-#define yr y[-7] //ref
-#define yu y[-6]
-#define yt y[-5]
+#define yr yC[-7] //ref
+#define yu yC[-6]
+#define yt yC[-5]
 #define yn yI[-1]
 #define yx yK[0]
 #define yy yK[1]
 #define yI ((I*)y)
 #define yK ((K*)y)
-#define Yc  y[i]
+#define Yc ((S)y)[i]
 #define Yi yI[i]
 #define Yx yK[i]
 #define Y0(e)  ({typeof(e)_e=(e);r0(y);_e;})
 #define Az A(z)
 #define zi I(z)
-#define zu z[-6]
-#define zt z[-5]
+#define zu zC[-6]
+#define zt zC[-5]
 #define zn zI[-1]
 #define zx zK[0]
 #define zy zK[1]
 #define zI ((I*)z)
 #define zF ((F*)z)
 #define zK ((K*)z)
-#define Zc  z[i]
+#define Zc ((S)z)[i]
 #define Zi zI[i]
 #define Zx zK[i]
 #define Z0(e)  ({typeof(e)_e=(e);r0(z);_e;})
 #define Ar T(r)
 #define ri I(r)
-#define rr r[-7]
-#define rt r[-5]
+#define rr rC[-7]
+#define rt rC[-5]
 #define rn rI[-1]
 #define rI ((I*)r)
 #define rK ((K*)r)
 #define rx rK[0]
 #define ry rK[1]
 #define rz rK[2]
-#define Rc r[i]
+#define Rc ((S)r)[i]
 #define Ri rI[i]
 #define Rx rK[i]
 #define R0(e)  ({typeof(e)_e=(e);r0(r);_e;})
