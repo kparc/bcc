@@ -43,7 +43,7 @@ OSTRESS=-O2 -g -DTA_TEST -DNDEBUG -DNO_MI_STATS -lpthread $(PGFIX)
 OMI=-Ibench/extern/mimalloc/include -Lbench/extern/mimalloc/out/release -lmimalloc -Wno-int-conversion -Wno-extra-semi
 TM=TA_NBLK=$(NBLK) LD_LIBRARY_PATH=bench/extern/mimalloc/out/release $(TIME)
 
-STRESSCFG=1 100 16
+STRESSCFG=1 100 32
 stress: clean
 	@$C $(OSTRESS) -DUSE_AW_MALLOC  -DSTRESS $(SRC_AW) stress.c -o stress_aw  $(CF) $(GNU) -Wno-language-extension-token -Wno-pointer-sign
 	@$C $(OSTRESS) -DUSE_MI_MALLOC  -DSTRESS $(SRC_TA) stress.c -o stress_mi  $(CF) $(GNU) $(OMI)
