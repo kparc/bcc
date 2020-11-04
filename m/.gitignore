@@ -4,3 +4,4 @@ bench
 leak
 stress
 libtm*
+cf_*
