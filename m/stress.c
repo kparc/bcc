@@ -21,11 +21,8 @@ terms of the MIT license.
 #include <stdbool.h>
 #include <string.h>
 
-#ifndef NO_MI_STATS
-#include<mimalloc.h>
-#endif
-
 #ifdef USE_STD_MALLOC
+#define MLC "sys_malloc"
 #define custom_init
 #define custom_calloc(n,s)    calloc(n,s)
 #define custom_realloc(p,s)   realloc(p,s)
@@ -34,14 +31,17 @@ terms of the MIT license.
 
 #ifdef USE_MI_MALLOC
 #include"m.h"
+#include<mimalloc.h>
+#define MLC "mi_malloc"
 #define custom_init
 #define custom_calloc(n,s)    mi_calloc(n,(S)s)
 #define custom_realloc(p,s)   mi_realloc((S)p,s)
 #define custom_free(p)        mi_free((S)(V*)p)
 #endif
 
-#ifdef USE_TM_MALLOC
+#ifdef USE_TA_MALLOC
 #include"m.h"
+#define MLC "ta_malloc"
 #define custom_init           ta_test_init()
 #define custom_calloc(n,s)    ta_calloc(n,s)
 #define custom_realloc(p,s)   (O("nyi ta_realloc\n"),exit(1),(V*)0)
@@ -225,7 +225,7 @@ static void test_leak(void) {
   for (int n = 0; n < ITER; n++) {
     run_os_threads(THREADS, &leak);
 
-#ifndef NO_MI_STATS
+#ifdef USE_MI_MALLOC
     mi_collect(false);
 #endif
 
@@ -256,7 +256,7 @@ int main(int argc, char** argv) {
     long n = (strtol(argv[3], &end, 10));
     if (n > 0) ITER = n;
   }
-  printf("Using %d thread%swith a %d%% load-per-thread and %d iterations\n", THREADS,THREADS>1?"s ":" ", SCALE, ITER);
+  printf("using %d thread%swith a %d%% load-per-thread and %d iterations (%s)\n", THREADS,THREADS>1?"s ":" ", SCALE, ITER, MLC);
   //int res = mi_reserve_huge_os_pages(4,1);
   //printf("(reserve huge: %i\n)", res);
 

@@ -53,7 +53,7 @@ V ta_test_init(){
     base=ma(heap);
 
  ta_init(base,(S)base+heap,nblk,splt,algn);
- O("ta blk %zu phys %zug heap %zug\n",nblk,GB(phys),GB(heap));}
+ O("ta_test_init blk %zu heap %zug phys %zug\n",nblk,GB(heap),GB(phys));}
 
 #else
 #define DBG(a...)
