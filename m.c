@@ -54,7 +54,11 @@ V*aw_realloc(V*p,size_t n){K x=(K)p;
     R xiy(tn(xt,n),0,x);}                           //!< otherwise, copy x to a fresh list of the requested size and release the old one.
 V*aw_calloc(size_t n,size_t sz){                    //!< allocate n*sz bytes and fill with zero
     I nn=MX(1,n)*MX(1,sz);K x=tn(KC,nn);            //!< calculate new length and allocate a new list
-    N(nn/8,xJ[i]=0LL)N(nn%8,((C*)x)[nn-i]=0)R x;}   //<! wipe out first with 8-byte stride, then 1-byte
+    //N(nn/8,xJ[i]=0LL)N(nn%8,((C*)x)[nn-i]=0)R x;} //<! zero out first with 8-byte stride, then byte-wise
+    R memset(x,0,nn);}                              //<! zero out using memset(3)
+    
+    
+//    N(nn/8,xJ[i]=0LL)N(nn%8,((C*)x)[nn-i]=0)R x;}   //<! wipe out first with 8-byte stride, then 1-byte
 V aw_free(V*p){r0((K)p);}J aw_malloc_used(){R ws();}
 #endif
 
