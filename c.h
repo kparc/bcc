@@ -28,7 +28,8 @@ typedef unsigned char C,*S,*K;typedef int I;typedef long long J;typedef double F
 #define Z_ static inline
 #define AB(s)       (os(s),exit(1),(V*)0L) //abort string
 
-#ifndef __APPLE__
+//#ifndef __APPLE__
+#if 0
 #define BASE 0x700000
 #else
 #define BASE 0x70000000L
