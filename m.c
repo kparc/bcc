@@ -30,7 +30,7 @@ ZI clzl(I n){I i=0;W(n)n/=2,++i;R i-4;}V csr(){R;}//<! FIXME tcc ldmxcsr nyi
 #endif
 
 #ifdef USE_AW_MALLOC //!< posix wrappers
-V aw_malloc_init(){c0();O("atw_malloc_init ok\n");}
+V aw_malloc_init(){c0();O("aw_malloc_init ok\n");}
 V*aw_malloc(size_t n){P(!n,(V*)n)R(V*)tn(KC,(I)n);}
 V*aw_calloc(size_t n,size_t sz){I nn=MX(1,n)*MX(1,sz);K x=tn(KC,nn);N(nn/8,xJ[i]=0LL)N(nn%8,((C*)x)[nn-i]=0)R x;}
 V aw_free(V*p){r0((K)p);}J aw_malloc_used(){R ws();}
