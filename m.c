@@ -48,9 +48,9 @@ V aw_malloc_init(){c0();O("aw_malloc_init ok\n");}  //!< seed alloc
 V*aw_malloc(size_t n){P(!n,(V*)0)R(V*)tn(KC,(I)n);} //!< allocate a list of n bytes
 V*aw_realloc(V*p,size_t n){K x=(K)p;
     P(!x,aw_malloc(n))                              //!< if ptr is null, realloc() is identical to malloc(n)
-    P(KC-xt,O("`nyi"),(V*)0)                       //!< realloc only supports char-typed lists
+    P(KC-xt,O("`nyi"),(V*)0)                        //!< realloc only supports char-typed lists
     P(!n&&x,aw_free(x),aw_malloc(1))                //!< if size is null and ptr is not, ptr is freed and a new minimum-sized object is allocated
-    P(xn<=(I)n||!xr&&8+NX*(J)n<16L<<xm,xu=0,xn=n,x) //!< if new size is less than current, or x has no refs and there is enough space in the block, increase xn and return x
+    P(xn<=(I)n||!xr&&8+NX*(J)n<16L<<xm,xu=0,xn=n,x) //!< if new size is less than current, or x has no refs and there is enough space in the block, set xn to requested length and return x
     R xiy(tn(xt,n),0,x);}                           //!< otherwise, copy x to a fresh list of the requested size and release the old one.
 V*aw_calloc(size_t n,size_t sz){                    //!< allocate n*sz bytes and fill with zero
     I nn=MX(1,n)*MX(1,sz);K x=tn(KC,nn);            //!< calculate new length and allocate a new list
