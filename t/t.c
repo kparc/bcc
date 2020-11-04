@@ -148,8 +148,26 @@ UNIT(syms,
    W0=ws();        //! FIXME variable identifiers should probably be excluded from wssize
 )
 
+#include"../m.h"
+
+//!       0 1 2 3 4 5 6 7 8
+//!       K c h i j e f s * (arr int8 int16 int32 int64 real double sym any)
+//I bt[]={0,1,2,3,3,4,4,4,4};
+//#define PW2(n) (n&&!(n&n-1))
+UNIT(aw_malloc,
+   N(16,
+      K x=(K)aw_malloc(i+1);
+      //O("x %d = %p xn %d %d\n",i,x,xm,xr);N(xn,O("%d ",((C*)x)[i]))O("\n");
+      aw_free((V*)x))
+   N(16,
+      K x=(K)aw_calloc(i+1,2);
+      //O("x %d = %p xn %d %d\n",i,x,xm,xr);N(xn,O("%d ",((C*)x)[i]))O("\n");
+      aw_free((V*)x))
+   //! ws should be zero
+)
 
 TESTS(
+   RUN(aw_malloc)
 
 #ifndef SYMS
    RUN(smoke)RUN(malloc)

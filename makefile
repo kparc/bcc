@@ -5,7 +5,7 @@ O=-O0 -g
 T=t.b
 
 ifeq ($(ISOMRPH),1)
- O+= -DISOMRPH
+ O+=-DISOMRPH
  T=tiso.b
 endif
 
@@ -35,12 +35,12 @@ r:
 
 FIXME=-Wno-pointer-to-int-cast
 test: cleantest
-	@clang -std=gnu99 -DISOMRPH -DTST $O $(LF) t/t.c t/lib/unity.c $(SRC) -o test $(CF) -fmacro-backtrace-limit=0 \
+	@clang -std=gnu99 -DISOMRPH -DUSE_AW_MALLOC -DTST $O $(LF) t/t.c t/lib/unity.c $(SRC) -o test $(CF) -fmacro-backtrace-limit=0 \
 	-fprofile-instr-generate -fcoverage-mapping -fdebug-macro -Wno-int-conversion $(FIXME)
 	@./test
 
 syms: cleansyms
-	@clang -std=gnu99 -DISOMRPH -DTST -DSYMS $O $(LF) t/t.c t/lib/unity.c $(SRC) -o syms $(CF) \
+	@clang -std=gnu99 -DISOMRPH -DUSE_AW_MALLOC -DTST -DSYMS $O $(LF) t/t.c t/lib/unity.c $(SRC) -o syms $(CF) \
 	-fmacro-backtrace-limit=0 -Wno-int-conversion $(FIXME)
 	@./syms
 

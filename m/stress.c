@@ -39,12 +39,22 @@ terms of the MIT license.
 #define custom_free(p)        mi_free((S)(V*)p)
 #endif
 
+#ifdef USE_AW_MALLOC
+#include"../a.h"
+#include"../m.h"
+#define MLC "aw_malloc"
+#define custom_init           c0()
+#define custom_calloc(n,s)    aw_calloc(n,s)
+#define custom_realloc(p,s)   (O("`nyi aw_realloc()\n"),exit(1),(V*)0)
+#define custom_free(p)        aw_free(p)
+#endif
+
 #ifdef USE_TA_MALLOC
 #include"m.h"
 #define MLC "ta_malloc"
 #define custom_init           ta_test_init()
 #define custom_calloc(n,s)    ta_calloc(n,s)
-#define custom_realloc(p,s)   (O("nyi ta_realloc\n"),exit(1),(V*)0)
+#define custom_realloc(p,s)   (O("`nyi ta_realloc()\n"),exit(1),(V*)0)
 #define custom_free(p)        ta_free(p)
 #endif
 #endif
