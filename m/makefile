@@ -60,20 +60,22 @@ leakmi: clean
 	@#threads scale iter
 	$(TM) ./leak $(LEAKOPTS)
 
-cf: clean so
-	@#clang -DCUSTOM_FREE=ta_free -DDEBUGOPS -DCUSTOM_MALLOC=ta_malloc -DCUSTOM_MALLOC_INIT=ta_test_init -DTA_TEST -DNOMEMOPT -w -O0 -g -DNDEBUG -std=gnu89 cfrac/*.c -o cf_tm  -lm -L. -ltm
+OCFRAC=-w -Os -DNDEBUG -std=gnu89 -DNOMEMOPT cfrac/*.c
+OCFRAC_TA=-DCUSTOM_FREE=ta_free -DCUSTOM_MALLOC=ta_malloc -DCUSTOM_MALLOC_INIT=ta_test_init -DTA_TEST
+OCFRAC_IN=175451865205073170563711388363
 
-	clang -DCUSTOM_FREE=ta_free -DCUSTOM_MALLOC=ta_malloc -DCUSTOM_MALLOC_INIT=ta_test_init -DTA_TEST -DNOMEMOPT -w -O2 -DNDEBUG -std=gnu89 cfrac/*.c m.c -o cf_tm  -lm
-	clang -DCUSTOM_FREE=ta_free -DCUSTOM_MALLOC=ta_malloc -DCUSTOM_MALLOC_INIT=ta_test_init -DTA_TEST -DNOMEMOPT -w -O2 -DNDEBUG -std=gnu89 cfrac/*.c m.c -o cf_tm_nc  -lm -DTA_NO_COMPACT
-	clang -DCUSTOM_FREE=ta_free -DCUSTOM_MALLOC=ta_malloc -DCUSTOM_MALLOC_INIT=ta_test_init -DTA_TEST -DNOMEMOPT -w -O2 -DNDEBUG -std=gnu89 cfrac/*.c m.c -o cf_tm_ns  -lm -DTA_NO_SPLIT
-	clang -DCUSTOM_FREE=ta_free -DCUSTOM_MALLOC=ta_malloc -DCUSTOM_MALLOC_INIT=ta_test_init -DTA_TEST -DNOMEMOPT -w -O2 -DNDEBUG -std=gnu89 cfrac/*.c m.c -o cf_tm_ncs -lm -DTA_NO_COMPACT -DTA_NO_SPLIT
-	clang -DCUSTOM_FREE=free    -DCUSTOM_MALLOC=malloc                                                -DNOMEMOPT -w -O2 -DNDEBUG -std=gnu89 cfrac/*.c     -o cf_sys -lm
+cfrac: clean
+	@clang $(OCFRAC)                  -o cf_sys
+	@clang $(OCFRAC) $(OCFRAC_TA) m.c -o cf_tm
+	@clang $(OCFRAC) $(OCFRAC_TA) m.c -o cf_tm_nc  -DTA_NO_COMPACT
+	@clang $(OCFRAC) $(OCFRAC_TA) m.c -o cf_tm_ns  -DTA_NO_SPLIT
+	@clang $(OCFRAC) $(OCFRAC_TA) m.c -o cf_tm_ncs -DTA_NO_COMPACT -DTA_NO_SPLIT
 
-	time ./cf_sys    175451865205073170563711388363
-	TA_NBLK=2048 time ./cf_tm     175451865205073170563711388363
-	TA_NBLK=2048 time ./cf_tm_ns  175451865205073170563711388363
-	TA_NBLK=4096 time ./cf_tm_nc  175451865205073170563711388363
-	TA_NBLK=4096 time ./cf_tm_ncs 175451865205073170563711388363
+	             time ./cf_sys    $(OCFRAC_IN)
+	TA_NBLK=2048 time ./cf_tm     $(OCFRAC_IN)
+	TA_NBLK=2048 time ./cf_tm_ns  $(OCFRAC_IN)
+	TA_NBLK=4096 time ./cf_tm_nc  $(OCFRAC_IN)
+	TA_NBLK=4096 time ./cf_tm_ncs $(OCFRAC_IN)
 
 all: clean m t so
 
