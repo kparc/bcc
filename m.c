@@ -23,7 +23,7 @@ K tn(I t,I n){K x=m1(MX(1,n)*nt[KS<t?0:t]);R W+=16L<<xm,xu=0,xt=t,xn=n,x;}
 //! append items of y after the i-th element of x
 K xiy(K x,I i,K y){
  memcpy(x+NX*i,y,NX*yn);     //!< NX is the width of x item type
- if(!yt)N(yn,r1(Yx))         //!< increase refcounts of items in y
+ if(!yt)N(yn,r1(Yx))         //!< if y is an mixed list, increase refcounts of items in y
  R Y0(x);}                   //!< recursively decrease refcounts of y and return x
 
 //! join two lists
