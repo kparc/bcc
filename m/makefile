@@ -105,6 +105,7 @@ cfrac: clean
 all: clean m t so 
 
 clean:
+	@rm -rf *.dSYM
 	@rm -f m stress libtm.so libtm.dylib cf_* leak_*
 
 .PHONY: clean all cfrac
