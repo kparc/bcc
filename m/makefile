@@ -41,8 +41,8 @@ TM=TA_NBLK=$(NBLK) LD_LIBRARY_PATH=bench/extern/mimalloc/out/release time
 STRESSCFG=1 100 16
 stress: clean
 	@$C $(OSTRESS) -DUSE_STD_MALLOC -DSTRESS $(SRC) stress.c -o stress_sys $(CF) $(GNU)
-	@$C $(OSTRESS) -DUSE_MI_MALLOC  -DSTRESS $(SRC) stress.c -o stress_mi $(CF)  $(GNU) $(OMI)
-	@$C $(OSTRESS) -DUSE_TA_MALLOC -DSTRESS $(SRC) stress.c  -o stress_ta $(CF)  $(GNU)
+	@$C $(OSTRESS) -DUSE_MI_MALLOC  -DSTRESS $(SRC) stress.c -o stress_mi  $(CF) $(GNU) $(OMI)
+	@$C $(OSTRESS) -DUSE_TA_MALLOC  -DSTRESS $(SRC) stress.c -o stress_ta  $(CF) $(GNU)
 
 	@echo;echo "stress realloc";echo
 	@$(TM) ./stress_sys $(STRESSCFG)
