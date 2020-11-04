@@ -46,7 +46,7 @@ V ta_test_init(){
   if(r)n=strtol((char*)&nb,0,10);DBG("ge %d %s %lld\n",r,r?nb:"(null)",n);
   V*base;SZ
     phys=phy(),
-    heap=phys>>1,
+    heap=phys>>2,
     nblk=n?n:256,
     splt=16,
     algn=sizeof(S);

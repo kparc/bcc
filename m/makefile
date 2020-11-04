@@ -16,7 +16,7 @@ LEAKOPTS=1 100 10000
 STRESSOPTS=1 100 16
 TM=LD_LIBRARY_PATH=bench/extern/mimalloc/out/release
 
-OSO=-shared -lpthread
+OSO=-shared -lpthread -fPIC
 TSO=libtm.so
 ifeq ($(shell uname),Darwin)
  OSO=-dynamiclib -undefined dynamic_lookup
@@ -67,7 +67,7 @@ cf: clean so
 	clang -DCUSTOM_FREE=ta_free -DCUSTOM_MALLOC=ta_malloc -DCUSTOM_MALLOC_INIT=ta_test_init -DTA_TEST -DNOMEMOPT -w -O2 -DNDEBUG -std=gnu89 cfrac/*.c m.c -o cf_tm_nc  -lm -DTA_NO_COMPACT
 	clang -DCUSTOM_FREE=ta_free -DCUSTOM_MALLOC=ta_malloc -DCUSTOM_MALLOC_INIT=ta_test_init -DTA_TEST -DNOMEMOPT -w -O2 -DNDEBUG -std=gnu89 cfrac/*.c m.c -o cf_tm_ns  -lm -DTA_NO_SPLIT
 	clang -DCUSTOM_FREE=ta_free -DCUSTOM_MALLOC=ta_malloc -DCUSTOM_MALLOC_INIT=ta_test_init -DTA_TEST -DNOMEMOPT -w -O2 -DNDEBUG -std=gnu89 cfrac/*.c m.c -o cf_tm_ncs -lm -DTA_NO_COMPACT -DTA_NO_SPLIT
-	clang -DCUSTOM_FREE=free    -DCUSTOM_MALLOC=malloc                                                -DNOMEMOPT -w -O2 -DNDEBUG -std=gnu89 cfrac/*.c     -o cf_sys -lm -L. -ltm
+	clang -DCUSTOM_FREE=free    -DCUSTOM_MALLOC=malloc                                                -DNOMEMOPT -w -O2 -DNDEBUG -std=gnu89 cfrac/*.c     -o cf_sys -lm
 
 	time ./cf_sys    175451865205073170563711388363
 	TA_NBLK=2048 time ./cf_tm     175451865205073170563711388363
