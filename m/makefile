@@ -66,7 +66,7 @@ leak: clean
 	@$C $(OSTRESS) -DUSE_TA_MALLOC  $(SRC_TA)  stress.c -o leak_ta_chk    $(CF) $(GNU) -DTA_CHECK
 	@$C $(OSTRESS) -DUSE_TA_MALLOC  $(SRC_TA)  stress.c -o leak_ta_ns     $(CF) $(GNU) -DTA_NO_SPLIT
 	@$C $(OSTRESS) -DUSE_STD_MALLOC $(SRC_TA)  stress.c -o leak_sys       $(CF) $(GNU)
-	@$C $(OSTRESS) -DUSE_MI_MALLOC  $(SRC_TA)  stress.c -o leak_mi        $(CF) $(GNU) $(OMI)
+	@#$C $(OSTRESS) -DUSE_MI_MALLOC  $(SRC_TA)  stress.c -o leak_mi        $(CF) $(GNU) $(OMI)
 
 	@echo;echo "leak ta_malloc (split+compact)";echo
 	@time ./leak_ta  $(LEAKCFG)
@@ -83,8 +83,8 @@ leak: clean
 	@echo;echo "leak aw_malloc";echo
 	@time ./leak_aw $(LEAKCFG)
 
-	@echo;echo "leak mi_malloc";echo
-	@$(TM) ./leak_mi  $(LEAKCFG)
+	@#echo;echo "leak mi_malloc";echo
+	@#$(TM) ./leak_mi  $(LEAKCFG)
 
 ############
 # cfrac test
