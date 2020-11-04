@@ -60,7 +60,7 @@ leakmi: clean
 	@#threads scale iter
 	$(TM) ./leak $(LEAKOPTS)
 
-OCFRAC=-w -Os -DNDEBUG -std=gnu89 -DNOMEMOPT cfrac/*.c
+OCFRAC=-w -Os -DNDEBUG -std=gnu89 -DNOMEMOPT cfrac/*.c -lm
 OCFRAC_TA=-DCUSTOM_FREE=ta_free -DCUSTOM_MALLOC=ta_malloc -DCUSTOM_MALLOC_INIT=ta_test_init -DTA_TEST
 OCFRAC_IN=175451865205073170563711388363
 
