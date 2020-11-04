@@ -4,5 +4,6 @@ bench
 leak
 stress
 libtm*
-cf_*
+cfrac_*
 leak_*
+stress_*
