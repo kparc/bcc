@@ -6,6 +6,11 @@ typedef struct {B f;B u;B frsh;SZ top;}pHP;typedef pHP*HP;//!< heap: first free 
 static HP hp;ZS HMAX;static SZ heap_split_thresh,heap_alignment,heap_max_blocks;
 
 #ifdef TA_TEST
+
+//#define DBG(a...) O(a)
+#define DBG(a...)
+#define CHK(fn) if(!ta_check())O("ta_check() fail %s\n",fn),exit(1);
+
 #include<stdlib.h>
 #include<sys/types.h>
 #include<sys/sysctl.h>
@@ -26,6 +31,9 @@ SZ phy(){SZ m=0;
 
 S ma(SZ n){S r=mmap(0,n,PROT_READ|PROT_WRITE,MAP_ANON|MAP_PRIVATE,0,0);$(r==MAP_FAILED,O("%s (n=%zu)\n",strerror(errno),n),exit(1))R r;}
 
+#else
+#define DBG(a...)
+#define CHK(fn)
 #endif
 
 #ifdef TA_MAIN
@@ -55,15 +63,16 @@ V ta_init(S base,S max,SZ hpb,SZ splt,SZ algn) {
     heap_alignment = algn;
 
     hp->f=hp->u=0;
-    hp->frsh=(B)hp+1;
-    hp->top=(SZ)hp->frsh+hpb;
+    hp->frsh=(B)(hp+1);
+    hp->top=(SZ)(hp->frsh+hpb);
 
     B b=hp->frsh;
     SZ i=heap_max_blocks-1;
-    W(i--)b->n=b,++b;
+    W(i--)b->n=b+1,++b;
     b->n=0;}
 
 ZV insert_block(B b) {
+    DBG("insert_block %p\n",b);
 #ifndef TA_NO_COMPACT
     B p=hp->f,pre=0;//< if compaction is enabled, insert block into free list, sorted by addr
     W(p)$((SZ)b->a<=(SZ)p->a,break)pre=p,p=p->n;
@@ -74,12 +83,12 @@ ZV insert_block(B b) {
 #endif
 
 #ifndef TA_NO_COMPACT
-ZV release_blocks(B sc,B to){B nxt;W(sc!=to)nxt=sc->n,sc->n=hp->frsh,hp->frsh=sc,sc->a=(S)0,sc->s=0,sc=nxt;}
+ZV release_blocks(B sc,B to){DBG("release_blocks %p %p\n",sc,to);B nxt;W(sc!=to)nxt=sc->n,sc->n=hp->frsh,hp->frsh=sc,sc->a=(S)0,sc->s=0,sc=nxt;}
 ZV compact() {
     B ptr=hp->f,prev,scan;
     W(ptr){
         prev=ptr;scan=ptr->n;
-        W(scan&&(SZ)prev->a+prev->s==(SZ)scan->a)prev=scan;scan=scan->n;//merge
+        W(scan&&(SZ)prev->a+prev->s==(SZ)scan->a)prev=scan,scan=scan->n;//merge
         if(prev!=ptr){
             SZ new_size = (SZ)prev->a-(SZ)ptr->a + prev->s;
             ptr->s = new_size;
@@ -90,22 +99,34 @@ ZV compact() {
         ptr = ptr->n;}}
 #endif
 
-C ta_free(V*free){
+C ta_free(V*p){
+    DBG("ta_free %p:\n",p);
     B b=hp->u,prev=0;
-    W(b){
-        P(free==b->a,$(prev,prev->n=b->n)hp->u=b->n;INSERT(b)1)
-        prev=b,b=b->n;}//else
+    W(b){//DBG("...ta_free b=%p -> ",b);
+        if(p==b->a){
+            if(prev){
+                prev->n=b->n;
+            }else{
+                hp->u=b->n;
+            }
+            INSERT(b)
+            DBG("1\n");CHK("ta_free1");
+            R 1;
+        }
+        prev=b;b=b->n;
+    }
+    DBG("0\n");CHK("ta_free0");
     R 0;}
 
-static B alloc_block(SZ n){ALGN(n)
+static B alloc_block(SZ n){DBG("alloc_block(%zu):\n",n);ALGN(n)
     B ptr=hp->f,prev=0;SZ tp=hp->top;
     W(ptr){
         const C is_top=((SZ)ptr->a+ptr->s>=tp)&&((SZ)ptr->a+n<=(SZ)HMAX);
         if(is_top||ptr->s>=n){
-            $(prev,prev->n=ptr->n)hp->frsh=ptr->n;
+            $(prev,prev->n=ptr->n)hp->f=ptr->n;
             ptr->n=hp->u,hp->u=ptr;
             if(is_top){//resize top block
-                ptr->s=n,hp->top=(J)ptr->a+n;
+                ptr->s=n,hp->top=(SZ)ptr->a+n;
 #ifndef TA_NO_SPLIT
             }else if(hp->frsh){
                 SZ excess = ptr->s-n;
@@ -135,9 +156,9 @@ static B alloc_block(SZ n){ALGN(n)
         hp->top   = new_top,
         ptr:0;}
 
-V*ta_alloc(SZ n){B b=alloc_block(n);R b?b->a:0;}
-ZV ta_memclear(V*p,SZ n){SZ*ptrw=(SZ*)p,numw=(n&-SZT)/SZT;W(numw--)*ptrw++=0;n&=SZT-1;S ptrb=(S)ptrw;W(n--)*ptrb++=0;}
-V*ta_calloc(SZ n,SZ sz){B b=alloc_block(n*=sz);P(b,ta_memclear(b->a,n),b->a)R 0;}
+V*ta_alloc(SZ n){DBG("ta_alloc %zu...\n",n);B b=alloc_block(n);S r=b?b->a:0;DBG("ta_alloc %p\n",r);CHK("ta_alloc")R r;}
+ZV*ta_memclear(V*p,SZ n){SZ*ptrw=(SZ*)p,numw=(n&-SZT)/SZT;W(numw--)*ptrw++=0;n&=SZT-1;S ptrb=(S)ptrw;W(n--)*ptrb++=0;R p;}
+V*ta_calloc(SZ n,SZ sz){DBG("ta_calloc(%zu,%zu)\n",n,sz);B b=alloc_block(n*=sz);S r=b?ta_memclear(b->a,n):(S)0;DBG("ta_calloc -> %p\n",r);CHK("ta_calloc");R r;}
 
 static SZ ta_count(B b){SZ c=0;W(b)b=b->n,c++;R c;}
 CNT(ta_avail,f)CNT(ta_used,u)CNT(ta_fresh,frsh)

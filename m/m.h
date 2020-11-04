@@ -8,7 +8,7 @@
 #define ALGN(x) x=(x+heap_alignment-1)&-heap_alignment;
 
 #ifndef TA_NO_COMPACT
-#define INSERT(b) insert_block(b),compact();
+#define INSERT(b) insert_block(b);compact();
 #else
 #define INSERT(b) insert_block(b);
 #endif

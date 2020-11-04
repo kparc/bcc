@@ -67,8 +67,6 @@ static int ITER    = 50;      // N full iterations destructing and re-creating a
 // static int THREADS = 8;    // more repeatable if THREADS <= #processors
 // static int SCALE   = 100;  // scaling factor
 
-#define STRESS   // undefine for leak test
-
 static bool   allow_large_objects = true;    // allow very large objects?
 static size_t use_one_size = 0;              // use single object size of `N * sizeof(uintptr_t)`?
 
@@ -202,6 +200,7 @@ static void stress(intptr_t tid) {
 
 static void run_os_threads(size_t nthreads, void (*entry)(intptr_t tid));
 
+#ifdef STRESS
 static void test_stress(void) {
   uintptr_t r = rand();
   for (int n = 0; n < ITER; n++) {
@@ -218,9 +217,9 @@ static void test_stress(void) {
 #endif
   }
 }
-
-#ifndef STRESS
+#else
 static void leak(intptr_t tid) {
+  //O("leak(tid=%ld)\n",tid);
   uintptr_t r = rand();
   void* p = alloc_items(1 /*pick(&r)%128*/, &r);
   if (chance(50, &r)) {
@@ -233,7 +232,9 @@ static void leak(intptr_t tid) {
 static void test_leak(void) {
   for (int n = 0; n < ITER; n++) {
     run_os_threads(THREADS, &leak);
-    mi_collect(false);
+
+    //mi_collect(false);
+
 #ifndef NDEBUG
     if ((n + 1) % 10 == 0) { printf("- iterations left: %3d\n", ITER - (n + 1)); }
 #endif
@@ -261,7 +262,7 @@ int main(int argc, char** argv) {
     long n = (strtol(argv[3], &end, 10));
     if (n > 0) ITER = n;
   }
-  printf("Using %d threads with a %d%% load-per-thread and %d iterations\n", THREADS, SCALE, ITER);
+  printf("Using %d thread%swith a %d%% load-per-thread and %d iterations\n", THREADS,THREADS>1?"s ":" ", SCALE, ITER);
   //int res = mi_reserve_huge_os_pages(4,1);
   //printf("(reserve huge: %i\n)", res);
 

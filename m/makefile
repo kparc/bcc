@@ -23,6 +23,8 @@ stress: clean
 
 leak: clean
 	@$C -DNO_REALLOC -DUSE_TINY_MALLOC          $O $S stress.c $T $(LF) -o leak $(CF) $(GNU)
+	@#threads scale iter
+	lldb ./leak 1 10 50
 
 all: clean m t
 
