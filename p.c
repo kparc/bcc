@@ -30,10 +30,14 @@ I cl(I c){R 128>c?"  \"+$++ ()++ + +0000000000+;+++  aaaaaaaaaaaaaNaaaaaaaaWaaa[
 #define ID(x) sc((S)"aNW0_",cl(x)) //!< after first 'a'-classed char, these classes are valid identifier chars
 static K idh[SMX]={NL};ZK ids[SMX]={NL};ZK idv[SMX]={NL};
 K hsh(S s,UI n){UI h=5381;N(n,h=(h<<5)+h+*s++)R ks(h);}//Z_ UI djb(S x,UI n){UI h=5381;N(n,h=33*(h^x[i]));R h;}
-I bkt(K h){N(SMX,P(h==idh[i],i))R-1;}K nme(K h){I i=bkt(h);K x=-1<i?r1(ids[i]):NL;R x;}ZI cla(I i,S s,I n){K x=ids[i];R memcmp((V*)x,s,MN(n,xn));}
+//I bkt(K h){N(SMX,P(h==idh[i],i))R-1;}
+I bkt(K h){R h&(SMX-1);}//!< get bucket id (maps hash value to the size of hash table)
+K nme(K h){I i=bkt(h);K x=-1<i?r1(ids[i]):NL;R x;}ZI cla(I i,S s,I n){K x=ids[i];R memcmp((V*)x,s,MN(n,xn));}
 
+//! scan a symbol from take
 K sym(I a){S r=Ss;K h;I i,n;
-  W(Ss&&ID(*++Ss)){}P(a&&':'-*Ss,Ss-=Ss-r,NL)
+  W(Ss&&ID(*++Ss)){}
+  P(a&&':'-*Ss,Ss-=Ss-r,NL) //!< FIXME special case to support pcle() logic
   h=hsh(r,n=Ss-r),i=bkt(h);$(-1<i,Qs(cla(i,r,n),"clash");R h);i=bkt(0);Qs(0>i,"limit")R idv[i]=NL,ids[i]=pn(r,n),idh[i]=h;}
 
 V del(K h){I i=bkt(h);$(-1<i,K x=ids[i];$(!xr,ids[i]=idh[i]=NL);r0(x));}K*GG(K h){R&idv[bkt(h)];}
