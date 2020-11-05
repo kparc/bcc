@@ -1,6 +1,6 @@
 CF=-minline-all-stringops -fno-asynchronous-unwind-tables -fno-stack-protector -Wall -Wno-parentheses -Wno-pointer-sign
 #LF=-nostdlib -c a.S
-SRC=a.c b.c m.c p.c
+SRC=[abmph].c
 O=-O0 -g
 T=t.b
 

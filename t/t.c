@@ -167,8 +167,24 @@ UNIT(aw_malloc,
    //! unit must pass (wss should be zero)
 )
 
+#include"../h.h"
+UNIT(symtable,
+   s0(2,3);
+   S keys[] = { "FKTABLE_CAT", "cov", "bmp", "frameset", "cos", "fmt" };
+   I n = 6;
+
+   N(n,
+      S x=ssn(keys[i],strlen(keys[i]));
+      STR(keys[i], x, "hashed value must match input string"))
+
+   EQ_I(6,   scnt(), "htable should contain 6 elements")
+   EQ_I(181, suse(), "htable should be using 128 bytes")
+
+)
+
 TESTS(
    RUN(aw_malloc)
+   RUN(symtable)
 
 #ifndef SYMS
    RUN(smoke)RUN(malloc)
