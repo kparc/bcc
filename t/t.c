@@ -163,7 +163,8 @@ UNIT(aw_malloc,
       K x=(K)aw_calloc(i+1,2);
       //O("x %d = %p xn %d %d\n",i,x,xm,xr);N(xn,O("%d ",((C*)x)[i]))O("\n");
       aw_free((V*)x))
-   //! ws should be zero
+
+   //! unit must pass (wss should be zero)
 )
 
 TESTS(
