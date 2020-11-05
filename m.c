@@ -39,7 +39,7 @@ K2(j2){I m=xn,n=m+(Ay?1:yn);    //!< m is the old size, n is the new one (inc n 
 #if (__x86_64__||i386)&&!__TINYC__
 ZI clzl(I n){R 60-__builtin_clzl(n);}V csr(){R;asm("movl $0x9fc0,-4(%rsp);ldmxcsr -4(%rsp);");}//V csr(){volatile I mxcsr=0x9fc0;asm("ldmxcsr %0":"=m"(mxcsr));}
 #else
-ZI clzl(I n){I i=0;W(n)n/=2,++i;R i-4;}V csr(){R;}//<! FIXME tcc ldmxcsr nyi
+ZI clzl(I n){I i=0;W(n)n/=2,++i;R i-4;}V csr(){R;}  //<! FIXME tcc ldmxcsr nyi
 #endif
 
 //! posix wrappers for benchmarking
@@ -47,14 +47,14 @@ ZI clzl(I n){I i=0;W(n)n/=2,++i;R i-4;}V csr(){R;}//<! FIXME tcc ldmxcsr nyi
 V aw_malloc_init(){c0();O("aw_malloc_init ok\n");}  //!< seed alloc
 V*aw_malloc(size_t n){P(!n,(V*)0)R(V*)tn(KC,(I)n);} //!< allocate a list of n bytes
 V*aw_realloc(V*p,size_t n){K x=(K)p;
-    P(!x||!n,$(x,aw_free(x));aw_malloc(n?n:1))      //!< if ptr is null, realloc() is same as malloc(n), if size is 0 and ptr is not, ptr is freed and a new byte-sized object is allocated
+    P(!x||!n,$(x,aw_free(p));aw_malloc(n?n:1))      //!< if ptr is null, realloc() is same as malloc(n), if size is 0 and ptr is not, ptr is freed and a new byte-sized object is allocated
     P(KC-xt,O("`nyi"),(V*)0)                        //!< realloc only supports char-typed lists
-    P(xn<=(I)n||!xr&&8+NX*(J)n<16L<<xm,xu=0,xn=n,x) //!< if new size is less than current, or x has no refs and there is enough space in the block, set xn to requested length and return x
-    R xiy(tn(xt,n),0,x);}                           //!< otherwise, copy x to a fresh list of the requested size and release the old one.
+    P(xn<=(I)n||!xr&&8+NX*(J)n<16L<<xm,xu=0,xn=n,p) //!< if new size is less than current, or x has no refs and there is enough space in the block, set xn to requested length and return x
+    R(V*)xiy(tn(xt,n),0,x);}                        //!< otherwise, copy x to a fresh list of the requested size and release the old one.
 V*aw_calloc(size_t n,size_t sz){                    //!< allocate n*sz bytes and fill with zero
     I nn=MX(1,n)*MX(1,sz);K x=tn(KC,nn);            //!< calculate new length and allocate a new list
     //N(nn/8,xJ[i]=0LL)N(nn%8,((C*)x)[nn-i]=0)R x;} //<! zero out first with 8-byte stride, then byte-wise
-    R memset(x,0,nn);}                              //<! zero out using memset(3)
+    R memset((V*)x,0,nn);}                          //<! zero out using memset(3)
 V aw_free(V*p){r0((K)p);}J aw_malloc_used(){R ws();}
 #endif
 
