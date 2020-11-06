@@ -1,5 +1,12 @@
 #include"c.h"
 #include"h.h"
+
+//! malloc override
+#define bmalloc  aw_malloc
+#define bcalloc  aw_calloc
+#define brealloc aw_realloc
+#define bfree    aw_free
+
 #define NX nt[xt] // chijefs
 
 #define KC 1L
