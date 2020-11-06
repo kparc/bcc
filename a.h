@@ -1,12 +1,6 @@
 #include"c.h"
 #include"h.h"
 
-//! malloc override
-#define bmalloc  aw_malloc
-#define bcalloc  aw_calloc
-#define brealloc aw_realloc
-#define bfree    aw_free
-
 #define NX nt[xt] // chijefs
 
 #define KC 1L
@@ -158,3 +152,19 @@ Z_ K jc(K x,C c){R j2(x,kc(c));}
 #define K3(f)   K f(K x,K y,K z)
 Z_ K1(k1){K r=kK(1);R rx=x,r;}Z_ K2(k2){K r=kK(2);R rx=x,ry=y,r;}Z_ K3(k3){K r=kK(3);R rx=x,ry=y,rz=z,r;}Z_ K3(j3){R j2(j2(x,y),z);}Z_ K2(jk){R j2(x,k1(y));}Z_ K cj(C c,K y){R j2(c1(c),y);}Z_ K u(I u,K x){R xu=u,x;}
 
+#if 0
+//! TODO malloc override
+#include"m.h"
+#define bmalloc  aw_malloc
+#define bcalloc  aw_calloc
+#define brealloc aw_realloc
+#define bfree    aw_free
+#else
+#define bmalloc  malloc
+#define bcalloc  calloc
+#define brealloc realloc
+#define bfree    free
+#endif
+
+
+//:~

@@ -1,10 +1,10 @@
 //! \file h.c \brief simple hash table with separate chaining
 //! \see https://svn.process-one.net/ejabberd/tags/ejabberd-2.0.5/src/tls/tls_drv.c
-#include"b.h"
+#include"a.h"
 #include"h.h"
 
 #define SZ sizeof
-#define rea realloc
+#define rea brealloc
 #define hmap(h,rng) (h&((rng)-1)) //!< map hash value onto given range (h mod rng-1)
 #define spl t->spl
 #define lvl t->lvl
@@ -16,7 +16,7 @@
 //! djb2 \see www.burtleburtle.net/bob/hash/doobs.html groups.google.com/forum/#!topic/comp.lang.c/lSKWXiuNOAk
 UI hsh(S s,SZT n){UI h=5381;N(n,h=(h<<5)+h+*s++)R h;}//Z_ UI djb(S x,UI n){UI h=5381;N(n,h=33*(h^x[i]));R h;}
 ZV hcpy(V*d,V*s,SZT n){*((S)memcpy(d,s,n)+n)=0;}//!< copy and terminate
-HT hnew(S id,I l,I r){HT t=(HT)calloc(1,SZHT);I n;t->id=(S)malloc((n=strlen(id))+1);hcpy(t->id,id,n);rds=r,lvl=l,bkt=(B*)calloc(2*l,SZ(B*));R t;}
+HT hnew(S id,I l,I r){HT t=(HT)bcalloc(1,SZHT);I n;t->id=(S)bmalloc((n=strlen(id))+1);hcpy(t->id,id,n);rds=r,lvl=l,bkt=(B*)bcalloc(2*l,SZ(B*));R t;}
 ZV hbal(HT t);
 
 B hget(HT t,S s,I n){                 //!< lookup or insert string s of length n
@@ -29,8 +29,8 @@ B hget(HT t,S s,I n){                 //!< lookup or insert string s of length n
    N(n,$(b->s[i]!=s[i],goto L0);)     //!< compare strings char by char
    b)                                 //!< if they match, return the bucket
   L0:b=b->next;}                      //!< otherwise keep traversing the list.
- I m=SZ(pbkt)+n+1;b=(B)malloc(m);     //!< allocate memory for a new bucket (header size + strlen + terminator)
- mem+=m;b->h=h;b->n=n;                //!< increment mem usage and initialize bucket header
+ I m=SZ(pbkt)+n+1;b=(B)bmalloc(m);    //!< allocate memory for a new bucket (header size + strlen + terminator)
+ mem+=m;b->h=h;b->n=n;b->v=NL;        //!< increment mem usage and initialize bucket header
  hcpy(b->s,s,n);                      //!< copy string to the bucket and terminate it
  b->next=bkt[idx];bkt[idx]=b;         //!< push the new bucket to the head of the slot
  if(b->next)hbal(t);                  //!< if slot has a tail, try to split it
@@ -52,14 +52,11 @@ ZV hbal(HT t){B*bp,mov;               //!< balance hash table load
     N(lvl,bkt[lvl+i]=0));             //!< zero out the upper part.
   )}
 
-V hdel(HT t){B b,n;K x;               //!< destroy table
+V hdel(HT t){B b,n;                   //!< destroy table
  N(lvl<<1,b=bkt[i];
-  W(b){n=b->next,x=b->v;
-   $(x&&xr,AB("xr"));
-   free(b),cnt--,b=n;})
-  $(cnt,AB("cnt"))
-  spl=lvl=rds=mem=bkt=0;
-  free(bkt),free(t);}
+  W(b){n=b->next,cnt--,bfree(b),b=n;})
+  $(cnt,x=AB("cnt"))spl=lvl=rds=mem=bkt=0;
+  bfree(bkt),bfree(t);}
 
 #ifdef TST
 I hslot(HT t){I r=0;N(lvl<<1,r+=!!bkt[i])R r;}//<! count occupied slots

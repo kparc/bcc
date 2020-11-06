@@ -112,7 +112,7 @@ UNIT(shortsyms,
 )
 
 extern S Ss;extern K z;//!< \Ss tape \z zx source zy 0xrtype:opcodes:stack
-K sym(I a),nme(K h);K*GG(K h),hsh(S s,UI n);V del(K h);
+K sym(I a),nme(K h);K*GG(K h),ssh(S s,UI n);V del(K h);
 UNIT(syms,
    #define SYM "xyz"
 
@@ -177,7 +177,7 @@ UNIT(symtable,
    S keys[]={"FKTABLE_CAT","cov","bmp","frameset","cos","fmt"},cset=csets[CHARSET_ALNUM]; //<! test vectors
 
    N(n,I sl;bkts[i]=hget(t,keys[i],sl=strlen(keys[i]));total+=sl;
-    STR(keys[i],     bkts[i]->s,  "hashed value must match input string"))
+    STR(bkts[i]->s,  keys[i],     "hashed value must match input string"))
 
    EQ_I(t->cnt,      n,           "htable should contain 6 elements")
    EQ_I(hchk(t,0,1), t->cnt,      "htable counter should match internal check")
@@ -195,13 +195,15 @@ UNIT(symtable,
    EQ_I(t->cnt,      hchk(t,0,1), "htable counter should match internal check")
    EQ_I(hchk(t,0,0), 5999325069,  "htable checksum must match expected")
 
-   TRUE(hload(t)     >0.9,       "htable load factor should be above 0.9")
+   TRUE(hload(t)     >0.9,        "htable load factor should be above 0.9")
 
    #ifdef TEST_HT_STRESS
    //! load factor under stress
    N(1000000,I rlen=rand()%100;S s=(S)malloc(rlen+1);total+=rlen;rnd_str(s,rlen,CHARSET_ALNUM);hget(t,s,rlen);free(s))//!< rand load
    EQ_I(hload(t)>0.8,       1,  "htable load factor should be above 0.8")O("HT: keys=%zu slots=%d load=%f\n",t->cnt,hslot(t),hload(t))
    #endif
+
+   hdel(t); //!< release memory
 )
 
 TESTS(
