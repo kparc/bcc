@@ -2,7 +2,7 @@
 
 ZK d(I,K,ST);
 
-S Ss;K z;ZI B=5,RET=0xc3,A[]={0,7,6,2,1,8,9,10,11,3,12,13,14,15,5,4},//!< x64 abi lol
+S Ss;K z;ZI B5=5,RET=0xc3,A[]={0,7,6,2,1,8,9,10,11,3,12,13,14,15,5,4},//!< x64 abi lol
  //    jmp  jb   jz   jnbe jmp32 jnb  jnz  jbe   jnb32
  JJ[]={0xeb,0x72,0x74,0x77,0xe9, 0x73,0x75,0x76, 0x0f83};
 ZK c5(I o,I n){R cj(o,pn((S)&n,4));}ZI m(I a,I b,I c){R 64*a+8*(7&b)+(7&c);}
@@ -81,7 +81,7 @@ ZK v(I r,K x,I n,ST st){
 #else
  K y=xz,z;I c=!n&&!Ay&&sA==y,l=M;
 #endif
- z=vh(xK[3],n,r,st),M=l,y=vh(y,n,r,st),x=b(1,xy,st);yn-=c*B;I jj=1-n?n-xn-yn-3:zn;
+ z=vh(xK[3],n,r,st),M=l,y=vh(y,n,r,st),x=b(1,xy,st);yn-=c*B5;I jj=1-n?n-xn-yn-3:zn;
  K j=jmp(jj);y=j2(y,n||c?yn,j:c1(RET));R j3(jc(x,yn),y,z);}
 
 K p(ST);
