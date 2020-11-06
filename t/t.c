@@ -168,25 +168,38 @@ UNIT(aw_malloc,
 )
 
 #include"../h.h"
+#define expmem(n) ((n)*(sizeof(pbkt)+1)+total)
 UNIT(symtable,
-   hnew(2,3);
-   S keys[] = { "FKTABLE_CAT", "cov", "bmp", "frameset", "cos", "fmt" };
-   I n = 6;
-   S addrs[n];
 
-   N(n,
-      addrs[i]=hget(keys[i],strlen(keys[i]));
-      STR(keys[i], addrs[i], "hashed value must match input string")
-   )
+   hnew(2,10); //<! 4 slots, 10 split rounds
 
-   N(n,
-      if(addrs[i]!=hget(keys[i],strlen(keys[i])))FAIL("hash table must be stable");
-   )
+   I n=6,total=0;
+   S addrs[n],keys[]={"FKTABLE_CAT","cov","bmp","frameset","cos","fmt"},cset=csets[CHARSET_ALNUM]; //<! test vectors
 
+   N(n,I sl;addrs[i]=hget(keys[i],sl=strlen(keys[i]));total+=sl;
+    STR(keys[i],   addrs[i],   "hashed value must match input string"))
 
-   EQ_I(6,   hcnt(), "htable should contain 6 elements")
-   EQ_I(181, hmem(), "htable should be using 128 bytes")
+   EQ_I(n,         hcnt(),     "htable should contain 6 elements")
+   EQ_I(hchk(0,1), hcnt(),     "htable counter should match internal check")
+   EQ_I(hmem(),    expmem(n),  "htable mem usage should match expected")
+   EQ_I(hchk(0,0), 1408928309, "htable checksum must match expected")
 
+   N(n,if(addrs[i]!=hget(keys[i],strlen(keys[i])))FAIL("hash table must be stable"))
+   EQ_I(hcnt(),    n,          "htable should still remain the same")
+   EQ_I(hchk(0,1), hcnt(),     "htable counter should match internal check")
+   EQ_I(hmem(),    expmem(n),  "htable mem usage should match expected")
+   EQ_I(hchk(0,0), 1408928309, "htable checksum must match expected")
+
+   N(strlen(cset)-1,total+=i+1;hget(cset+i,i+1));//uppercase only - cannot be any of keys[]
+   EQ_I(hmem(),    expmem(n+strlen(cset)-1), "htable mem usage should match expected")
+   EQ_I(hcnt(),    hchk(0,1),  "htable counter should match internal check")
+   EQ_I(hchk(0,0), 5999325069, "htable checksum must match expected")
+
+   TRUE(hload()    >0.9,       "htable load factor should be above 0.9")
+
+   //! load factor under stress
+   //N(1000000,I rlen=rand()%100;S s=(S)malloc(rlen+1);total+=rlen;rnd_str(s,rlen,CHARSET_ALNUM);hget(s,rlen);free(s))//!< rand load
+   //EQ_I(hload()>0.8,       1,  "htable load factor should be above 0.9")O("HT: keys=%lld slots=%d load=%f\n",hcnt(),hslot(),hload())
 )
 
 TESTS(
