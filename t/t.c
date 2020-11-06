@@ -1,25 +1,26 @@
 #include"t.h"
 
-UNIT(smoke,//<! basic sanity
-   WS(0,          "workspace should initally be empty")
+UNIT(env,           //<! basic sanity
+   WS(0,            "workspace should initally be empty")
 
    K x=enm(ki(10)), //!< !10
      y=Li(x,5);     //!< list item
 
-   WS(        64, "enm(10) should allocate 64 bytes")
+   WS(          64, "enm(10) should allocate 64 bytes")
 
-   _(Ax,       0, "x should not be an atom")
-   _(xr,       0, "x should have refcount 0")
-   _(xt,      KI, "x should be an int vector")
-   _(xn,      10, "x should have 10 items")
+   _(Ax,         0, "x should not be an atom")
+   _(xr,         0, "x should have refcount 0")
+   _(xt,        KI, "x should be an int vector")
+   _(xn,        10, "x should have 10 items")
 
-   _(Ay,      KI, "5th item should be an int")
-   _(yi,       5, "5th item should be eq 5")
+   _(Ay,        KI, "5th item should be an int")
+   _(yi,         5, "5th item should be eq 5")
 
-   r0(x);    //units bail if wss>0
+   r0(x)            //units bail if wss>0
 )
 
-UNIT(malloc,
+#include"../m.h"
+UNIT(mem,
    _("2+2",    4, "basic ex #1")
    _("2=2",    1, "basic ex #2")
 
@@ -29,35 +30,51 @@ UNIT(malloc,
    WS0("non-assigning repl expressions shouldn't leak memory")
 
    _("f[ii]{x+y}",  NONE, "declare a global function")
-   WS(80, "workspace usage should be 80 bytes")
+   WS(                80, "workspace usage should be 80 bytes")
 
    _("f[40;2]",       42, "function calls should work as expected")
-   WS0("calling a function shouldn't leak memory")
+   WSSAME(                "calling a function shouldn't leak memory")
 
    _("f[ii]{x-y}",  NONE, "reassign an exisiting function")
-   WS0("reassigning a global function shouldn't leak memory")
+   WSSAME(                "reassigning a global function shouldn't leak memory")
 
    _("f[40;2]",       38, "reassigned function should work as expected")
 
-   _("\\-f",        NONE, "releasing existing global function should be ok")
+   _("\\-f",        NONE, "releasing existing global function should work")
 
    _("x:!10",       NONE, "declare a global vector")
    _("\\-x",        NONE, "releasing existing global vector should be ok")
 
+   WS0(                   "releasing a global vector shouldn't leak memory")
+
    //_("c[i]$[x;1;2]",NONE, "declare a ctf function (omitted brackets)")
    //_("\\-c",        NONE, "release a bare ctf function")
    //WS(0, "releasing a bare ctf function shouldn't leak memory FIXME")
+
+   //! aw_malloc|calloc|realloc|free
+   //! TODO test calloc, add more posix compliance tests
+   N(16,K x=(K)aw_malloc(i+1);//O("x %d = %p xn %d %d\n",i,x,xm,xr);N(xn,O("%d ",((C*)x)[i]))O("\n");
+      aw_free((V*)x))
+
+   N(16,K x=(K)aw_calloc(i+1,2);//O("x %d = %p xn %d %d\n",i,x,xm,xr);N(xn,O("%d ",((C*)x)[i]))O("\n");
+      aw_free((V*)x))
+
+   //! unit must pass (wss should be zero, no leaked refs)
 )
 
-UNIT(errors,
+UNIT(err,
    ERR("\\-f",       "f", "releasing a non-existent global should name-error")
    ERR("\\-A",       "A", "releasing an invalid identifier should name-error")
    ERR("x",          "x", "referencing an non-existent global should name-error")
+
    _("x:2",         NONE, "declare a test scalar")
+   ERR("\\-x",     "nyi", "releasing a scalar should nyi")
+
    ERR("\\-x",     "nyi", "releasing a scalar should nyi")
 )
 
-UNIT(parser,//<! parse trees
+UNIT(prs,//<! parse trees
+
    PT("#x",    "('#';x)",          "ptree of basic monadic op")
 
    PT("2*x",   "('\\';x)",         "2*x should translate to monadic left shift")
@@ -68,18 +85,19 @@ UNIT(parser,//<! parse trees
 
    PT("c[i]$[x;1;2]", "('$';x;0x81;0x82)",          "declare a ctf function (omitted brackets)")
    _("\\-c",        NONE, "release a ctf function")
-   WS(0, "parsing a bare ctf function shouldn't leak memory")
+   WS(                 0, "parsing a bare ctf function shouldn't leak memory")
 
    PT("c[x]{$[x;1;2]}", "('{';('$';x;0x81;0x82))",  "declare a ctf function (omitted brackets)")
    _("\\-c",        NONE, "release a ctf function")
 
    PT("l[i]{r:0;N(x){r+:2};r}",  "('{';(':';r;0x80);('N';x;('{';(0xab;r;0x82)));r)", "loop function decl ptree")
    _("\\-l",   NONE, "release of l[] should return memory to the heap")
-)
 
-UNIT(brackets,
+   //! bracket balancer
+   //! TODO add nesting limit tests
    #define pass(s) _(bb(s),0,s)
    #define fail(s,exp) {S b=bb(s);_(exp==(b?(C)*b:(C)b),1,exp)}
+
    pass("")
    pass("\n")
    pass("[]")
@@ -89,32 +107,25 @@ UNIT(brackets,
    fail("[}]",'}')
    fail("[\"]",'\"')
    fail("[\"\"",0)
-   //! TODO add nesting limit tests
+
+   //! unit must pass (wss should be zero)
 )
 #undef pass
 #undef fail
 
-UNIT(disk,
+UNIT(fio,
+
    ERR("\\l t/blah.b",   "t/blah.b",      "missing file should report an error")
-     _("\\l t/t.b",       NONE,           "successful file compilation shouldn't report")
+     _("\\l t/t.fio.b",   NONE,           "successful file compilation shouldn't report")
      _("#x",              100,            "loaded and compiled source should produce result")
      _("\\-x",            NONE,           "releasing the result of compilation should empty the ws")
-)
-
-UNIT(shortsyms,
-   PT("a:42",   "0xaa",  "parse tree of a scalar assignment is its literal value")
-   PT("s:2+1",           "('+';0x82;0x81)", "parse tree of a simple expression #1")
-   PT("s+s",             "('+';s;s)",       "parse tree of a simple expression #2")
-
-   _("s:2+1",             0,                "scalar expr assignment")
-   _("s",                 3,                "parse tree of a simple expression #2")
 )
 
 #ifdef SYMS
 extern S Ss;extern K z;//!< \Ss tape \z zx source zy 0xrtype:opcodes:stack
 K sym(I a),nme(K h);K*GG(K h),ssh(S s,UI n);V del(K h);
-UNIT(syms,
 
+UNIT(sym,
    //! api test
    #define SYM "xyz"
    Ss=(S)SYM;       //!< set the parser tape to string SYM
@@ -123,8 +134,8 @@ UNIT(syms,
     *v=GG(b);       //!< look up a pointer to the global sym value
    *v=ki(42);       //!< assign a value
 
-   STR(x,                 SYM,      "global symbol name should match expected")
-   EQ_SYM(SYM,           "42",      "assigned variable holds the correct scalar value")
+   STR(x,                 SYM,               "global symbol name should match expected")
+   EQ_SYM(SYM,           "42",               "assigned variable holds the correct scalar value")
 
    PT("ccall+go_fn+42",  "('+';`ccall;('+';`go_fn;0xaa))",   "basic multichar identifiers are supported by parser")
    PT("x+Not+Wha",       "('+';`x;('+';`Not;`Wha))",         "special case: if leading N|W is not followed by (, force class to identifier")
@@ -157,9 +168,9 @@ UNIT(syms,
 #include"../h.h"
 //#define expmem(n) ((n)*(sizeof(pbkt)+1)+total)
 #define expmem(n) ((n)*(sizeof(pbkt)))
-UNIT(symtable,
+UNIT(hsh,
 
-   HT t=hnew("tst",2,10); //<! 4 slots, 10 split rounds
+   HT t=hnew("tst",2,10,djb2); //<! 4 slots, 10 split rounds
 
    I n=6,total=0;B bkts[n];
    S keys[]={"FKTABLE_CAT","cov","bmp","frameset","cos","fmt"},cset=csets[CHARSET_ALNUM]; //<! test vectors
@@ -170,60 +181,51 @@ UNIT(symtable,
    EQ_I(t->cnt,      n,           "htable should contain 6 elements")
    EQ_I(hdbg(t,0,1), t->cnt,      "htable counter should match internal check")
    EQ_I(t->mem,      expmem(n),   "htable mem usage should match expected")
-   EQ_I(hdbg(t,0,0), 1408928309,  "htable checksum must match expected")
+   //EQ_I(hdbg(t,0,0), 1408928309,  "htable checksum must match expected")
 
    N(n,if(bkts[i]!=hget(t,keys[i],strlen(keys[i])))FAIL("hash table must be stable"))
    EQ_I(t->cnt,      n,           "htable should still remain the same")
    EQ_I(hdbg(t,0,1), t->cnt,      "htable counter should match internal check")
    EQ_I(t->mem,      expmem(n),   "htable mem usage should match expected")
-   EQ_I(hdbg(t,0,0), 1408928309,  "htable checksum must match expected")
+   //EQ_I(hdbg(t,0,0), 1408928309,  "htable checksum must match expected")
 
    N(strlen(cset)-1,total+=i+1;hget(t,cset+i,i+1));//uppercase only - cannot be any of keys[]
    EQ_I(t->mem,      expmem(n+strlen(cset)-1), "htable mem usage should match expected")
    EQ_I(hdbg(t,0,1), t->cnt,      "htable counter should match internal check")
-   EQ_I(hdbg(t,0,0), 5999325069,  "htable checksum must match expected")
+   //EQ_I(hdbg(t,0,0), 5999325069,  "htable checksum must match expected")
 
    TRUE(hload(t)     >0.9,        "htable load factor should be above 0.9")
 
    #ifdef TEST_HT_STRESS
    //! load factor under stress
    N(1000000,I rlen=rand()%100;S s=(S)malloc(rlen+1);total+=rlen;rnd_str(s,rlen,CHARSET_ALNUM);hget(t,s,rlen);free(s))//!< rand load
-   EQ_I(hload(t)>0.8,         1,  "htable load factor should be above 0.8")O("HT: keys=%zu slots=%d load=%f\n",t->cnt,hslot(t),hload(t))
+   EQ_I(hload(t)>0.8,         1,  "htable load factor should be above 0.8")O("HT: keys=%zu slots=%d load=%f\n",t->cnt,hslot(t),hload(t));
    #endif
 
    hdel(t); //!< release memory
 )
-#endif//SYMS
+#else
 
-#include"../m.h"
-UNIT(aw_malloc, //! TODO test calloc, add more posix compliance tests
-   N(16,
-      K x=(K)aw_malloc(i+1);
-      //O("x %d = %p xn %d %d\n",i,x,xm,xr);N(xn,O("%d ",((C*)x)[i]))O("\n");
-      aw_free((V*)x))
-   N(16,
-      K x=(K)aw_calloc(i+1,2);
-      //O("x %d = %p xn %d %d\n",i,x,xm,xr);N(xn,O("%d ",((C*)x)[i]))O("\n");
-      aw_free((V*)x))
+UNIT(sym,
+   PT("a:42",            "0xaa",            "parse tree of a scalar assignment is its literal value")
+   PT("s:2+1",           "('+';0x82;0x81)", "parse tree of a simple expression #1")
+   PT("s+s",             "('+';s;s)",       "parse tree of a simple expression #2")
 
-   //! unit must pass (wss should be zero)
+   _("s:2+1",             0,                "scalar expr assignment")
+   _("s",                 3,                "parse tree of a simple expression #2")
 )
 
+#endif//SYMS
+
+UNIT(nop,TRUE(1,"dummy test"))
 
 TESTS(
 #ifndef SYMS
-   RUN(smoke)
-   RUN(malloc)
-   RUN(aw_malloc)
-   RUN(brackets)
-   RUN(errors)
-   RUN(parser)
-   RUN(shortsyms)
-   RUN(disk)
+   U(env)U(mem)U(err)U(prs)U(fio)X(nop)
 #else
-   //RUN(symtable)
-   RUN(syms)
+   U(hsh)
 #endif
+   //RUN(sym)
 )
 
 //:~

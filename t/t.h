@@ -3,6 +3,8 @@
 #include"../a.h"
 #include<stdlib.h>//rand
 
+//#define TEST_HT_STRESS
+
 #define NONE 0
 #define ES(x) ((S)(-1UL>>16&(J)x))
 
@@ -50,13 +52,20 @@ V setUp(V){}V tearDown(V){}//!< before/after each test
 
 
 #define PT(act,exp,msg) {Wprev=ws();K x=ptree(act);TEST_ASSERT_EQUAL_STRING_MESSAGE(exp,(S)x,msg);r0(x);}
-#define WS(exp,msg)     {TEST_ASSERT_EQUAL_INT_MESSAGE(exp,ws()-W0,msg);}
-#define WS0(msg)        {TEST_ASSERT_EQUAL_INT_MESSAGE(0,ws()-Wprev,msg);}
+#define WS0(msg)           {TEST_ASSERT_EQUAL_INT_MESSAGE(0,ws(),msg);}
+#define WSSAME(msg)        {TEST_ASSERT_EQUAL_INT_MESSAGE(0,ws()-Wprev,msg);}
+#define WS(exp,msg)        {TEST_ASSERT_EQUAL_INT_MESSAGE(exp,ws(),msg);}
 
 #define TESTS(units...) I main(I a,char**c){init();UNITY_BEGIN();units;R UNITY_END();}
-#define UNIT(name,tests...) V test##_##name(V){W0=ws();tests;WS(0,"test unit shouldn't leak memory")};\
 
-#define RUN(unit) RUN_TEST(test##_##unit);
+//#define UNIT(name,tests...) V test##_##name(V){W0=ws();tests;WS(0,"test unit shouldn't leak memory")};
+//#define RUN(unit) RUN_TEST(test##_##unit);
+
+#define UNIT(name,tests...) V skip##_##name(V){TEST_IGNORE();};V unit##_##name(V){W0=ws();tests;WS(W0,"test unit shouldn't leak memory")};
+
+#define U(name) extern V unit##_##name(V);RUN_TEST(unit##_##name);
+#define X(name) extern V skip##_##name(V);RUN_TEST(skip##_##name);
+
 
 enum charsets { CHARSET_ALNUM, CHARSET_AZaz, CHARSET_AZ, CHARSET_az};
 ZS csets[4]={
