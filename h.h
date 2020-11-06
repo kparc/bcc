@@ -3,9 +3,12 @@
 #include<stdlib.h>
 #include"c.h"
 
+#define hval(t,k) (hget(t,k,strlen(k)->v)
+#define hset(t,k,v) (hval=(K)v)
+
 typedef size_t SZT;
 typedef struct pbkt pbkt;typedef pbkt*B;
-typedef struct pbkt{I h,n;B next;C s[];}pbkt;//!< hash,strlen,next,str+nullchar
+typedef struct pbkt{I h,n;B next;K v;C s[];}pbkt;//!< keyhash,keylen,next,value,keyname+nullchar
 
 typedef struct ht{
     S       id;          //< table id
@@ -21,11 +24,14 @@ const static SZT SZHT=sizeof(pHT); //< hash table header size
 
 HT hnew(S id,I lvl,I rds);//!< init \p id table identifier \p lvl initial size (power of 2) \p rds rounds of tail split attempts
 B hget(HT t,S s,I n);    //!< insert|lookup \p s string \p n length
+V hdel(HT t);            //!< destroy table
 
 #ifdef TST
 I hslot(HT t);           //<! #occupied slots
 F hload(HT t);           //<! table load factor
 UJ hchk(HT t,C prt,C s); //<! print and checksums
 #endif
+
+UI hsh(S s,SZT n);       //!< export hash fn
 
 //:~

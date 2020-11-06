@@ -13,21 +13,14 @@
 #define cnt t->cnt
 #define bkt t->bkt
 
-/*
-static B*ht;    //<! hash table
-ZI rds;         //<! balancer rounds
-ZI lvl,spl;     //<! current size of the table divided by 2, split position (initially 0)
-ZJ S1,j;        //!< memory usage, bucket count
-*/
-
 //! djb2 \see www.burtleburtle.net/bob/hash/doobs.html groups.google.com/forum/#!topic/comp.lang.c/lSKWXiuNOAk
-Z_ UI djb(S s,SZT n){UI h=5381;N(n,h=(h<<5)+h+*s++)R h;}//Z_ UI djb(S x,UI n){UI h=5381;N(n,h=33*(h^x[i]));R h;}
+UI hsh(S s,SZT n){UI h=5381;N(n,h=(h<<5)+h+*s++)R h;}//Z_ UI djb(S x,UI n){UI h=5381;N(n,h=33*(h^x[i]));R h;}
 ZV hcpy(V*d,V*s,SZT n){*((S)memcpy(d,s,n)+n)=0;}//!< copy and terminate
 HT hnew(S id,I l,I r){HT t=(HT)calloc(1,SZHT);I n;t->id=(S)malloc((n=strlen(id))+1);hcpy(t->id,id,n);rds=r,lvl=l,bkt=(B*)calloc(2*l,SZ(B*));R t;}
 ZV hbal(HT t);
 
 B hget(HT t,S s,I n){                 //!< lookup or insert string s of length n
- B b;UI h=djb(s,n),hi=0,              //!< b bucket, h hash, hi use full range (dbg)
+ B b;UI h=hsh(s,n),hi=0,              //!< b bucket, h hash, hi use full range (dbg)
  idx=hmap(h,lvl);                     //!< first, try to map hash value to the 1st half of table
  $(idx<spl,hi=1,idx=hmap(h,lvl<<1));  //!< if idx is above split position, remap to the entire table
  b=bkt[idx];                          //!< retrieve the bucket from the slot idx
@@ -56,8 +49,17 @@ ZV hbal(HT t){B*bp,mov;               //!< balance hash table load
    $(++spl==lvl,                      //!< if ++spl+lvl reaches the size of the table
     lvl<<=1;spl=0;                    //!< then double lvl and reset spl to zero
     bkt=(B*)rea((V*)bkt,SZ(B*)*2*lvl);//!< double the size of the table
-    N(lvl,bkt[lvl+i]=0));               //!< zero out the upper part.
+    N(lvl,bkt[lvl+i]=0));             //!< zero out the upper part.
   )}
+
+V hdel(HT t){B b,n;K x;               //!< destroy table
+ N(lvl<<1,b=bkt[i];
+  W(b){n=b->next,x=b->v;
+   $(x&&xr,AB("xr"));
+   free(b),cnt--,b=n;})
+  $(cnt,AB("cnt"))
+  spl=lvl=rds=mem=bkt=0;
+  free(bkt),free(t);}
 
 #ifdef TST
 I hslot(HT t){I r=0;N(lvl<<1,r+=!!bkt[i])R r;}//<! count occupied slots
@@ -66,7 +68,7 @@ F hload(HT t){R(F)hslot(t)/cnt;}
 UJ hchk(HT t,C o,C st){B b;I n,len,LEN=0,CNT=0;UJ csum,CSUM=0;
   N(lvl<<1,
     b=bkt[i];n=len=csum=0;
-    $(o,O("%s[%d]: ",i,t->id))
+    $(o,O("%s[%d]: ",t->id,i))
     W(b){
       $(o,O("(%s) -> ",b->s));
       n++,len+=b->n,csum+=b->h;
