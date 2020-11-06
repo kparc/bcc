@@ -59,24 +59,14 @@ K hdel(HT t){B b,n;                   //!< destroy table
   R bfree(bkt),bfree(t),r;}
 
 #ifdef TST
-I hslot(HT t){I r=0;N(lvl<<1,r+=!!bkt[i])R r;}//<! count occupied slots
-F hload(HT t){R(F)hslot(t)/cnt;}
-
-UJ hchk(HT t,C o,C st){B b;I n,len,LEN=0,CNT=0;UJ csum,CSUM=0;
-  N(lvl<<1,
-    b=bkt[i];n=len=csum=0;
-    $(o,O("%s[%d]: ",t->id,i))
-    W(b){
-      $(o,O("(%s) -> ",b->s));
-      n++,len+=b->n,csum+=b->h;
-      b=b->next;}
-    $(n,csum+=len+n+i);
-    $(o,$(n,O("[cnt=%d,len=%d,sum=%llu]\n",n,len,csum))O("()\n"););
-    CSUM+=csum;LEN+=len;CNT+=n
-  )
+I hslot(HT t){I r=0;N(lvl<<1,r+=!!bkt[i])R r;}F hload(HT t){R(F)hslot(t)/cnt;}//<! slot count, load factor
+UJ hdbg(HT t,C o,C st){B b;I n,len,LEN=0,CNT=0;UJ csum,CSUM=0;
+  N(lvl<<1,b=bkt[i];n=len=csum=0;$(o,O("%s[%d]: ",t->id,i))
+    W(b){$(o,O("(%s) -> ",b->s));n++,len+=b->n,csum+=b->h;b=b->next;}
+    $(n,csum+=len+n+i);$(o,$(n,O("[cnt=%d,len=%d,sum=%llu]\n",n,len,csum))O("()\n"););
+    CSUM+=csum;LEN+=len;CNT+=n)
   $(o,O("HT[%s]: keys=%d len=%d\n",t->id,CNT,LEN));
-  R st?CNT:(CSUM+(lvl<<1));
-}
+  R st?CNT:(CSUM+(lvl<<1));}
 #endif
 
- //:~
+//:~

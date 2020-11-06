@@ -22,14 +22,14 @@ typedef struct ht{
 } pHT;typedef pHT*HT;
 const static SZT SZHT=sizeof(pHT); //< hash table header size
 
-HT hnew(S id,I lvl,I rds);//!< init \p id table identifier \p lvl initial size (power of 2) \p rds rounds of tail split attempts
+HT hnew(S id,I l,I r);   //!< init \p id table identifier \p lvl initial size (power of 2) \p rds rounds of tail split attempts
 B hget(HT t,S s,I n);    //!< insert|lookup \p s string \p n length
 K hdel(HT t);            //!< destroy table
 
 #ifdef TST
 I hslot(HT t);           //<! #occupied slots
 F hload(HT t);           //<! table load factor
-UJ hchk(HT t,C prt,C s); //<! print and checksums
+UJ hdbg(HT t,C prt,C s); //<! print and checksums
 #endif
 
 UI hsh(S s,SZT n);       //!< export hash fn

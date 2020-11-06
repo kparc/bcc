@@ -180,20 +180,20 @@ UNIT(symtable,
     STR(bkts[i]->s,  keys[i],     "hashed value must match input string"))
 
    EQ_I(t->cnt,      n,           "htable should contain 6 elements")
-   EQ_I(hchk(t,0,1), t->cnt,      "htable counter should match internal check")
+   EQ_I(hdbg(t,0,1), t->cnt,      "htable counter should match internal check")
    EQ_I(t->mem,      expmem(n),   "htable mem usage should match expected")
-   EQ_I(hchk(t,0,0), 1408928309,  "htable checksum must match expected")
+   EQ_I(hdbg(t,0,0), 1408928309,  "htable checksum must match expected")
 
    N(n,if(bkts[i]!=hget(t,keys[i],strlen(keys[i])))FAIL("hash table must be stable"))
    EQ_I(t->cnt,      n,           "htable should still remain the same")
-   EQ_I(hchk(t,0,1), t->cnt,      "htable counter should match internal check")
+   EQ_I(hdbg(t,0,1), t->cnt,      "htable counter should match internal check")
    EQ_I(t->mem,      expmem(n),   "htable mem usage should match expected")
-   EQ_I(hchk(t,0,0), 1408928309,  "htable checksum must match expected")
+   EQ_I(hdbg(t,0,0), 1408928309,  "htable checksum must match expected")
 
    N(strlen(cset)-1,total+=i+1;hget(t,cset+i,i+1));//uppercase only - cannot be any of keys[]
    EQ_I(t->mem,      expmem(n+strlen(cset)-1), "htable mem usage should match expected")
-   EQ_I(t->cnt,      hchk(t,0,1), "htable counter should match internal check")
-   EQ_I(hchk(t,0,0), 5999325069,  "htable checksum must match expected")
+   EQ_I(hdbg(t,0,1), t->cnt,      "htable counter should match internal check")
+   EQ_I(hdbg(t,0,0), 5999325069,  "htable checksum must match expected")
 
    TRUE(hload(t)     >0.9,        "htable load factor should be above 0.9")
 
