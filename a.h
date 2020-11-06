@@ -1,4 +1,5 @@
 #include"c.h"
+#include"h.h"
 #define NX nt[xt] // chijefs
 
 #define KC 1L
@@ -35,7 +36,7 @@ typedef struct{C L[26];C T[26];I M;C D[2];C N;I A;}pst;typedef pst*ST;
 typedef struct{C L[26];C T[26];I M;C D[2];C N;K A;}pst;typedef pst*ST; //<! assignment target (A) must be K to hold KS
 #endif
 
-extern K sym(I a),*GG(K h),val(K h),nme(K h);//!< symtable manager
+extern HT GT;extern K sym(I a),*GG(K h),val(K h),nme(K h);//!< symtable manager
 extern J nt[],ip();extern K G[],ex(K),ps(S),r1(),tn(),j2(),k0(),sS(),enm(),o();I cl(I c);V exit(),w2(),r0();S pi(),pf(),px();J ws();F fp();Z_ K X(K*k,K y){R r0(*k),*k=y,NL;}
 Z_ I oc(I i){R w2((S)&i),i;}Z_ V nl(){w2("\n");}Z_ S os(S s){R w2(s),nl(),s;}Z_ J oi(J j){R os(pi(j)),j;}Z_ F of(F f){R os(pf(f)),f;}Z_ J ox(J j){R os(px(j)),j;}
 Z_ S _sc(S s,I c){W(*s-c)P(!*s++,(S)0)R s;}
