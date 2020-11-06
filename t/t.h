@@ -65,8 +65,7 @@ ZS csets[4]={
  (S)"abcdefghijklmnopqrstuvwxyz"
 };
 
-//!attic
-/*
+#ifdef TEST_HT_STRESS
 ZS rnd_str(S dest,size_t size,C cs){
   P(4<cs,(S)0)S dict=csets[cs];
   size_t dictlen=strlen(dict);
@@ -76,7 +75,10 @@ ZS rnd_str(S dest,size_t size,C cs){
   )
   dest[size]='\0'; //< terminate string
   R dest;}
-*/
+#endif
+
+//!attic
+
 //V __llvm_profile_enable_continuous_mode(V);I __llvm_profile_is_continuous_mode_enabled(V),__llvm_profile_write_file(V);
 //        0        1         2         3        4         5       6         7          8        9          10        11
 //enum kerr{ERR_ZERO,ERR_CARET,ERR_PARSE,ERR_RANK,ERR_VALUE,ERR_NYI,ERR_CLASS,ERR_LENGTH,ERR_TYPE,ERR_DOMAIN,ERR_STACK,ERR_LIMIT};

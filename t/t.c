@@ -171,35 +171,37 @@ UNIT(aw_malloc,
 #define expmem(n) ((n)*(sizeof(pbkt)+1)+total)
 UNIT(symtable,
 
-   hnew(2,10); //<! 4 slots, 10 split rounds
+   HT t=hnew("tst",2,10); //<! 4 slots, 10 split rounds
 
-   I n=6,total=0;
-   S addrs[n],keys[]={"FKTABLE_CAT","cov","bmp","frameset","cos","fmt"},cset=csets[CHARSET_ALNUM]; //<! test vectors
+   I n=6,total=0;B bkts[n];
+   S keys[]={"FKTABLE_CAT","cov","bmp","frameset","cos","fmt"},cset=csets[CHARSET_ALNUM]; //<! test vectors
 
-   N(n,I sl;addrs[i]=hget(keys[i],sl=strlen(keys[i]));total+=sl;
-    STR(keys[i],   addrs[i],   "hashed value must match input string"))
+   N(n,I sl;bkts[i]=hget(t,keys[i],sl=strlen(keys[i]));total+=sl;
+    STR(keys[i],     bkts[i]->s,  "hashed value must match input string"))
 
-   EQ_I(n,         hcnt(),     "htable should contain 6 elements")
-   EQ_I(hchk(0,1), hcnt(),     "htable counter should match internal check")
-   EQ_I(hmem(),    expmem(n),  "htable mem usage should match expected")
-   EQ_I(hchk(0,0), 1408928309, "htable checksum must match expected")
+   EQ_I(t->cnt,      n,           "htable should contain 6 elements")
+   EQ_I(hchk(t,0,1), t->cnt,      "htable counter should match internal check")
+   EQ_I(t->mem,      expmem(n),   "htable mem usage should match expected")
+   EQ_I(hchk(t,0,0), 1408928309,  "htable checksum must match expected")
 
-   N(n,if(addrs[i]!=hget(keys[i],strlen(keys[i])))FAIL("hash table must be stable"))
-   EQ_I(hcnt(),    n,          "htable should still remain the same")
-   EQ_I(hchk(0,1), hcnt(),     "htable counter should match internal check")
-   EQ_I(hmem(),    expmem(n),  "htable mem usage should match expected")
-   EQ_I(hchk(0,0), 1408928309, "htable checksum must match expected")
+   N(n,if(bkts[i]!=hget(t,keys[i],strlen(keys[i])))FAIL("hash table must be stable"))
+   EQ_I(t->cnt,      n,           "htable should still remain the same")
+   EQ_I(hchk(t,0,1), t->cnt,      "htable counter should match internal check")
+   EQ_I(t->mem,      expmem(n),   "htable mem usage should match expected")
+   EQ_I(hchk(t,0,0), 1408928309,  "htable checksum must match expected")
 
-   N(strlen(cset)-1,total+=i+1;hget(cset+i,i+1));//uppercase only - cannot be any of keys[]
-   EQ_I(hmem(),    expmem(n+strlen(cset)-1), "htable mem usage should match expected")
-   EQ_I(hcnt(),    hchk(0,1),  "htable counter should match internal check")
-   EQ_I(hchk(0,0), 5999325069, "htable checksum must match expected")
+   N(strlen(cset)-1,total+=i+1;hget(t,cset+i,i+1));//uppercase only - cannot be any of keys[]
+   EQ_I(t->mem,      expmem(n+strlen(cset)-1), "htable mem usage should match expected")
+   EQ_I(t->cnt,      hchk(t,0,1), "htable counter should match internal check")
+   EQ_I(hchk(t,0,0), 5999325069,  "htable checksum must match expected")
 
-   TRUE(hload()    >0.9,       "htable load factor should be above 0.9")
+   TRUE(hload(t)     >0.9,       "htable load factor should be above 0.9")
 
+   #ifdef TEST_HT_STRESS
    //! load factor under stress
-   //N(1000000,I rlen=rand()%100;S s=(S)malloc(rlen+1);total+=rlen;rnd_str(s,rlen,CHARSET_ALNUM);hget(s,rlen);free(s))//!< rand load
-   //EQ_I(hload()>0.8,       1,  "htable load factor should be above 0.9")O("HT: keys=%lld slots=%d load=%f\n",hcnt(),hslot(),hload())
+   N(1000000,I rlen=rand()%100;S s=(S)malloc(rlen+1);total+=rlen;rnd_str(s,rlen,CHARSET_ALNUM);hget(t,s,rlen);free(s))//!< rand load
+   EQ_I(hload(t)>0.8,       1,  "htable load factor should be above 0.8")O("HT: keys=%zu slots=%d load=%f\n",t->cnt,hslot(t),hload(t))
+   #endif
 )
 
 TESTS(
