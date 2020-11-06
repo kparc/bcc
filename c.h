@@ -10,7 +10,7 @@
 #define rC ptr(r)
 
 typedef unsigned long long K;
-typedef unsigned char C,*S;typedef int I;typedef long long J;typedef double F;typedef void V;typedef unsigned int UI;
+typedef unsigned char C,*S;typedef int I;typedef long long J;typedef double F;typedef void V;typedef unsigned int UI;typedef unsigned long long UJ;
 //V*memcpy();strlen(const char*);//#define P(b,a...)   if(b)return(a);
 
 #define R return
@@ -19,7 +19,7 @@ typedef unsigned char C,*S;typedef int I;typedef long long J;typedef double F;ty
 #define W(b...)     while((b))                //while
 #define N(n,a...)   {I i=0,_n=(n);W(i<_n){a;++i;}}
 #define $(b,a...)   if(b){a;}else             //cond
-#define C(i,a...)   case i:{a;}break  ;       //case
+#define C(i,a...)   case i:{a;}break;         //case
 #define S(i,c,a...) switch(i){c default:a;} //switch
 #define O printf
 
