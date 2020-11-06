@@ -1,6 +1,7 @@
 //#define UNITY_INCLUDE_DOUBLE
 #include"lib/unity.h"
 #include"../a.h"
+#include<stdlib.h>//rand
 
 #define NONE 0
 #define ES(x) ((S)(-1UL>>16&(J)x))
@@ -28,6 +29,7 @@ V setUp(V){}V tearDown(V){}//!< before/after each test
 #define EQ_SYM(act,exp,msg) {K x=SYMVAL(act);TEST_ASSERT_MESSAGE(!memcmp(x,exp,MN(strlen(exp),xn)), "variable value should match expected");}
 
 #define FAIL(msg) TEST_ASSERT_MESSAGE(0,msg)
+#define TRUE(cnd,msg) TEST_ASSERT_MESSAGE((cnd),msg);
 
 //#define EQ_NL(act,msg)    TEST_ASSERT_MESSAGE(out(act)==NL,msg);
 
@@ -55,9 +57,26 @@ V setUp(V){}V tearDown(V){}//!< before/after each test
 
 #define RUN(unit) RUN_TEST(test##_##unit);
 
+enum charsets { CHARSET_ALNUM, CHARSET_AZaz, CHARSET_AZ, CHARSET_az};
+ZS csets[4]={
+ (S)"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
+ (S)"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
+ (S)"ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+ (S)"abcdefghijklmnopqrstuvwxyz"
+};
 
 //!attic
-
+/*
+ZS rnd_str(S dest,size_t size,C cs){
+  P(4<cs,(S)0)S dict=csets[cs];
+  size_t dictlen=strlen(dict);
+  N(size,
+    size_t key=rand()%(dictlen-1);
+    dest[i]=dict[key];
+  )
+  dest[size]='\0'; //< terminate string
+  R dest;}
+*/
 //V __llvm_profile_enable_continuous_mode(V);I __llvm_profile_is_continuous_mode_enabled(V),__llvm_profile_write_file(V);
 //        0        1         2         3        4         5       6         7          8        9          10        11
 //enum kerr{ERR_ZERO,ERR_CARET,ERR_PARSE,ERR_RANK,ERR_VALUE,ERR_NYI,ERR_CLASS,ERR_LENGTH,ERR_TYPE,ERR_DOMAIN,ERR_STACK,ERR_LIMIT};
