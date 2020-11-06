@@ -25,7 +25,7 @@ V setUp(V){}V tearDown(V){}//!< before/after each test
 #define EQ_I(act,exp,msg) TEST_ASSERT_EQUAL_INT_MESSAGE(exp,act,msg);
 #define EQ_F(act,exp,msg) TEST_ASSERT_EQUAL_FLOAT_MESSAGE(exp,act,msg);
 #define EQ_S(act,exp,msg) TEST_ASSERT_EQUAL_STRING_MESSAGE(exp,str(act),msg);
-#define STR(act,exp,msg) TEST_ASSERT_EQUAL_STRING_MESSAGE(exp,act,msg);
+//#define STR(act,exp,msg) TEST_ASSERT_EQUAL_STRING_MESSAGE(exp,act,msg);
 
 #define SYMVAL(s) (S)se(hget(GT,s,strlen(s))->v,0)
 #define EQ_SYM(act,exp,msg) {S x=SYMVAL(act);\
@@ -33,6 +33,7 @@ V setUp(V){}V tearDown(V){}//!< before/after each test
 
 #define FAIL(msg) TEST_ASSERT_MESSAGE(0,msg)
 #define TRUE(cnd,msg) TEST_ASSERT_MESSAGE((cnd),msg);
+#define MEM(act,exp,n) TEST_ASSERT_EQUAL_MEMORY(act,exp,n);
 
 //#define EQ_NL(act,msg)    TEST_ASSERT_MESSAGE(out(act)==NL,msg);
 

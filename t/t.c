@@ -134,7 +134,7 @@ UNIT(sym,
     *v=GG(b);       //!< look up a pointer to the global sym value
    *v=ki(42);       //!< assign a value
 
-   STR(x,                 SYM,               "global symbol name should match expected")
+   MEM(x,                 SYM,               xn)
    EQ_SYM(SYM,           "42",               "assigned variable holds the correct scalar value")
 
    PT("ccall+go_fn+42",  "('+';`ccall;('+';`go_fn;0xaa))",   "basic multichar identifiers are supported by parser")
@@ -176,23 +176,23 @@ UNIT(hsh,
    S keys[]={"FKTABLE_CAT","cov","bmp","frameset","cos","fmt"},cset=csets[CHARSET_ALNUM]; //<! test vectors
 
    N(n,I sl;bkts[i]=hget(t,keys[i],sl=strlen(keys[i]));total+=sl;K x=(S)bkts[i]->k;
-    STR(xC,          keys[i],     "hashed value must match input string"))
+    MEM(xC,          keys[i],     xn))
 
    EQ_I(t->cnt,      n,           "htable should contain 6 elements")
    EQ_I(hdbg(t,0,1), t->cnt,      "htable counter should match internal check")
    EQ_I(t->mem,      expmem(n),   "htable mem usage should match expected")
-   //EQ_I(hdbg(t,0,0), 1408928309,  "htable checksum must match expected")
+   EQ_I(hdbg(t,0,0), 1408928309,  "htable checksum must match expected")
 
    N(n,if(bkts[i]!=hget(t,keys[i],strlen(keys[i])))FAIL("hash table must be stable"))
    EQ_I(t->cnt,      n,           "htable should still remain the same")
    EQ_I(hdbg(t,0,1), t->cnt,      "htable counter should match internal check")
    EQ_I(t->mem,      expmem(n),   "htable mem usage should match expected")
-   //EQ_I(hdbg(t,0,0), 1408928309,  "htable checksum must match expected")
+   EQ_I(hdbg(t,0,0), 1408928309,  "htable checksum must match expected")
 
    N(strlen(cset)-1,total+=i+1;hget(t,cset+i,i+1));//uppercase only - cannot be any of keys[]
    EQ_I(t->mem,      expmem(n+strlen(cset)-1), "htable mem usage should match expected")
    EQ_I(hdbg(t,0,1), t->cnt,      "htable counter should match internal check")
-   //EQ_I(hdbg(t,0,0), 5999325069,  "htable checksum must match expected")
+   EQ_I(hdbg(t,0,0), 5999325069,  "htable checksum must match expected")
 
    TRUE(hload(t)     >0.9,        "htable load factor should be above 0.9")
 
@@ -220,12 +220,15 @@ UNIT(sym,
 UNIT(nop,TRUE(1,"dummy test"))
 
 TESTS(
+   
 #ifndef SYMS
-   U(env)U(mem)U(err)U(prs)U(fio)X(nop)
+   U(env)U(mem)U(err)U(prs)U(fio)
 #else
    U(hsh)
+   U(sym)
 #endif
-   //RUN(sym)
+
+   X(nop)
 )
 
 //:~

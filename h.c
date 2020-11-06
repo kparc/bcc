@@ -9,6 +9,7 @@
 #define hmap(h,rng) (h&((rng)-1)) //!< map hash value onto given range (h mod rng-1)
 #define tid t->tid
 #define spl t->spl
+#define hfn t->hfn
 #define lvl t->lvl
 #define rds t->rds
 #define mem t->mem
@@ -16,15 +17,15 @@
 #define bkt t->bkt
 
 //! djb2 \see www.burtleburtle.net/bob/hash/doobs.html groups.google.com/forum/#!topic/comp.lang.c/lSKWXiuNOAk
-HTYPE djb2(S s,SZT n){HTYPE h=5381;N(n,h=(h<<5)+h+*s++)R h;}//Z_ UI djb(S x,UI n){UI h=5381;N(n,h=33*(h^x[i]));R h;}
-HTYPE sdbm(S s,SZT n){HTYPE h=0;I c;W(c=*s++)h=c+(h<<6)+(h<<16)-h;R h;}//<! sdbm \see berkeleydb \see sleepycat
+inline HTYPE djb2(S s,SZT n){HTYPE h=5381;N(n,h=(h<<5)+h+*s++)R h;}//Z_ UI djb(S x,UI n){UI h=5381;N(n,h=33*(h^x[i]));R h;}
+inline HTYPE sdbm(S s,SZT n){HTYPE h=0;I c;W(c=*s++)h=c+(h<<6)+(h<<16)-h;R h;}//<! sdbm \see berkeleydb \see sleepycat
 //ZV hcpy(V*d,V*s,SZT n){*((S)memcpy(d,s,n)+n)=0;}//!< copy and terminate
 ZK hcpy(S s,SZT n){K x=kS(n+1);*((S)memcpy((V*)x,s,n)+n)=0;R x;}//!< copy and terminate
-HT hnew(S id,I l,I r){HT t=(HT)bcalloc(1,SZHT);tid=hcpy(id,strlen(id));rds=r,lvl=l,bkt=(B*)bcalloc(2*l,SZ(B*));R t;}//tid=(S)bmalloc((n=strlen(id))+1);hcpy(t->id,id,n);
+HT hnew(S id,I l,I r,HFN f){HT t=(HT)bcalloc(1,SZHT);tid=hcpy(id,strlen(id));hfn=f?f:DFLT_HFN;rds=r,lvl=l,bkt=(B*)bcalloc(2*l,SZ(B*));R t;}//tid=(S)bmalloc((n=strlen(id))+1);hcpy(t->id,id,n);
 ZV hbal(HT t);
 
 B hget(HT t,S s,I n){                 //!< lookup or insert string s of length n
- K x;B b;UI h=hsh(s,n),hi=0,          //!< b bucket, h hash, hi use full range (dbg)
+ K x;B b;HTYPE h=hfn(s,n),hi=0,       //!< b bucket, h hash, hi use full range (dbg)
  idx=hmap(h,lvl);                     //!< first, try to map hash value to the 1st half of table
  $(idx<spl,hi=1,idx=hmap(h,lvl<<1));  //!< if idx is above split position, remap to the entire table
  b=bkt[idx];                          //!< retrieve the bucket from the slot idx

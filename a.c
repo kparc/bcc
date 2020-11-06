@@ -59,7 +59,7 @@ ZS1(rg){I i=*s-'a';K x;Qs(26u<i||!(NL!=(x=G[i])),s)Qs(Ax,"nyi")P(!xr,G[i]=X0(NL)
 V init(){csr();*(K*)(K0=kK(0))=c0();N(26,G[i]=NL)}
 #else
 ZS1(rg){R AB("nyi");}
-V init(){csr();*(K*)(K0=kK(0))=c0();GT=hnew("G",2,3);}
+V init(){csr();*(K*)(K0=kK(0))=c0();GT=hnew("G",2,3,0);}
 #endif
 
 ZV km(S*a){init();if(*++a)pr(ld(*a));os("kparc/b x64");W(1)pr(es(r2((S)" ")));}K enm(J x){K r=kI(xi);N(rn,Ri=i)R r;}
