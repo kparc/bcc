@@ -16,7 +16,8 @@
 #define bkt t->bkt
 
 //! djb2 \see www.burtleburtle.net/bob/hash/doobs.html groups.google.com/forum/#!topic/comp.lang.c/lSKWXiuNOAk
-UI hsh(S s,SZT n){UI h=5381;N(n,h=(h<<5)+h+*s++)R h;}//Z_ UI djb(S x,UI n){UI h=5381;N(n,h=33*(h^x[i]));R h;}
+HTYPE djb2(S s,SZT n){HTYPE h=5381;N(n,h=(h<<5)+h+*s++)R h;}//Z_ UI djb(S x,UI n){UI h=5381;N(n,h=33*(h^x[i]));R h;}
+HTYPE sdbm(S s,SZT n){HTYPE h=0;I c;W(c=*s++)h=c+(h<<6)+(h<<16)-h;R h;}//<! sdbm \see berkeleydb \see sleepycat
 //ZV hcpy(V*d,V*s,SZT n){*((S)memcpy(d,s,n)+n)=0;}//!< copy and terminate
 ZK hcpy(S s,SZT n){K x=kS(n+1);*((S)memcpy((V*)x,s,n)+n)=0;R x;}//!< copy and terminate
 HT hnew(S id,I l,I r){HT t=(HT)bcalloc(1,SZHT);tid=hcpy(id,strlen(id));rds=r,lvl=l,bkt=(B*)bcalloc(2*l,SZ(B*));R t;}//tid=(S)bmalloc((n=strlen(id))+1);hcpy(t->id,id,n);

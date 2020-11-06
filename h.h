@@ -3,12 +3,17 @@
 #include<stdlib.h>
 #include"c.h"
 
+#define hsh(s,n) djb2(s,n) //< default hash fn
 #define hval(t,k) (hget(t,k,strlen(k))->v)
 #define hset(t,k,v) (hval=(K)v)
 
+
 typedef size_t SZT;
+typedef UI HTYPE; //!< hash width
+typedef HTYPE(*HSH_FN)(S s,SZT n); //!< hsh_each function interface
+
 typedef struct pbkt pbkt;typedef pbkt*B;
-typedef struct pbkt{I h,n;B next;K v;K k;}pbkt;//!< keyhash,keylen,next,value,key
+typedef struct pbkt{HTYPE h;I n;B next;K v;K k;}pbkt;//!< keyhash,keylen,next,value,key
 
 typedef struct ht{
     K       tid;         //< table id
@@ -18,6 +23,7 @@ typedef struct ht{
     SZT     cnt;         //< bucket count
     SZT     mem;         //< mem usage
     B*      bkt;         //< array of bucket pointers
+    HSH_FN  hfn;         //< hash function
     //V*    hea;         //< bucket heap pointer
 } pHT;typedef pHT*HT;
 const static SZT SZHT=sizeof(pHT); //< hash table header size
@@ -32,6 +38,6 @@ F hload(HT t);           //<! table load factor
 UJ hdbg(HT t,C prt,C s); //<! print and checksums
 #endif
 
-UI hsh(S s,SZT n);       //!< export hash fn
+HTYPE hsh(S s,SZT n);       //!< export hash fn
 
 //:~
