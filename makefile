@@ -33,14 +33,15 @@ r:
 	clang -Os -g r.c -o r&&./r
 	@#objdump -d r
 
+TESTCC=clang -std=gnu11
 FIXME=-Wno-pointer-to-int-cast
 test: cleantest
-	@clang -std=gnu99 -DISOMRPH -DUSE_AW_MALLOC -DTST $O $(LF) t/t.c t/lib/unity.c $(SRC) -o test $(CF) -fmacro-backtrace-limit=0 \
+	@$(TESTCC) -DISOMRPH -DUSE_AW_MALLOC -DTST $O $(LF) t/t.c t/lib/unity.c $(SRC) -o test $(CF) -fmacro-backtrace-limit=0 \
 	-fprofile-instr-generate -fcoverage-mapping -fdebug-macro -Wno-int-conversion $(FIXME)
 	@./test
 
 syms: cleansyms
-	@clang -std=gnu99 -DISOMRPH -DUSE_AW_MALLOC -DTST -DSYMS $O $(LF) t/t.c t/lib/unity.c $(SRC) -o syms $(CF) \
+	@$(TESTCC) -DISOMRPH -DUSE_AW_MALLOC -DTST -DSYMS $O $(LF) t/t.c t/lib/unity.c $(SRC) -o syms $(CF) \
 	-fmacro-backtrace-limit=0 -Wno-int-conversion $(FIXME)
 	@./syms
 

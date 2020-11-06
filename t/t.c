@@ -169,16 +169,23 @@ UNIT(aw_malloc,
 
 #include"../h.h"
 UNIT(symtable,
-   s0(2,3);
+   hnew(2,3);
    S keys[] = { "FKTABLE_CAT", "cov", "bmp", "frameset", "cos", "fmt" };
    I n = 6;
+   S addrs[n];
 
    N(n,
-      S x=ssn(keys[i],strlen(keys[i]));
-      STR(keys[i], x, "hashed value must match input string"))
+      addrs[i]=hget(keys[i],strlen(keys[i]));
+      STR(keys[i], addrs[i], "hashed value must match input string")
+   )
 
-   EQ_I(6,   scnt(), "htable should contain 6 elements")
-   EQ_I(181, suse(), "htable should be using 128 bytes")
+   N(n,
+      if(addrs[i]!=hget(keys[i],strlen(keys[i])))FAIL("hash table must be stable");
+   )
+
+
+   EQ_I(6,   hcnt(), "htable should contain 6 elements")
+   EQ_I(181, hmem(), "htable should be using 128 bytes")
 
 )
 

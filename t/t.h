@@ -27,6 +27,7 @@ V setUp(V){}V tearDown(V){}//!< before/after each test
 #define SYMVAL(s) (S)se(*GG(hsh(s,strlen(s))),0)
 #define EQ_SYM(act,exp,msg) {K x=SYMVAL(act);TEST_ASSERT_MESSAGE(!memcmp(x,exp,MN(strlen(exp),xn)), "variable value should match expected");}
 
+#define FAIL(msg) TEST_ASSERT_MESSAGE(0,msg)
 
 //#define EQ_NL(act,msg)    TEST_ASSERT_MESSAGE(out(act)==NL,msg);
 
