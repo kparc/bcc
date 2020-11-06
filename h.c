@@ -52,11 +52,11 @@ ZV hbal(HT t){B*bp,mov;               //!< balance hash table load
     N(lvl,bkt[lvl+i]=0));             //!< zero out the upper part.
   )}
 
-V hdel(HT t){B b,n;                   //!< destroy table
+K hdel(HT t){B b,n;                   //!< destroy table
  N(lvl<<1,b=bkt[i];
   W(b){n=b->next,cnt--,bfree(b),b=n;})
-  $(cnt,x=AB("cnt"))spl=lvl=rds=mem=bkt=0;
-  bfree(bkt),bfree(t);}
+  K r=cnt?AB("cnt"):(K)(spl=lvl=rds=mem=0);
+  R bfree(bkt),bfree(t),r;}
 
 #ifdef TST
 I hslot(HT t){I r=0;N(lvl<<1,r+=!!bkt[i])R r;}//<! count occupied slots

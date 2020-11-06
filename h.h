@@ -24,7 +24,7 @@ const static SZT SZHT=sizeof(pHT); //< hash table header size
 
 HT hnew(S id,I lvl,I rds);//!< init \p id table identifier \p lvl initial size (power of 2) \p rds rounds of tail split attempts
 B hget(HT t,S s,I n);    //!< insert|lookup \p s string \p n length
-V hdel(HT t);            //!< destroy table
+K hdel(HT t);            //!< destroy table
 
 #ifdef TST
 I hslot(HT t);           //<! #occupied slots
