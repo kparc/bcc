@@ -66,16 +66,16 @@ F hload(HT t){R(F)hslot(t)/cnt;}
 UJ hchk(HT t,C o,C st){B b;I n,len,LEN=0,CNT=0;UJ csum,CSUM=0;
   N(lvl<<1,
     b=bkt[i];n=len=csum=0;
-    $(o,O("ht[%d]: ",i))
+    $(o,O("%s[%d]: ",i,t->id))
     W(b){
-      if(o)O("(%s) -> ",b->s);
+      $(o,O("(%s) -> ",b->s));
       n++,len+=b->n,csum+=b->h;
       b=b->next;}
     $(n,csum+=len+n+i);
     $(o,$(n,O("[cnt=%d,len=%d,sum=%llu]\n",n,len,csum))O("()\n"););
     CSUM+=csum;LEN+=len;CNT+=n
   )
-  if(o)O("HT: keys=%d len=%d\n",CNT,LEN);
+  $(o,O("HT[%s]: keys=%d len=%d\n",t->id,CNT,LEN));
   R st?CNT:(CSUM+(lvl<<1));
 }
 #endif
