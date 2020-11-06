@@ -5,6 +5,7 @@
 
 #define SZ sizeof
 #define rea brealloc
+#define F(p) bfree(p)
 #define hmap(h,rng) (h&((rng)-1)) //!< map hash value onto given range (h mod rng-1)
 #define spl t->spl
 #define lvl t->lvl
@@ -54,9 +55,9 @@ ZV hbal(HT t){B*bp,mov;               //!< balance hash table load
 
 K hdel(HT t){B b,n;                   //!< destroy table
  N(lvl<<1,b=bkt[i];
-  W(b){n=b->next,cnt--,bfree(b),b=n;})
+  W(b){n=b->next,cnt--,F(b),b=n;})
   K r=cnt?AB("cnt"):(K)(spl=lvl=rds=mem=0);
-  R bfree(bkt),bfree(t),r;}
+  R F(bkt),F(t),r;}
 
 #ifdef TST
 I hslot(HT t){I r=0;N(lvl<<1,r+=!!bkt[i])R r;}F hload(HT t){R(F)hslot(t)/cnt;}//<! slot count, load factor
