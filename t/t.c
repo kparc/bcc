@@ -28,13 +28,13 @@ UNIT(malloc,
 
    WS0("non-assigning repl expressions shouldn't leak memory")
 
-   _("f(ii){x+y}",  NONE, "declare a global function")
+   _("f[ii]{x+y}",  NONE, "declare a global function")
    WS(80, "workspace usage should be 80 bytes")
 
    _("f[40;2]",       42, "function calls should work as expected")
    WS0("calling a function shouldn't leak memory")
 
-   _("f(ii){x-y}",  NONE, "reassign an exisiting function")
+   _("f[ii]{x-y}",  NONE, "reassign an exisiting function")
    WS0("reassigning a global function shouldn't leak memory")
 
    _("f[40;2]",       38, "reassigned function should work as expected")
@@ -66,14 +66,14 @@ UNIT(parser,//<! parse trees
    PT("#x",    "('#';x)",          "ptree of monadic op")
    PT("x+y",   "('+';x;y)",        "ptree of dyadic op")
 
-   PT("c(i)$[x;1;2]", "('$';x;0x81;0x82)",          "declare a ctf function (omitted brackets)")
+   PT("c[i]$[x;1;2]", "('$';x;0x81;0x82)",          "declare a ctf function (omitted brackets)")
    _("\\-c",        NONE, "release a ctf function")
    WS(0, "parsing a bare ctf function shouldn't leak memory")
 
-   PT("c(x){$[x;1;2]}", "('{';('$';x;0x81;0x82))",  "declare a ctf function (omitted brackets)")
+   PT("c[x]{$[x;1;2]}", "('{';('$';x;0x81;0x82))",  "declare a ctf function (omitted brackets)")
    _("\\-c",        NONE, "release a ctf function")
 
-   PT("l(i){r:0;N(x){r+:2};r}",  "('{';(':';r;0x80);('N';x;('{';(0xab;r;0x82)));r)", "loop function decl ptree")
+   PT("l[i]{r:0;N(x){r+:2};r}",  "('{';(':';r;0x80);('N';x;('{';(0xab;r;0x82)));r)", "loop function decl ptree")
    _("\\-l",   NONE, "release of l[] should return memory to the heap")
 )
 
@@ -108,22 +108,23 @@ UNIT(shortsyms,
 
    _("s:2+1",             0,                "scalar expr assignment")
    _("s",                 3,                "parse tree of a simple expression #2")
-
 )
 
+#ifdef SYMS
 extern S Ss;extern K z;//!< \Ss tape \z zx source zy 0xrtype:opcodes:stack
 K sym(I a),nme(K h);K*GG(K h),ssh(S s,UI n);V del(K h);
 UNIT(syms,
-   #define SYM "xyz"
 
+   //! api test
+   #define SYM "xyz"
    Ss=(S)SYM;       //!< set the parser tape to string SYM
-   K h=sym(0),       //!< scan an identifier from the tape and return hash (KS)
-     x=nme(h),      //!< lookup literal symbol name string (KC)
-    *v=GG(h);       //!< look up a pointer to the global sym value slot
+   K b=sym(0),      //!< scan an identifier from the tape and return bucket (KS)
+     x=nme(b),      //!< lookup literal symbol name string (KS)
+    *v=GG(b);       //!< look up a pointer to the global sym value
    *v=ki(42);       //!< assign a value
 
-   //K g=*GG(hsh(SYM,strlen(SYM)));os(SYM);o(g);
-   r0(x);del(h);    //!< cleanup
+   STR(x,                 SYM,      "global symbol name should match expected")
+   EQ_SYM(SYM,           "42",      "assigned variable holds the correct scalar value")
 
    PT("ccall+go_fn+42",  "('+';`ccall;('+';`go_fn;0xaa))",   "basic multichar identifiers are supported by parser")
    PT("x+Not+Wha",       "('+';`x;('+';`Not;`Wha))",         "special case: if leading N|W is not followed by (, force class to identifier")
@@ -131,44 +132,31 @@ UNIT(syms,
    PT("asdf:42",         "0xaa",            "parse tree of a scalar assignment is its literal value")
    PT("sum:2+1",         "('+';0x82;0x81)", "parse tree of a simple expression #1")
    PT("sum+sum",         "('+';`sum;`sum)", "parse tree of a simple expression #2")
-   //PT("fun[i]{x}",       "asdf",            "function declaration FIXME segv")
 
    _("til:!3",            0,                "vector expr assignment")
    _("sum:2+1",           0,                "scalar expr assignment")
-   _("prd:sum*sum",       0,                "product of two global variables")
-   //_("fun[i]{x}",         0,                "function declaration FIXME segv")
+   _("Not:1",             0,                "global identifier starting with N")
+   _("Wha:\\4",           0,                "global identifier starting with W")
+   _("woW:/64",           0,                "global identifier ending with W")
 
-   //_("sum",               3,                "get value of a global variable FIXME")
+   EQ_SYM("sum",        "3",                "sum holds the correct scalar value")
+   EQ_SYM("til",    "0 1 2",                "til holds the correct vector value")
+   EQ_SYM("Not",        "1",                "Not holds the correct scalar value")
+   EQ_SYM("Wha",        "8",                "Wha holds the correct scalar value")
+   EQ_SYM("woW",       "32",                "woW holds the correct scalar value")
 
-   EQ_SYM("sum",         "3",      "sum holds the correct scalar value in the htable slot")
-   EQ_SYM("til",     "0 1 2",      "til holds the correct vector value in the htable slot")
+   //_("fun(i){x+2}",         0,            "function declaration")
+   //EQ_SYM("fun",       disasm,            "TODO")
 
-   //EQ_VAL("prd",         "9",      "prd holds the correct vector value in the slot FIXME")
+   //_("prd:sum*sum",       0,              "product of two global variables")
+   //EQ_VAL("prd",         "9",             "prd holds the correct vector value in the slot FIXME")
 
-   W0=ws();        //! FIXME variable identifiers should probably be excluded from wssize
-)
-
-#include"../m.h"
-
-//!       0 1 2 3 4 5 6 7 8
-//!       K c h i j e f s * (arr int8 int16 int32 int64 real double sym any)
-//I bt[]={0,1,2,3,3,4,4,4,4};
-//#define PW2(n) (n&&!(n&n-1))
-UNIT(aw_malloc,
-   N(16,
-      K x=(K)aw_malloc(i+1);
-      //O("x %d = %p xn %d %d\n",i,x,xm,xr);N(xn,O("%d ",((C*)x)[i]))O("\n");
-      aw_free((V*)x))
-   N(16,
-      K x=(K)aw_calloc(i+1,2);
-      //O("x %d = %p xn %d %d\n",i,x,xm,xr);N(xn,O("%d ",((C*)x)[i]))O("\n");
-      aw_free((V*)x))
-
-   //! unit must pass (wss should be zero)
+   W0=ws();                                 //! FIXME variable identifiers should probably be excluded from wssize
 )
 
 #include"../h.h"
-#define expmem(n) ((n)*(sizeof(pbkt)+1)+total)
+//#define expmem(n) ((n)*(sizeof(pbkt)+1)+total)
+#define expmem(n) ((n)*(sizeof(pbkt)))
 UNIT(symtable,
 
    HT t=hnew("tst",2,10); //<! 4 slots, 10 split rounds
@@ -176,8 +164,8 @@ UNIT(symtable,
    I n=6,total=0;B bkts[n];
    S keys[]={"FKTABLE_CAT","cov","bmp","frameset","cos","fmt"},cset=csets[CHARSET_ALNUM]; //<! test vectors
 
-   N(n,I sl;bkts[i]=hget(t,keys[i],sl=strlen(keys[i]));total+=sl;
-    STR(bkts[i]->s,  keys[i],     "hashed value must match input string"))
+   N(n,I sl;bkts[i]=hget(t,keys[i],sl=strlen(keys[i]));total+=sl;K x=(S)bkts[i]->k;
+    STR(xC,          keys[i],     "hashed value must match input string"))
 
    EQ_I(t->cnt,      n,           "htable should contain 6 elements")
    EQ_I(hdbg(t,0,1), t->cnt,      "htable counter should match internal check")
@@ -200,24 +188,40 @@ UNIT(symtable,
    #ifdef TEST_HT_STRESS
    //! load factor under stress
    N(1000000,I rlen=rand()%100;S s=(S)malloc(rlen+1);total+=rlen;rnd_str(s,rlen,CHARSET_ALNUM);hget(t,s,rlen);free(s))//!< rand load
-   EQ_I(hload(t)>0.8,       1,  "htable load factor should be above 0.8")O("HT: keys=%zu slots=%d load=%f\n",t->cnt,hslot(t),hload(t))
+   EQ_I(hload(t)>0.8,         1,  "htable load factor should be above 0.8")O("HT: keys=%zu slots=%d load=%f\n",t->cnt,hslot(t),hload(t))
    #endif
 
    hdel(t); //!< release memory
 )
+#endif//SYMS
+
+#include"../m.h"
+UNIT(aw_malloc, //! TODO test calloc, add more posix compliance tests
+   N(16,
+      K x=(K)aw_malloc(i+1);
+      //O("x %d = %p xn %d %d\n",i,x,xm,xr);N(xn,O("%d ",((C*)x)[i]))O("\n");
+      aw_free((V*)x))
+   N(16,
+      K x=(K)aw_calloc(i+1,2);
+      //O("x %d = %p xn %d %d\n",i,x,xm,xr);N(xn,O("%d ",((C*)x)[i]))O("\n");
+      aw_free((V*)x))
+
+   //! unit must pass (wss should be zero)
+)
+
 
 TESTS(
-   RUN(aw_malloc)
-   RUN(symtable)
-
 #ifndef SYMS
-   RUN(smoke)RUN(malloc)
-   RUN(errors)
+   RUN(smoke)
+   RUN(malloc)
+   RUN(aw_malloc)
    RUN(brackets)
+   RUN(errors)
    RUN(parser)
-   RUN(disk)
    RUN(shortsyms)
+   RUN(disk)
 #else
+   //RUN(symtable)
    RUN(syms)
 #endif
 )

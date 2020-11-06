@@ -36,7 +36,7 @@ r:
 TESTCC=clang -std=gnu11
 FIXME=-Wno-pointer-to-int-cast
 test: cleantest
-	@$(TESTCC) -DISOMRPH -DUSE_AW_MALLOC -DTST $O $(LF) t/t.c t/lib/unity.c $(SRC) -o test $(CF) -fmacro-backtrace-limit=0 \
+	@$(TESTCC) -DUSE_AW_MALLOC -DTST $O $(LF) t/t.c t/lib/unity.c $(SRC) -o test $(CF) -fmacro-backtrace-limit=0 \
 	-fprofile-instr-generate -fcoverage-mapping -fdebug-macro -Wno-int-conversion $(FIXME)
 	@./test
 

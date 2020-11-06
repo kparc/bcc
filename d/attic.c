@@ -1,3 +1,4 @@
+//#define PW2(x) (x&&!(x&x-1)) //!< is integer n x power of 2
 //I main(){asm("movl $0x9fc0,-4(%rsp);ldmxcsr -4(%rsp);lea 8(%rsp),%rdi;jmp _km");}
 //V csr(){R;asm("movl $0x9fc0,-4(%rsp);ldmxcsr -4(%rsp);");}
 

@@ -7,6 +7,7 @@
 #define rea brealloc
 #define F(p) bfree(p)
 #define hmap(h,rng) (h&((rng)-1)) //!< map hash value onto given range (h mod rng-1)
+#define tid t->tid
 #define spl t->spl
 #define lvl t->lvl
 #define rds t->rds
@@ -16,26 +17,28 @@
 
 //! djb2 \see www.burtleburtle.net/bob/hash/doobs.html groups.google.com/forum/#!topic/comp.lang.c/lSKWXiuNOAk
 UI hsh(S s,SZT n){UI h=5381;N(n,h=(h<<5)+h+*s++)R h;}//Z_ UI djb(S x,UI n){UI h=5381;N(n,h=33*(h^x[i]));R h;}
-ZV hcpy(V*d,V*s,SZT n){*((S)memcpy(d,s,n)+n)=0;}//!< copy and terminate
-HT hnew(S id,I l,I r){HT t=(HT)bcalloc(1,SZHT);I n;t->id=(S)bmalloc((n=strlen(id))+1);hcpy(t->id,id,n);rds=r,lvl=l,bkt=(B*)bcalloc(2*l,SZ(B*));R t;}
+//ZV hcpy(V*d,V*s,SZT n){*((S)memcpy(d,s,n)+n)=0;}//!< copy and terminate
+ZK hcpy(S s,SZT n){K x=kS(n+1);*((S)memcpy((V*)x,s,n)+n)=0;R x;}//!< copy and terminate
+HT hnew(S id,I l,I r){HT t=(HT)bcalloc(1,SZHT);tid=hcpy(id,strlen(id));rds=r,lvl=l,bkt=(B*)bcalloc(2*l,SZ(B*));R t;}//tid=(S)bmalloc((n=strlen(id))+1);hcpy(t->id,id,n);
 ZV hbal(HT t);
 
 B hget(HT t,S s,I n){                 //!< lookup or insert string s of length n
- B b;UI h=hsh(s,n),hi=0,              //!< b bucket, h hash, hi use full range (dbg)
+ K x;B b;UI h=hsh(s,n),hi=0,          //!< b bucket, h hash, hi use full range (dbg)
  idx=hmap(h,lvl);                     //!< first, try to map hash value to the 1st half of table
  $(idx<spl,hi=1,idx=hmap(h,lvl<<1));  //!< if idx is above split position, remap to the entire table
  b=bkt[idx];                          //!< retrieve the bucket from the slot idx
  W(b){                                //!< traverse its linked list, if any:
-  P(b->n==n,                          //!< if length matches..
-   N(n,$(b->s[i]!=s[i],goto L0);)     //!< compare strings char by char
+  P(b->n==n,x=b->k;                   //!< if length matches..
+   N(n,$(xC[i]!=s[i],goto L0);)       //!< compare strings char by char
    b)                                 //!< if they match, return the bucket
   L0:b=b->next;}                      //!< otherwise keep traversing the list.
- I m=SZ(pbkt)+n+1;b=(B)bmalloc(m);    //!< allocate memory for a new bucket (header size + strlen + terminator)
+ I m=SZ(pbkt)/*+n+1*/;b=(B)bmalloc(m);//!< allocate memory for a new bucket (header size //+ strlen + terminator)
  mem+=m;b->h=h;b->n=n;b->v=NL;        //!< increment mem usage and initialize bucket header
- hcpy(b->s,s,n);                      //!< copy string to the bucket and terminate it
+ //hcpy(b->k,s,n);                    //!< copy string to the bucket and terminate it
+ x=b->k=pn(s,n);xt=KS;                //!< internalize the string
  b->next=bkt[idx];bkt[idx]=b;         //!< push the new bucket to the head of the slot
  if(b->next)hbal(t);                  //!< if slot has a tail, try to split it
- R cnt++,b;}
+ R cnt++,b;}                          //!< increment bucket count and return new bucket
 
 ZV hbal(HT t){B*bp,mov;               //!< balance hash table load
   N(rds,                              //!< perform rds balancing attempts:
@@ -53,20 +56,21 @@ ZV hbal(HT t){B*bp,mov;               //!< balance hash table load
     N(lvl,bkt[lvl+i]=0));             //!< zero out the upper part.
   )}
 
+#define S0(ks) {K x=ks;xt=KC;r0(x);}; //!< release symbol (downcast to KC)
 K hdel(HT t){B b,n;                   //!< destroy table
  N(lvl<<1,b=bkt[i];
-  W(b){n=b->next,cnt--,F(b),b=n;})
-  K r=cnt?AB("cnt"):(K)(spl=lvl=rds=mem=0);
+  W(b){n=b->next,cnt--;S0(b->k)F(b),b=n;})
+  K r=cnt?AB("cnt"):(K)(spl=lvl=rds=mem=0);S0(tid)
   R F(bkt),F(t),r;}
 
 #ifdef TST
 I hslot(HT t){I r=0;N(lvl<<1,r+=!!bkt[i])R r;}F hload(HT t){R(F)hslot(t)/cnt;}//<! slot count, load factor
 UJ hdbg(HT t,C o,C st){B b;I n,len,LEN=0,CNT=0;UJ csum,CSUM=0;
-  N(lvl<<1,b=bkt[i];n=len=csum=0;$(o,O("%s[%d]: ",t->id,i))
-    W(b){$(o,O("(%s) -> ",b->s));n++,len+=b->n,csum+=b->h;b=b->next;}
+  N(lvl<<1,b=bkt[i];n=len=csum=0;$(o,O("%s[%d]: ",(S)tid,i))
+    W(b){$(o,O("(%s) -> ",(S)b->k));n++,len+=b->n,csum+=b->h;b=b->next;}
     $(n,csum+=len+n+i);$(o,$(n,O("[cnt=%d,len=%d,sum=%llu]\n",n,len,csum))O("()\n"););
     CSUM+=csum;LEN+=len;CNT+=n)
-  $(o,O("HT[%s]: keys=%d len=%d\n",t->id,CNT,LEN));
+  $(o,O("HT[%s]: keys=%d len=%d\n",(S)tid,CNT,LEN));
   R st?CNT:(CSUM+(lvl<<1));}
 #endif
 

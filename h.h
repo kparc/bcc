@@ -3,15 +3,15 @@
 #include<stdlib.h>
 #include"c.h"
 
-#define hval(t,k) (hget(t,k,strlen(k)->v)
+#define hval(t,k) (hget(t,k,strlen(k))->v)
 #define hset(t,k,v) (hval=(K)v)
 
 typedef size_t SZT;
 typedef struct pbkt pbkt;typedef pbkt*B;
-typedef struct pbkt{I h,n;B next;K v;C s[];}pbkt;//!< keyhash,keylen,next,value,keyname+nullchar
+typedef struct pbkt{I h,n;B next;K v;K k;}pbkt;//!< keyhash,keylen,next,value,key
 
 typedef struct ht{
-    S       id;          //< table id
+    K       tid;         //< table id
     I       spl;         //< split position
     I       lvl;         //< capacity is 2*lvl
     short   rds;         //< split rounds

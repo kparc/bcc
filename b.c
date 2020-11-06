@@ -46,7 +46,11 @@ ZI ln(S s){I o=*s++,h=o/16,p=0xc5==o?2:0x0f==o;R 4==h?1+ln(s):RET==o||5==h?1:*JJ
 
 //!linker: fix relative addresses
 ZV lnk(K x,K z,I a){S s=xC;W(s<xC+xn){I n=ln(s+=4==*s/16),p=0xc5==*s?2:0x0f==*s;S r=s+n-4;
+#ifndef SYMS
  if(0xe8==*s||(p?8-s[1]/16:4>*s/16||8==*s/16)&&5==(0xc7&s[1+p]))*(I*)r=(0xe8==*s?a-'a'==*r?x:26==*r?(K)l1:((K*)G[*r])[1]:32>*r?(K)&zF[2+*r-16]:(K)(G+*r-'a'))-(K)r-4;s+=n;}}
+#else
+ if(0xe8==*s||(p?8-s[1]/16:4>*s/16||8==*s/16)&&5==(0xc7&s[1+p]))*(I*)r=(0xe8==*s?a-'a'==*r?x:26==*r?(K)l1:((K*)*GG(*r))[1]:32>*r?(K)&zF[2+*r-16]:(K)(*GG(*r)))-(K)r-4;s+=n;}}//!< TODO
+#endif
 
 //!disasm: pretty print opcodes and ret type
 V dis(K x){S s=xC;W(s<xC+xn-2){N(ln(s),w2(px(*s++)))oc(' ');}N(2,w2(px(*s++)))oc(' ');oc(KS<xu?'K':KF==xu?'f':'j');nl();}
@@ -59,11 +63,19 @@ ZK MV(I t,I r,K y){R O2(t,0,r,u(r,c0()),y);}
  K Na(){S r=Ss;W(10u>*++Ss-'0'||'.'==*Ss){};I f=0;N(Ss-r,f|='.'==r[i])R f?kf(fp(r,Ss-r)):ki(ip(r,Ss-r));}
 
 ZI _q(K x,S sL){I i=xi-'a';R Ax?26u>i&&sL[i]?sL[i]:0:':'==*xC?I(xy):0;}
-I  _t(K x,S sT){I a=xi-'a'; //!< determine type of x
+I  _t(K x,S sT){/*if(!Ax)O("t x %p\n",(V*)x)*/;I a=xi-'a'; //!< determine type of x
+#ifndef SYMS
   R!Ax?xu:                  //!< not an atom is a function: xu holds rettype
+#else
+  R!Ax?KS==xt?A(*GG(x)):xu: //!< not an atom is a function: xu holds rettype
+#endif
    126<xi?KI:               //!< small integer atom encoded in a single byte
    26u>a&&sT[a]?sT[a]:      //!< local variable
+#ifndef SYMS
    A(x=26u>a?G[a]:          //!< global variable
+#else
+   A(KS==xt?*GG(x):         //!< global variable
+#endif
     zK[2+xi-16])?Ax:        //!< function argument (additional element of z)
     xt+8;}                  //!< array (element type + 4th bit)
 
@@ -99,17 +111,21 @@ ZK g(I c,K x,ST st){K y=c0(),z,r=c0();I i=0,l=sA?M:0;W(++i<xn){z=Xx;I l=M&1<<i,b
 ZI dh(K x,ST st){I t=T[xi-'a'];R 14==t?-2:13==t?-4:2*t-26;}
 ZK d(I r,K x,ST st){
  P(Ax,(r=q(x))?M|=1<<r,u(r,c0()):x)
- I s=15&r,a;K y,z;S((y=xy,cl(a=*xC)),
-  case'N':C('W',R w(x,st))C('$',R u(r,v(r,x,1,st)))
-  C('{',R E(r,x,st))C('[',R g(26,x,st))
+ I s=15&r,a;K y,z;//O("d x=%p\n",(V*)x);o(x);
+ y=xy;switch(cl(a=*xC)){
+  case'N':C('W',R w(x,st))
+  C('$',R u(r,v(r,x,1,st)))
+  C('{',R E(r,x,st))
+  C('[',R g(26,x,st))
   C('a',R T[a-'a']?O2(0,1+dh(xx,st),s,d(0,xx,st),d(0,y,st)):g(a-'a',x,st))
-  C(0,R y=d(0,y,st),O2(t(x),U(a-128),yu,y,d(s,xz,st))),
+  C(0,R y=d(0,y,st),O2(t(x),U(a-128),yu,y,d(s,xz,st)))
+  default:
   if(':'==a){P(Ay,r=L[yi-'a'],M&=~(1<<r),f(r,xz,st))y=d(0,yy,st),z=e(s,xz,st),x=xy;R r=zu,u(r,j2(z,O2(0,dh(xx,st),r,d(0,xx,st),y)));}
   I m,b=t(y);
   P(3>xn,'&'==a?SH(b,e(0,y,st)):'%'==a?y=e(0,y,st),u(s,j2(y,cv(s,yu))):'\\'==a?y=e(s,y,st),O2(b,1,s,u(yu,c0()),y):O2(0,'#'==a?-3:'*'==a?1+dh(y,st):'/'==a?4:U(a),s,e(s,y,st),kc(128+('#'==a?-1:'*'!=a))))
   z=xz;a=U(a),r=9<a||16-r?r:0;
   P(!Ay&&!q(y)&&!Az&&!q(y),M|=1<<(m=D[KF==b]++),y=e(0,y,st),M&=~(1<<m),z=O2(b,a,r,y,f(m,z,st)),--D[KF==b],z)
-  R Ay&&!q(y)&&2-a&&4-a?O2(b,9<a?11-a+11:a,r,e(s,z,st),y):O2(b,a,r,e(s,y,st),d(s,z,st)))}
+  R Ay&&!q(y)&&2-a&&4-a?O2(b,9<a?11-a+11:a,r,e(s,z,st),y):O2(b,a,r,e(s,y,st),d(s,z,st));}}
 
 Z_ I m2(S s,S t){R*s==*t&&s[1]==t[1];}ZS bq(S x){W((x=sc(++x,'"'))&&!({I i=0;W('\\'==x[--i]);1&i;})){};R x;}//!< parse quoted string with esc sequences
 #define BLIM 16 //<! nesting limit FIXME add tests
@@ -118,37 +134,31 @@ S bb(S x){C b[BLIM];I n=0,a;S s;x-=1;W(*++x){$(m2(" /",x),s=sc(x,'\n');P(!s,n?x:
 //! parse[->compile->link->exec]
 K pcle(S tp,I dbg){Ss=tp;pst t={{0},{0},0,{1,1},8,0};ST st=&t;//pst t;ST st=&t;sA=M=0;sN=8;D0=D1=1;N(26,L[i]=T[i]=0)N(26,O("%d %d\n",L[i],T[i]))
  S b=bb(tp);P(b,qs(*b?b:(S)"balance")) //<! scan the whole tape and bail on unbalanced "{[( or excessive nesting
-
 #ifdef SYMS
- K g='a'==cl(*Ss)?sym(1):NL;//{K x=nme(g);Ss-=xn;} // read an indentifier, if not followed by assign (:), rewind to start
-#endif
-
- if(!tp[1])$(26u>*tp-'a',K x=G[*tp-'a'];Qs(NL==x,tp)P(FN(x),os((S)xx),dis(xy),NL))R qs(tp);//!< KPC FIXME quick temporary hack to pretty print-opcodes by referencing function name
- //if(!*++Ss&&NL!=var){O(P(!*GG(var),qs("val"))R*GG(var);}
-
- S r=!LP(*Ss)&&ARGOPN==Ss[1]&&(r=sc(Ss,ARGCLS))&&*++r?r:0; //!< FIXME function assignment is a lookahead hack
-
-#ifdef SYMS
- K*k=r||':'==*Ss?sA=g,Ss+=1,GG(g):0;
+ K g=ID(*Ss)?sym(1):NL;//{K x=nme(g);Ss-=xn;} // read an indentifier, if not followed by assign (:), rewind to start
+ //O("G tp=%s, Ss=%s %p %c\n",tp,Ss,(V*)g,cl(*Ss));
+ if(g&&!*Ss){K x=*GG(g);Qs(NL==x,nme(g))$(FN(x),os((S)xx),dis(xy))R o(x),NL;}//!< KPC FIXME quick temporary hack to pretty print-opcodes by referencing function name
+ //if(NL!=g){O("VAR\n");P(!*GG(g),qs("val"))R*GG(g);}
 #else
- //! FIXME this is fundamentally incorrect:
- //  we should just inform the parser that
- //  its entry point is the global scope.
- K*k=r||':'==Ss[1]?sA=*Ss,Ss+=2,G+sA-'a':0;
+ if(!tp[1])$(26u>*tp-'a',K x=G[*tp-'a'];Qs(NL==x,tp)P(FN(x),os((S)xx),dis(xy),NL))R qs(tp);//!< KPC FIXME quick temporary hack to pretty print-opcodes by referencing function name
 #endif
-
+ S r=!LP(*Ss)&&ARGOPN==Ss[1]&&(r=sc(Ss,ARGCLS))&&*++r?r:0; //!< FIXME function assignment is a lookahead hack
+#ifndef SYMS
+ K*k=r||':'==Ss[1]?sA=*Ss,Ss+=2,G+sA-'a':0; //! FIXME we should just inform the parser that its entry point is the global scope.
+#else
+ K*k=r||':'==*Ss?sA=g,Ss+=1,GG(g):0;
+#endif
  P('!'==*Ss,++Ss,X(k,enm(ki(ip(Ss,strlen((V*)Ss))))))
  z=k2(kp(Ss-!!k),NL);//<!(src;bin)
-#ifdef SYMS
- if(!Ss[1]&&26u>*Ss-'a')r1(GG(g));//!< inc xr of the referenced global var
-#else
+#ifndef SYMS
  if(!Ss[1]&&26u>*Ss-'a')r1(G[*Ss-'a']);//!< inc xr of the referenced global var
+#else
+ if(!Ss[1]&&26u>*Ss-'a')r1(*GG(g));//!< inc xr of the referenced global var
 #endif
  if(r){X(k,k2(r1(zx),u(KI,c2(1,1))));  //!< set types for xyz args
   N(r-Ss-1,L[23+i]=D0++,T[23+i]=l((S)" chijefs CHIJEFS",Ss[i]))Ss=r;} //!< FIXME increase argcount limit, more than 3 argdecls is a segv
  K x=p(st);P(dbg,r0(z),x)//o(x);//!< dump parse tree
  N(23,if(Ti)Li=D[KF==Ti]++)//<! set addresses of global vars (i>23 is xyz)
-
  I qfv=Ax||'$'-*xC;//<! f/v compile or print
  zy=j2(X0(qfv?f(0,x,st):v(0,x,0,st)),c3(RET,D0,D1));
  zy=u(t(x),zy);lnk(zy,z,sA);//dis(zy);//!< disasm
