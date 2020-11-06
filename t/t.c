@@ -87,11 +87,8 @@ UNIT(prs,//<! parse trees
    _("\\-c",        NONE, "release a ctf function")
    WS(                 0, "parsing a bare ctf function shouldn't leak memory")
 
-   PT("c[x]{$[x;1;2]}", "('{';('$';x;0x81;0x82))",  "declare a ctf function (omitted brackets)")
-   _("\\-c",        NONE, "release a ctf function")
-
    PT("l[i]{r:0;N(x){r+:2};r}",  "('{';(':';r;0x80);('N';x;('{';(0xab;r;0x82)));r)", "loop function decl ptree")
-   _("\\-l",   NONE, "release of l[] should return memory to the heap")
+   _("\\-l",        NONE, "release of l[] should return memory to the heap")
 
    //! bracket balancer
    //! TODO add nesting limit tests
@@ -219,16 +216,23 @@ UNIT(sym,
 
 UNIT(nop,TRUE(1,"dummy test"))
 
+UNIT(TODO,
+   //! err
+   ERR("c[x]{$[x;1;2]}",  "x",             "malformed function signature should be an error")
+   ERR("c[x]$[x;1;2]",    "x",             "malformed function signature should be an error")
+   ERR("c[x]{}",          "x",             "malformed function signature should be an error")
+)
+
+
 TESTS(
-   
 #ifndef SYMS
    U(env)U(mem)U(err)U(prs)U(fio)
 #else
    U(hsh)
    U(sym)
 #endif
-
-   X(nop)
+   X(TODO)
+   //X(nop)
 )
 
 //:~
