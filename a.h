@@ -3,13 +3,13 @@
 
 #define NX nt[xt] // chijefs
 
-#define KC 1L
-#define KH 2L
-#define KI 3L
-#define KJ 4L
-#define KE 5L
-#define KF 6L
-#define KS 7L
+#define KC 1ULL
+#define KH 2ULL
+#define KI 3ULL
+#define KJ 4ULL
+#define KE 5ULL
+#define KF 6ULL
+#define KS 7ULL
 
 #ifdef SYMS
 #define KSSZ 8 //!< symbol is countains a UI djbhash of the underlying string extended to K, see ks()
@@ -36,7 +36,7 @@ extern K G[];
 typedef struct{C L[26];C T[26];I M;C D[2];C N;I A;}pst;typedef pst*ST;
 #else
 typedef struct{C L[26];C T[26];I M;C D[2];C N;K A;}pst;typedef pst*ST; //<! assignment target (A) must be K to hold KS
-extern HT GT;extern K sym(I a),*GG(K h),val(K h),nme(K h);             //<! symtable manager
+extern HT GT;extern K sym(I a),*GG(K h),nme(K h);             //<! symtable manager
 #endif
 
 extern J nt[],ip();extern K ex(K),ps(S),r1(),tn(),j2(),k0(),sS(),enm(),o();I cl(I c);V exit(),w2(),r0();S pi(),pf(),px();J ws();F fp();Z_ K X(K*k,K y){R r0(*k),*k=y,NL;}
