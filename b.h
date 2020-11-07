@@ -27,6 +27,6 @@
 #define q(x) _q(x,L)
 #define t(x) _t(x,T)
 
-K p(ST),l1(),u(I,K),Na();I U(I i),_t(K x,S sT);
+K p(ST),l1(),u(I,K);I U(I i),_t(K x,S sT);
 
 //:~
