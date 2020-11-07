@@ -2,11 +2,13 @@
 #include"h.h"
 // !til #cnt %div  *mul|frst  +sum|inc -sub|dec &and |or /shr \shl   <=>leg  ;sep    $[c;t;f] N(times){} W(true){}
 // \todo xor cst mod neq not flr ...
-extern S Ss;extern K z;//!< \Ss tape \z zx source zy 0xrtype:opcodes:stack
+extern S Ss;extern K z;ZK n(K x);//!< \Ss tape \z zx source zy 0xrtype:opcodes:stack
 
 ZS qt(){R sc(";})]",*Ss);} //<! test whether current char is an expression terminator
+ZK pF(K x,I b,ST st){R KF-b||KF==t(x)?x:Ax&&126<xi?n(kf(xi-128)):u(KF,k2(kc('%'),x));}//!< promote rettype to float if needed
+ZK Na(){S r=Ss;W(10u>*++Ss-'0'||'.'==*Ss){};I f=0;N(Ss-r,f|='.'==r[i])R f?kf(fp(r,Ss-r)):ki(ip(r,Ss-r));}//!< parse numbers, int|fp (floats as 1e6 must contain a dot)
 
-// encode integers up to 127 as bytes with the highest bit set,
+// encode integers up to 127 as bytes with the highest bit set
 // other numbers are appended at the end of z and return index
 // (indices <16 correspond to registers, zn-3 is the index in
 // the z is of K vals: z[0] is the source and z[1] is opcodes)
@@ -19,8 +21,6 @@ ZK pE(I a,I c,ST st){      //!< parse an expr \c cmd \a optional rettype
       :p(st));             //<! get the parse tree of the next expr
   W(';'==*Ss++);           //<! semicolon is the expression separator
  R u(a?a:t(x),r);}         //<! set the given rettype, or the rettype of last expr
-
-ZK pF(K x,I b,ST st){R KF-b||KF==t(x)?x:Ax&&126<xi?n(kf(xi-128)):u(KF,k2(kc('%'),x));}//!< promote rettype to float if needed
 
 #include"p.h"//pE->E,pF->f
 
@@ -37,6 +37,7 @@ K sym(I a){S r=Ss;I n;//! scan a symbol from tape
 
 //! parse next token on tape
 K p(ST st){K x,y;I a,b;      //!< a operator, x/y operands, b return type
+ O("p Ss=%s\n",Ss);
  C qn='0'-cl('-'==(a=*Ss++)?Ss['.'==*Ss]:'.'==a?*Ss:a); //<!special case: if expr starts with a minus, dot or a minus-dot, it may be a number
  C cls=qn?cl(a):'0';
 #ifdef SYMS
@@ -73,7 +74,7 @@ K p(ST st){K x,y;I a,b;      //!< a operator, x/y operands, b return type
        D1=MX(D1,xC[xn-1]),xu),
 #ifdef SYMS
      nme(y),st               //<! op is the array|function name
-    ):y;};break;             //<! b) it is variable reference.
+    ):nme(y);};break;        //<! b) it is variable reference.
 #else
      a,st                    //<! op is the array|function name
     ):kc(a);break;           //<! b) it is variable reference.
