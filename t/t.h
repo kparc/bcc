@@ -57,6 +57,8 @@ V setUp(V){}V tearDown(V){}//!< before/after each test
 #define WSSAME(msg)        {TEST_ASSERT_EQUAL_INT_MESSAGE(0,ws()-Wprev,msg);}
 #define WS(exp,msg)        {TEST_ASSERT_EQUAL_INT_MESSAGE(exp,ws(),msg);}
 
+#define ___  TEST_ASSERT_MESSAGE(0,"STOP");
+
 #define TESTS(units...) I main(I a,char**c){init();UNITY_BEGIN();units;R UNITY_END();}
 
 //#define UNIT(name,tests...) V test##_##name(V){W0=ws();tests;WS(0,"test unit shouldn't leak memory")};

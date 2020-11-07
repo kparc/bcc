@@ -157,7 +157,7 @@ UNIT(sym,
    //EQ_SYM("fun",       disasm,            "TODO")
 
    //_("prd:sum*sum",       0,              "product of two global variables")
-   //EQ_VAL("prd",         "9",             "prd holds the correct vector value in the slot FIXME")
+   //EQ_SYM("prd",         "9",             "prd holds the correct vector value in the slot FIXME")
 
    W0=ws();                                 //! FIXME variable identifiers should probably be excluded from wssize
 )
@@ -204,34 +204,77 @@ UNIT(hsh,
 #else
 
 UNIT(sym,
-   PT("a:42",            "0xaa",            "parse tree of a scalar assignment is its literal value")
-   PT("s:2+1",           "('+';0x82;0x81)", "parse tree of a simple expression #1")
-   PT("s+s",             "('+';s;s)",       "parse tree of a simple expression #2")
+   //PT("a:42",            "0xaa",            "parse tree of a scalar assignment is its literal value")
+   //PT("s:2+1",           "('+';0x82;0x81)", "parse tree of a simple expression #1")
+   //PT("s+s",             "('+';s;s)",       "parse tree of a simple expression #2")
 
-   _("s:2+1",             0,                "scalar expr assignment")
-   _("s",                 3,                "parse tree of a simple expression #2")
+   //_("s:2+1",             0,                "scalar expr assignment")
+   //_("s:4",                 0,                "parse tree of a simple expression #2")
+   //PT("p:s*s",           "('*';s;s)",       "parse tree of a simple expression #2")
+   //_("s:4",                 0,                "parse tree of a simple expression #2")
+   G['l'-'a'] = ki(3);
+   G['r'-'a'] = ki(4);
+   //_("p:s*s",               0,                "parse tree of a simple expression #2")
+   _("l*r",                  12,                "parse tree of a simple expression #2")
+
+   //_("p",                  16,                "p should have expected value")
 )
 
 #endif//SYMS
 
 UNIT(nop,TRUE(1,"dummy test"))
 
+
 UNIT(TODO,
    //! err
-   ERR("c[x]{$[x;1;2]}",  "x",             "malformed function signature should be an error")
-   ERR("c[x]$[x;1;2]",    "x",             "malformed function signature should be an error")
-   ERR("c[x]{}",          "x",             "malformed function signature should be an error")
+   //ERR("c[x]{$[x;1;2]}",  "x",             "malformed function signature should be an error")
+   //ERR("c[x]$[x;1;2]",    "x",             "malformed function signature should be an error")
+   //ERR("c[x]{}",          "x",             "malformed function signature should be an error")
+
+   //_("s:4",               0,                "parse tree of a simple expression #2")
+   //PT("p:s*s",           "('*';`s;`s)",       "parse tree of a simple expression #2")
+#ifdef SYMS
+//#if 0
+   #define SETSYM(key,val) {Ss=(S)(key);K x=sym(0)/*,x=nme(b)*/,*y=GG(x);*y=(val);O("setsym dbg %p\n",*y),x;}
+
+   SETSYM("LEFT",ki(3))SETSYM("RIGHT",ki(4))
+/*
+   Ss=(S)SYM;       //!< set the parser tape to string SYM
+   K b=sym(0),      //!< scan an identifier from the tape and return bucket (KS)
+     x=nme(b),      //!< lookup literal symbol name string (KS)
+    *v=GG(b);       //!< look up a pointer to the global sym value
+   *v=ki(16);        //!< assign a value
+*/
+
+
+   EQ_SYM("LEFT",         "3",                "sum holds the correct scalar value")
+   EQ_SYM("RIGHT",        "4",                "sum holds the correct scalar value")
+#endif
+
+   _("LEFT+RIGHT",        12,                "parse tree of a simple expression #2")
+
+   ___
+
+   //_("prd",                 6,                "p should have expected value")
+
+   PT("pr:s*s",           "('*';`s;`s)",       "parse tree of a simple expression #2")
+   _("p:s*s",             0,                "parse tree of a simple expression #2")
+   _("p",                 9,                "p should have expected value")
+
+
+   PT("prd:sum*sum",        "('*';`sum;`sum)",   "assignment referencing globals should produce correct parse tree")
+   //EQ_SYM("prd",           "9",                  "prd holds the correct vector value in the slot FIXME")
 )
 
 
 TESTS(
 #ifndef SYMS
-   U(env)U(mem)U(err)U(prs)U(fio)
-#else
-   U(hsh)
+   //U(env)U(mem)U(err)U(prs)U(fio)
    U(sym)
+#else
+   //X(hsh)X(sym)
+   U(TODO)
 #endif
-   X(TODO)
    //X(nop)
 )
 

@@ -56,4 +56,4 @@ all: l g test syms t
 clean:
 	@rm -f test bl bg bt r
 
-.PHONY: t clean all cleansyms cleantest t
+.PHONY: t clean all cleansyms cleantest t syms
