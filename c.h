@@ -10,7 +10,7 @@
 #define rC ptr(r)
 
 typedef unsigned long long K;
-typedef unsigned char C,*S;typedef int I;typedef long long J;typedef double F;typedef void V;typedef unsigned int UI;typedef unsigned long long UJ;
+typedef unsigned char C,*S;typedef int I,CP;typedef long long J;typedef double F;typedef void V;typedef unsigned int UI;typedef unsigned long long UJ;
 //V*memcpy();strlen(const char*);//#define P(b,a...)   if(b)return(a);
 
 #define R return
