@@ -1,5 +1,6 @@
 //! \file h.c \brief simple hash table with separate chaining
 //! \see https://svn.process-one.net/ejabberd/tags/ejabberd-2.0.5/src/tls/tls_drv.c
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable" //! hi=0|1 for dbg
 #include"a.h"
 #include"h.h"
 

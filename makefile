@@ -25,6 +25,7 @@ endif
 ci:
 	@CI=1 make test
 	$(TESTCC) $O $(LF) $(SRC) -o b $(CF) $(FIXME)
+	file ./b
 	@#lldb --one-line-on-crash bt -b -o run ./bl t.b
 	@#gdb -ex r -ex bt -ex detach -ex quit --args ./bl t.b
 	@./b $T

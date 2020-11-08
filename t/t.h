@@ -100,7 +100,7 @@ ZS rnd_str(S dest,size_t size,C cs){
 #define RIP 0x0
 #endif
 V stack(I d,I o){V*arr[d];I sz=backtrace(arr, d);char**frames=backtrace_symbols(arr,sz);N(sz-o,os(frames[i+o]));nl();free(frames);}//!< depth+offset
-V handler(I sig,siginfo_t*si,V*c){nl();if(si->si_signo-SIGABRT){nl(),O("rip 0x%llx",RIP),osg(""),nl();}osg("");stack(10,0),exit(1);}
+V handler(I sig,siginfo_t*si,V*c){nl();if(si->si_signo-SIGABRT){nl(),O("rip 0x%zu",(size_t)RIP),osg(""),nl();}osg("");stack(10,0),exit(1);}
 V hsegv(){struct sigaction a;memset(&a,0,sizeof(struct sigaction));a.sa_flags=SA_SIGINFO;a.sa_sigaction=handler;sigaction(SIGSEGV,&a,0);sigaction(SIGABRT,&a,0);}
 
 //!attic
@@ -113,7 +113,7 @@ V hsegv(){struct sigaction a;memset(&a,0,sizeof(struct sigaction));a.sa_flags=SA
 //I k_init(I n,char**a);K1 e0,w_,ev;ZS str(K x){R(S)vc(wv(0,x),0);}long xT(K x){R(I)xt;}J xA(K x){R Ax;}
 //ZI WS(){I r=_i(w_(0));R 0>r?0:r;}ZS se(I e){R(S)err[e];}ZK out(S s){K x;U(x=p9(s));R X0(e0(x));}
 //#define $(act,msg) _(act,act,msg)
-//printf("cont mode enabled: %d\n", __llvm_profile_is_continuous_mode_enabled());\
+//printf("cont mode enabled: %d\n", __llvm_profile_is_continuous_mode_enabled());
 //__llvm_profile_enable_continuous_mode();
 //ZC arg[32]={0};init(0,(char**)(S[]){(S)"b"});
 //if(a==2){strncpy(arg,c[1],31);arg[31]='\0';memset(c[1],0,32);c=0;}
