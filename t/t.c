@@ -292,6 +292,8 @@ UNIT(utf8,
    EQ_I(at(cy,7),       0x0449,     "utf indexing test #2") // щ
    EQ_I(at(cy,24),      0x043c,     "utf indexing test #3") // м
    EQ_I(at(gr,15),      0x03c0,     "utf indexing test #4") // π
+   EQ_I(at(gr,100),          0,     "utf indexing test #5") // π
+   EQ_I(at(gr,-100),         0,     "utf indexing test #6") // π
 
    //! us()
    EQ_I(us(gr,"λ")-gr,      20,     "position of λ must be 20")
