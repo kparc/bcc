@@ -212,8 +212,8 @@ UNIT(sym,
    //_("s:4",                 0,                "parse tree of a simple expression #2")
    //PT("p:s*s",           "('*';s;s)",       "parse tree of a simple expression #2")
    //_("s:4",                 0,                "parse tree of a simple expression #2")
-   G['l'-'a'] = ki(3);
-   G['r'-'a'] = ki(4);
+   //G['l'-'a'] = ki(3);
+   //G['r'-'a'] = ki(4);
    //_("p:s*s",               0,                "parse tree of a simple expression #2")
    _("l*r",                  12,                "parse tree of a simple expression #2")
 
@@ -235,7 +235,7 @@ UNIT(TODO,
    //PT("p:s*s",           "('*';`s;`s)",       "parse tree of a simple expression #2")
 #ifdef SYMS
 //#if 0
-   #define SETSYM(key,val) {Ss=(S)(key);K x=sym(0)/*,x=nme(b)*/,*y=GG(x);*y=(val);O("setsym dbg %p\n",*y),x;}
+   #define SETSYM(key,val) ({Ss=(S)(key);K x=sym(0)/*,x=nme(b)*/,*y=GG(x);*y=(val);/*O("setsym dbg %p\n",*y),*/x;});
 
    SETSYM("LEFT",ki(3))SETSYM("RIGHT",ki(4))
 /*
@@ -266,14 +266,56 @@ UNIT(TODO,
    //EQ_SYM("prd",           "9",                  "prd holds the correct vector value in the slot FIXME")
 )
 
+UNIT(utf8,
+   CP c0,c1,c2;C*t[]={
+      "a\0",
+      "\xce\x93\0",
+      "\xe1\xbd\xb6\0",
+      "\xf0\x90\x8d\x88\0",
+      "\xf0\x9d\x91\x97\xf0\x9d\x91\x98\xf0\x9d\x91\x99\x20\xd0\x90\xd0\x91\xd0\x92\0"}, //𝑗𝑘𝑙 АБВ
+      *gr="αβγδεζηθικλμνξοπρςστυφχψω",
+      *cy="Мне отмщение, и аз воздам";
+         //0123456789012345678901234
+
+   //! ul()
+   EQ_I(ul(t[0]),            1,     "single 1-byte codepoint should have length 1")
+   EQ_I(ul(t[1]),            1,     "single 2-byte codepoint should have length 1")
+   EQ_I(ul(t[2]),            1,     "single 3-byte codepoint should have length 1")
+   EQ_I(ul(t[3]),            1,     "single 4-byte codepoint should have length 1")
+   EQ_I(ul(t[4]),            7,     "test vector length should match expected")
+   EQ_I(ul(gr),             25,     "test vector length should match expected")
+   EQ_I(ul(cy),             25,     "test vector length should match expected")
+   EQ_I(ul(utfstr),         53,     "test vector length should match expected")
+
+   //! at()
+   EQ_I(at(cy,0),       0x041c,     "utf indexing test #1") // M
+   EQ_I(at(cy,7),       0x0449,     "utf indexing test #2") // щ
+   EQ_I(at(cy,24),      0x043c,     "utf indexing test #3") // м
+   EQ_I(at(gr,15),      0x03c0,     "utf indexing test #4") // π
+
+   //! us()
+   EQ_I(us(gr,"λ")-gr,      20,     "position of λ must be 20")
+   EQ_I(us(cy,"дам")-cy,    39,     "position of 'дам' must be 39")
+
+   //! cp()
+   S r=cp(cy,&c0);r=cp(r,&c1);r=cp(r,&c2);
+   EQ_I(c0,             0x041c,     "codepoint scan #1")// M
+   EQ_I(c1,             0x043d,     "codepoint scan #2")// н
+   EQ_I(c2,             0x0435,     "codepoint scan #3")// e
+
+   //! uc()
+   EQ_I(uc(gr,0x03c0)-gr,   30,    "position of π should be 30")
+   EQ_I(uc(cy,',')-cy,      23,    "position of comma must be 23")
+)
 
 TESTS(
 #ifndef SYMS
    //U(env)U(mem)U(err)U(prs)U(fio)
-   U(sym)
+   //U(sym)
 #else
    //X(hsh)X(sym)
-   U(TODO)
+   //U(TODO)
+   U(utf8)
 #endif
    //X(nop)
 )
