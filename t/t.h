@@ -86,6 +86,7 @@ ZS rnd_str(S dest,size_t size,C cs){
 #endif
 
 #define _GNU_SOURCE 1 //!<REG_RIP
+#define _XOPEN_SOURCE //!< macos
 #include<execinfo.h>
 #include<signal.h>
 #include<string.h>
