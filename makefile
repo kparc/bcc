@@ -3,6 +3,7 @@ CF=-minline-all-stringops -fno-asynchronous-unwind-tables -fno-stack-protector -
 SRC=[abmphu].c
 O=-O0 -g
 T=t.b
+QUIET=@
 
 ifeq ($(ISOMRPH),1)
  O+=-DISOMRPH
@@ -10,7 +11,8 @@ ifeq ($(ISOMRPH),1)
 endif
 
 ifeq ($(CI),1)
- O+=-DCI
+ O=-O0 -DCI
+ QUIET=
 endif
 
 ifeq ($(shell uname),Darwin)
@@ -22,8 +24,8 @@ ci:
 	clang $O $(LF) $(SRC) -o bl $(CF)
 	@#lldb --one-line-on-crash bt -b -o run ./bl t.b
 	@#gdb -ex r -ex bt -ex detach -ex quit --args ./bl t.b
-	./bl $T
-	CI=1 make test
+	@./bl $T
+	@CI=1 make test
 
 # llvm
 l:
@@ -46,15 +48,17 @@ r:
 	@#objdump -d r
 
 TESTCC=clang -std=gnu11
-FIXME=-Wno-pointer-to-int-cast
+FIXME=-Wno-int-conversion
 test: cleantest
-	@$(TESTCC) -DUSE_AW_MALLOC -DTST $O $(LF) t/t.c t/lib/unity.c $(SRC) -o test $(CF) -fmacro-backtrace-limit=0 \
-	-fprofile-instr-generate -fcoverage-mapping -fdebug-macro -Wno-int-conversion $(FIXME)
+	@echo
+	@#-fprofile-instr-generate -fcoverage-mapping -fdebug-macro
+	$(QUIET)$(TESTCC) -DUSE_AW_MALLOC -DTST $O $(LF) t/t.c t/lib/unity.c $(SRC) -o test $(CF) -fmacro-backtrace-limit=0 $(FIXME)
+	@echo
 	@./test
 
 syms: cleansyms
 	@$(TESTCC) -DISOMRPH -DUSE_AW_MALLOC -DTST -DSYMS $O $(LF) t/t.c t/lib/unity.c $(SRC) -o syms $(CF) \
-	-fmacro-backtrace-limit=0 -Wno-int-conversion $(FIXME)
+	-fmacro-backtrace-limit=0 $(FIXME)
 	@./syms
 
 cleantest:
