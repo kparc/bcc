@@ -86,10 +86,19 @@ c:     e8 ef ff ff ff       call   0
 
 ### source
 
+`c.h`  dialect
+`a.h`  accessors
+
 `a.S`  kernel interface
 `a.c`  runtime
+`m.c`  malloc
 `p.c`  parser
 `b.c`  compiler
+`h.c`  hash table
+
+`d`    docs
+`t`    tests
+`m`    bench
  
 `p()`  parse
 `d()`  to register (constant or global)
