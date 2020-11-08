@@ -5,7 +5,7 @@ O=-O0 -g
 T=t.b
 QUIET=@
 FIXME=-Wno-int-conversion -Wno-pointer-to-int-cast -Wno-unused-value -Wno-misleading-indentation -Wno-pragmas
-TESTCC=gcc -std=gnu11 $(FIXME)
+TESTCC=clang -std=gnu11 $(FIXME)
 
 ifeq ($(ISOMRPH),1)
  O+=-DISOMRPH

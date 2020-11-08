@@ -311,7 +311,7 @@ ___
 
    //_("prd",                 6,                "p should have expected value")
 
-   PT("pr:s*s",           "('*';`s;`s)",       "parse tree of a simple expression #2")
+   PT("pr:s*s",           "('*';`s;`s)",    "parse tree of a simple expression #2")
    _("p:s*s",             0,                "parse tree of a simple expression #2")
    _("p",                 9,                "p should have expected value")
 
@@ -323,7 +323,7 @@ ___
 
 TESTS(
 #ifdef CI
-   U(env)U(hsh)U(mem)U(utf)U(err)U(prs)U(fio)
+   U(env)U(hsh)U(mem)U(utf)U(err)U(prs)U(fio)U(sym)
 #else
 
 #ifndef SYMS
@@ -333,7 +333,8 @@ TESTS(
    U(TODO)
 #endif
    //X(nop)
-#endif
+
+#endif//!CI
 )
 
 //:~
