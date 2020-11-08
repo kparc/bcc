@@ -52,8 +52,8 @@ r:
 FIXME=-Wno-int-conversion
 test: cleantest
 	@echo
-	@#-fprofile-instr-generate -fcoverage-mapping -fdebug-macro
-	$(QUIET)$(TESTCC) -DUSE_AW_MALLOC -DTST $O $(LF) t/t.c t/lib/unity.c $(SRC) -o test $(CF) -fmacro-backtrace-limit=0 $(FIXME)
+	@#-fprofile-instr-generate -fcoverage-mapping -fdebug-macro -fmacro-backtrace-limit=0
+	$(QUIET)$(TESTCC) -DUSE_AW_MALLOC -DTST $O $(LF) t/t.c t/lib/unity.c $(SRC) -o test $(CF)  $(FIXME)
 	@echo
 	@./test
 
