@@ -322,7 +322,7 @@ UNIT(TODO,
 
 TESTS(
 #ifdef CI
-   U(env)U(mem)U(utf)U(hsh)U(err)U(prs)U(fio)U(sym)
+   U(env)U(mem)U(utf)U(err)U(prs)U(fio)U(sym)//U(hsh)
 #else
 
 #ifndef SYMS
