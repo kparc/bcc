@@ -4,6 +4,7 @@ SRC=[abmphu].c
 O=-O0 -g
 T=t.b
 QUIET=@
+TESTCC=gcc -std=gnu11
 
 ifeq ($(ISOMRPH),1)
  O+=-DISOMRPH
@@ -21,7 +22,7 @@ endif
 
 # ci
 ci:
-	clang $O $(LF) $(SRC) -o bl $(CF)
+	$(TESTCC) $O $(LF) $(SRC) -o b $(CF)
 	@#lldb --one-line-on-crash bt -b -o run ./bl t.b
 	@#gdb -ex r -ex bt -ex detach -ex quit --args ./bl t.b
 	@./bl $T
@@ -47,7 +48,6 @@ r:
 	clang -Os -g r.c -o r&&./r
 	@#objdump -d r
 
-TESTCC=clang -std=gnu11
 FIXME=-Wno-int-conversion
 test: cleantest
 	@echo
