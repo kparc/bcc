@@ -59,7 +59,7 @@ V setUp(V){}V tearDown(V){}//!< before/after each test
 
 #define ___  TEST_ASSERT_MESSAGE(0,"STOP");
 
-#define TESTS(units...) I main(I a,char**c){init();UNITY_BEGIN();units;R UNITY_END();}
+#define TESTS(units...) V hsegv();I main(I a,char**c){hsegv(),init();UNITY_BEGIN();units;R UNITY_END();}
 
 //#define UNIT(name,tests...) V test##_##name(V){W0=ws();tests;WS(0,"test unit shouldn't leak memory")};
 //#define RUN(unit) RUN_TEST(test##_##unit);
@@ -80,15 +80,25 @@ ZS csets[4]={
 
 #ifdef TEST_HT_STRESS
 ZS rnd_str(S dest,size_t size,C cs){
-  P(4<cs,(S)0)S dict=csets[cs];
-  size_t dictlen=strlen(dict);
-  N(size,
-    size_t key=rand()%(dictlen-1);
-    dest[i]=dict[key];
-  )
-  dest[size]='\0'; //< terminate string
-  R dest;}
+  P(4<cs,(S)0)S dict=csets[cs];size_t dictlen=strlen(dict);
+  N(size,size_t key=rand()%(dictlen-1);dest[i]=dict[key])
+  dest[size]=0;R dest;}
 #endif
+
+#define _GNU_SOURCE 1 //!<REG_RIP
+#include<execinfo.h>
+#include<signal.h>
+#include<string.h>
+#ifdef __APPLE__
+#define osg(s) psignal(si->si_signo,s)
+#define RIP ((ucontext_t*)c)->uc_mcontext->__ss.__rip
+#else
+#define osg(s) psiginfo(si,s)
+#define RIP con->uc_mcontext.gregs[REG_RIP]
+#endif
+V stack(I d,I o){V*arr[d];I sz=backtrace(arr, d);char**frames=backtrace_symbols(arr,sz);N(sz-o,os(frames[i+o]));free(frames);}//!< depth+offset
+V handler(I sig,siginfo_t*si,V*c){nl();if(si->si_signo-SIGABRT){nl(),O("rip 0x%llx",RIP),osg(""),nl();}stack(10,0),exit(1);}
+V hsegv(){struct sigaction a;memset(&a,0,sizeof(struct sigaction));a.sa_flags=SA_SIGINFO;a.sa_sigaction=handler;sigaction(SIGSEGV,&a,0);sigaction(SIGABRT,&a,0);}
 
 //!attic
 
