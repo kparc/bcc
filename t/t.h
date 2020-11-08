@@ -90,20 +90,6 @@ ZS rnd_str(S dest,size_t size,C cs){
   R dest;}
 #endif
 
-char utfstr[] = {
-    '\xce', '\x93', '\xce', '\xb1', '\xce', '\xb6', '\xce', '\xad', '\xce',
-    '\xb5', '\xcf', '\x82', '\x20', '\xce', '\xba', '\xce', '\xb1', '\xe1',
-    '\xbd', '\xb6', '\x20', '\xce', '\xbc', '\xcf', '\x85', '\xcf', '\x81',
-    '\xcf', '\x84', '\xce', '\xb9', '\xe1', '\xbd', '\xb2', '\xcf', '\x82',
-    '\x20', '\xce', '\xb4', '\xe1', '\xbd', '\xb2', '\xce', '\xbd', '\x20',
-    '\xce', '\xb8', '\xe1', '\xbd', '\xb0', '\x20', '\xce', '\xb2', '\xcf',
-    '\x81', '\xe1', '\xbf', '\xb6', '\x20', '\xcf', '\x80', '\xce', '\xb9',
-    '\xe1', '\xbd', '\xb0', '\x20', '\xcf', '\x83', '\xcf', '\x84', '\xe1',
-    '\xbd', '\xb8', '\x20', '\xcf', '\x87', '\xcf', '\x81', '\xcf', '\x85',
-    '\xcf', '\x83', '\xce', '\xb1', '\xcf', '\x86', '\xe1', '\xbd', '\xb6',
-    '\x20', '\xce', '\xbe', '\xce', '\xad', '\xcf', '\x86', '\xcf', '\x89',
-    '\xcf', '\x84', '\xce', '\xbf', '\x0a', '\0'};
-
 //!attic
 
 //V __llvm_profile_enable_continuous_mode(V);I __llvm_profile_is_continuous_mode_enabled(V),__llvm_profile_write_file(V);
