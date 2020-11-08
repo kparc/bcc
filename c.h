@@ -1,6 +1,7 @@
 #pragma once
 #include<string.h>
 #include<stdio.h>
+#include<signal.h>//! raise
 
 #define ptr(x) (*(S*)&x)
 #define xC ptr(x)
@@ -38,7 +39,8 @@ enum UCL{UQ,Ul,Ug,Uc,Um,Ua};//!< QQ  Āɏ Ая  Αω  ∀⋿  ⌀⍺  (err, lat,
 #define ZV static V
 
 #define Z_ static inline
-#define AB(s)       (os((S)s),exit(1),(K)0L) //abort string
+
+#define AB(s)       (w2("AB: "),w2(s),raise(SIGABRT),exit(1),(K)0L) //abort string
 
 //#ifndef __APPLE__
 #if 0
