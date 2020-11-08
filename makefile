@@ -1,4 +1,4 @@
-CF=-minline-all-stringops -fno-asynchronous-unwind-tables -fno-stack-protector -Wall -Wno-parentheses -Wno-pointer-sign -rdynamic
+CF=-minline-all-stringops -fno-asynchronous-unwind-tables -fno-stack-protector -Wall -Wno-unknown-warning-option -Wno-parentheses -Wno-pointer-sign -rdynamic
 #LF=-nostdlib -c a.S
 SRC=[abmphu].c
 O=-O0 -g
