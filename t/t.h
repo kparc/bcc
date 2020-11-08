@@ -89,12 +89,14 @@ ZS rnd_str(S dest,size_t size,C cs){
 #include<execinfo.h>
 #include<signal.h>
 #include<string.h>
+#include<ucontext.h>
 #ifdef __APPLE__
 #define osg(s) psignal(si->si_signo,s)
 #define RIP ((ucontext_t*)c)->uc_mcontext->__ss.__rip
 #else
 #define osg(s) psiginfo(si,s)
-#define RIP con->uc_mcontext.gregs[REG_RIP]
+//#define RIP ((ucontext_t *)c)->uc_mcontext->__ss.__rip
+#define RIP 0x0
 #endif
 V stack(I d,I o){V*arr[d];I sz=backtrace(arr, d);char**frames=backtrace_symbols(arr,sz);N(sz-o,os(frames[i+o]));free(frames);}//!< depth+offset
 V handler(I sig,siginfo_t*si,V*c){nl();if(si->si_signo-SIGABRT){nl(),O("rip 0x%llx",RIP),osg(""),nl();}stack(10,0),exit(1);}
