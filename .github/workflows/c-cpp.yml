@@ -14,7 +14,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: make
-      run: make ci
+      run: make ci test
       
   build-osx:
 
@@ -23,4 +23,4 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: make
-      run: make l
+      run: make ci test
