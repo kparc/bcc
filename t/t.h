@@ -99,8 +99,8 @@ ZS rnd_str(S dest,size_t size,C cs){
 //#define RIP ((ucontext_t *)c)->uc_mcontext->__ss.__rip
 #define RIP 0x0
 #endif
-V stack(I d,I o){V*arr[d];I sz=backtrace(arr, d);char**frames=backtrace_symbols(arr,sz);N(sz-o,os(frames[i+o]));free(frames);}//!< depth+offset
-V handler(I sig,siginfo_t*si,V*c){nl();if(si->si_signo-SIGABRT){nl(),O("rip 0x%llx",RIP),osg(""),nl();}stack(10,0),exit(1);}
+V stack(I d,I o){V*arr[d];I sz=backtrace(arr, d);char**frames=backtrace_symbols(arr,sz);N(sz-o,os(frames[i+o]));nl();free(frames);}//!< depth+offset
+V handler(I sig,siginfo_t*si,V*c){nl();if(si->si_signo-SIGABRT){nl(),O("rip 0x%llx",RIP),osg(""),nl();}osg("");stack(10,0),exit(1);}
 V hsegv(){struct sigaction a;memset(&a,0,sizeof(struct sigaction));a.sa_flags=SA_SIGINFO;a.sa_sigaction=handler;sigaction(SIGSEGV,&a,0);sigaction(SIGABRT,&a,0);}
 
 //!attic

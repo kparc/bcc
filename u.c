@@ -1,4 +1,6 @@
 #pragma GCC diagnostic ignored "-Wunsequenced"
+#pragma GCC diagnostic ignored "-Wsequence-point"
+
 #include"c.h"
 #include <stdint.h>
 

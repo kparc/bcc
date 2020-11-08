@@ -4,7 +4,8 @@ SRC=[abmphu].c
 O=-O0 -g
 T=t.b
 QUIET=@
-TESTCC=gcc -std=gnu11
+FIXME=-Wno-int-conversion -Wno-pointer-to-int-cast -Wno-unused-value -Wno-misleading-indentation
+TESTCC=gcc -std=gnu11 $(FIXME)
 
 ifeq ($(ISOMRPH),1)
  O+=-DISOMRPH
@@ -23,7 +24,7 @@ endif
 # ci
 ci:
 	@CI=1 make test
-	$(TESTCC) $O $(LF) $(SRC) -o b $(CF)
+	$(TESTCC) $O $(LF) $(SRC) -o b $(CF) $(FIXME)
 	@#lldb --one-line-on-crash bt -b -o run ./bl t.b
 	@#gdb -ex r -ex bt -ex detach -ex quit --args ./bl t.b
 	@./b $T
@@ -36,7 +37,7 @@ l:
 
 # gcc
 g:
-	gcc $O $(LF) $(SRC) -o bg $(CF) -Wno-unused-value -Wno-misleading-indentation
+	gcc $O $(LF) $(SRC) -o bg $(CF) $(FIXME)
 	./bg $T
 
 # tcc
@@ -49,11 +50,10 @@ r:
 	clang -Os -g r.c -o r&&./r
 	@#objdump -d r
 
-FIXME=-Wno-int-conversion
 test: cleantest
 	@echo
 	@#-fprofile-instr-generate -fcoverage-mapping -fdebug-macro -fmacro-backtrace-limit=0
-	$(QUIET)$(TESTCC) -DUSE_AW_MALLOC -DTST $O $(LF) t/t.c t/lib/unity.c $(SRC) -o test $(CF)  $(FIXME)
+	$(QUIET)$(TESTCC) -DUSE_AW_MALLOC -DTST $O $(LF) t/t.c t/lib/unity.c $(SRC) -o test $(CF) $(FIXME)
 	@echo
 	@./test
 
