@@ -24,7 +24,7 @@ typedef struct ht{
 } pHT;typedef pHT*HT;
 const static SZT SZHT=sizeof(pHT); //< hash table header size
 
-HT hnew(S id,I l,I r,HFN f); //!< init \p id table identifier \p lvl initial size (power of 2) \p rds rounds of tail split attempts, hashfn or 0 for default
+HT hnew(S id,I l,I r,HFN f); //!< init \p id table identifier \p lvl initial size \p rds rounds of tail split attempts, hashfn or 0 for default
 B hget(HT t,S s,I n);    //!< insert|lookup \p s string \p n length
 K hdel(HT t);            //!< destroy table
 
