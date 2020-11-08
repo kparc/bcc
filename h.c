@@ -18,7 +18,8 @@
 #define bkt t->bkt
 
 //! djb2 \see www.burtleburtle.net/bob/hash/doobs.html groups.google.com/forum/#!topic/comp.lang.c/lSKWXiuNOAk
-inline HTYPE djb2(S s,SZT n){HTYPE h=5381;N(n,h=(h<<5)+h+*s++)R h;}//Z_ UI djb(S x,UI n){UI h=5381;N(n,h=33*(h^x[i]));R h;}
+//inline HTYPE djb2(S s,SZT n){HTYPE h=5381;N(n,h=(h<<5)+h+*s++)R h;}
+inline HTYPE djb2(S x,SZT n){HTYPE h=5381;N(n,h=33*(h^x[i]));R h;}
 inline HTYPE sdbm(S s,SZT n){HTYPE h=0;I c;W(c=*s++)h=c+(h<<6)+(h<<16)-h;R h;}//<! sdbm \see berkeleydb \see sleepycat
 //ZV hcpy(V*d,V*s,SZT n){*((S)memcpy(d,s,n)+n)=0;}//!< copy and terminate
 ZK hcpy(S s,SZT n){K x=kS(n+1);*((S)memcpy((V*)x,s,n)+n)=0;R x;}//!< copy and terminate
@@ -69,11 +70,11 @@ K hdel(HT t){B b,n;                   //!< destroy table
 #ifdef TST
 I hslot(HT t){I r=0;N(lvl<<1,r+=!!bkt[i])R r;}F hload(HT t){R(F)hslot(t)/cnt;}//<! slot count, load factor
 UJ hdbg(HT t,C o,C st){B b;I n,len,LEN=0,CNT=0;UJ csum,CSUM=0;
-  N(lvl<<1,b=bkt[i];n=len=csum=0;$(o,O("%s[%d]: ",(S)tid,i))
-    W(b){$(o,O("(%s) -> ",(S)b->k));n++,len+=b->n,csum+=b->h;b=b->next;}
+  N(lvl<<1,b=bkt[i];n=len=csum=0;$(o,O("%s[%d]: ",(S)tid,i));
+    W(b){$(o,K x=b->k;O("(%.*s) -> ",xn,(S)x));n++,len+=b->n,csum+=b->h;b=b->next;}
     $(n,csum+=len+n+i);$(o,$(n,O("[cnt=%d,len=%d,sum=%llu]\n",n,len,csum))O("()\n"););
     CSUM+=csum;LEN+=len;CNT+=n)
-  $(o,O("HT[%s]: keys=%d len=%d\n",(S)tid,CNT,LEN));
+  $(o,O("HT[%s]: keys=%d len=%d csum=%llu\n",(S)tid,CNT,LEN,CSUM));
   R st?CNT:(CSUM+(lvl<<1));}
 #endif
 

@@ -226,7 +226,7 @@ UNIT(sym,
 #define expmem(n) ((n)*(sizeof(pbkt)))
 UNIT(hsh,
 
-   HT t=hnew("tst",2,10,djb2); //<! 4 slots, 10 split rounds
+   HT t=hnew("tst",2,10,0); //<! 4 slots, 10 split rounds, default hashfn
 
    I n=6,total=0;B bkts[n];
    S keys[]={"FKTABLE_CAT","cov","bmp","frameset","cos","fmt"},cset=csets[CHARSET_ALNUM]; //<! test vectors
@@ -237,20 +237,20 @@ UNIT(hsh,
    EQ_I(t->cnt,      n,           "htable should contain 6 elements")
    EQ_I(hdbg(t,0,1), t->cnt,      "htable counter should match internal check")
    EQ_I(t->mem,      expmem(n),   "htable mem usage should match expected")
-   EQ_I(hdbg(t,0,0), 1408928309,  "htable checksum must match expected")
+   EQ_I(hdbg(t,0,0), 5149124949,  "htable checksum must match expected")
 
    N(n,if(bkts[i]!=hget(t,keys[i],strlen(keys[i])))FAIL("hash table must be stable"))
    EQ_I(t->cnt,      n,           "htable should still remain the same")
    EQ_I(hdbg(t,0,1), t->cnt,      "htable counter should match internal check")
    EQ_I(t->mem,      expmem(n),   "htable mem usage should match expected")
-   EQ_I(hdbg(t,0,0), 1408928309,  "htable checksum must match expected")
+   EQ_I(hdbg(t,0,0), 5149124949,  "htable checksum must match expected")
 
    N(strlen(cset)-1,total+=i+1;hget(t,cset+i,i+1));//uppercase only - cannot be any of keys[]
    EQ_I(t->mem,      expmem(n+strlen(cset)-1), "htable mem usage should match expected")
    EQ_I(hdbg(t,0,1), t->cnt,      "htable counter should match internal check")
-   EQ_I(hdbg(t,0,0), 5999325069,  "htable checksum must match expected")
+   EQ_I(hdbg(t,0,0), 130733567330,  "htable checksum must match expected")
 
-   TRUE(hload(t)     >0.9,        "htable load factor should be above 0.9")
+   TRUE(hload(t)     >0.9,        "htable load factor should be above 0.8")
 
    #ifdef TEST_HT_STRESS
    //! load factor under stress
@@ -323,7 +323,7 @@ ___
 
 TESTS(
 #ifdef CI
-   U(env)U(mem)U(utf)U(err)U(prs)U(fio)U(sym)//U(hsh)
+   U(env)U(hsh)U(mem)U(utf)U(err)U(prs)U(fio)
 #else
 
 #ifndef SYMS

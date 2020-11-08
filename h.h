@@ -3,13 +3,14 @@
 #include<stdlib.h>
 #include"c.h"
 
-#define DFLT_HFN djb2
+#define DFLT_HFN sdbm
+//#define DFLT_HFN djb2
 
 #define hval(t,k) (hget(t,k,strlen(k))->v)
 #define hset(t,k,v) (hval=(K)v)
 
 typedef size_t SZT;typedef UI HTYPE;typedef HTYPE(*HFN)(S s,SZT n); //!< //!< hash value type, hshfn function interface
-typedef struct pbkt pbkt;typedef pbkt*B;typedef struct pbkt{I h;I n;B next;K v;K k;}pbkt;//!< keyhash,keylen,next,value,key
+typedef struct pbkt pbkt;typedef pbkt*B;typedef struct pbkt{HTYPE h;I n;B next;K v;K k;}pbkt;//!< keyhash,keylen,next,value,key
 
 typedef struct ht{
     K       tid;         //< table id (KS)
