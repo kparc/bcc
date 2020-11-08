@@ -8,13 +8,13 @@ UNIT(env,           //<! basic sanity
 
    WS(          64, "enm(10) should allocate 64 bytes")
 
-   _(Ax,         0, "x should not be an atom")
-   _(xr,         0, "x should have refcount 0")
-   _(xt,        KI, "x should be an int vector")
-   _(xn,        10, "x should have 10 items")
+   EQ_I(Ax,      0, "x should not be an atom")
+   EQ_I(xr,      0, "x should have refcount 0")
+   EQ_I(xt,     KI, "x should be an int vector")
+   EQ_I(xn,     10, "x should have 10 items")
 
-   _(Ay,        KI, "5th item should be an int")
-   _(yi,         5, "5th item should be eq 5")
+   EQ_I(Ay,     KI, "5th item should be an int")
+   EQ_I(yi,      5, "5th item should be eq 5")
 
    r0(x)            //units bail if wss>0
 )
@@ -62,7 +62,7 @@ UNIT(mem,
    //! unit must pass (wss should be zero, no leaked refs)
 )
 
-UNIT(utf8,
+UNIT(utf,
    CP c0,c1,c2;C*t[]={
       "a\0",
       "\xce\x93\0",
@@ -215,6 +215,8 @@ UNIT(sym,
    W0=ws();                                 //! FIXME variable identifiers should probably be excluded from wssize
 )
 
+#else
+
 #include"../h.h"
 //#define expmem(n) ((n)*(sizeof(pbkt)+1)+total)
 #define expmem(n) ((n)*(sizeof(pbkt)))
@@ -254,23 +256,21 @@ UNIT(hsh,
 
    hdel(t); //!< release memory
 )
-#else
+
 
 UNIT(sym,
-   //PT("a:42",            "0xaa",            "parse tree of a scalar assignment is its literal value")
-   //PT("s:2+1",           "('+';0x82;0x81)", "parse tree of a simple expression #1")
-   //PT("s+s",             "('+';s;s)",       "parse tree of a simple expression #2")
+   GGG['l'-'a']=ki(3);
+   GGG['r'-'a']=ki(4);
 
-   //_("s:2+1",             0,                "scalar expr assignment")
-   //_("s:4",                 0,                "parse tree of a simple expression #2")
-   //PT("p:s*s",           "('*';s;s)",       "parse tree of a simple expression #2")
-   //_("s:4",                 0,                "parse tree of a simple expression #2")
-   //G['l'-'a'] = ki(3);
-   //G['r'-'a'] = ki(4);
-   //_("p:s*s",               0,                "parse tree of a simple expression #2")
-   _("l*r",                  12,                "parse tree of a simple expression #2")
+   PT("a:42",             "0xaa",            "parse tree of a scalar assignment is its literal value")
+   PT("s:2+1",            "('+';0x82;0x81)", "parse tree of a simple expression #1")
+   PT("s+s",              "('+';s;s)",       "parse tree of a simple expression #2")
+   PT("p:s*s",            "('*';s;s)",       "parse tree of a simple expression #3")
 
-   //_("p",                  16,                "p should have expected value")
+   _("s:2+2",             0,                 "scalar expr assignment")
+   _("p:s*s",             0,                 "evaluate an expression with global references #1")
+   _("l*r",               12,                "evaluate an expression with global references #2")
+   _("p",                 16,                "p should have expected value")
 )
 
 #endif//SYMS
@@ -321,14 +321,18 @@ UNIT(TODO,
 
 
 TESTS(
+#ifdef CI
+   U(env)U(mem)U(utf)U(hsh)U(err)U(prs)U(fio)U(sym)
+#else
+
 #ifndef SYMS
-   //U(env)U(mem)U(utf8)U(err)U(prs)U(fio)U(sym)
+   U(env)U(mem)U(utf)U(hsh)U(err)U(prs)U(fio)//U(sym)
 #else
    //X(hsh)X(sym)
    U(TODO)
-   
 #endif
    //X(nop)
+#endif
 )
 
 //:~

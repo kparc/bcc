@@ -9,6 +9,10 @@ ifeq ($(ISOMRPH),1)
  T=tiso.b
 endif
 
+ifeq ($(CI),1)
+ O+=-DCI
+endif
+
 ifeq ($(shell uname),Darwin)
  CF+= -pagezero_size 1000
 endif
@@ -19,6 +23,7 @@ ci:
 	@#lldb --one-line-on-crash bt -b -o run ./bl t.b
 	@#gdb -ex r -ex bt -ex detach -ex quit --args ./bl t.b
 	./bl $T
+	CI=1 make test
 
 # llvm
 l:

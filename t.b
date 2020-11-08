@@ -35,39 +35,38 @@ a[3;4]
 
 /fixme segv on ubuntu boxes
 x:!9
-x
-/b[x;7]
-/y:!8
-/z:!8
-/f[#y;y;z]
-/w:t[0;2]
-/c[w]
+b[x;7]
+y:!8
+z:!8
+f[#y;y;z]
+w:t[0;2]
+c[w]
 m[10]
 
-/\w
+\w
 
 /time
 \t:2000 a[3;4]
 
 /fixme segv on ubuntu boxes
-/x:!1000
-/\t N(1000000)b[x;1023&i]
-/y:!8
-/z:!8
-/\t:20 f[#y;y;z]
-/\t:100 t[0;13]
-/w:t[0;13]
-/\t:100 c[w]
+x:!1000
+\t N(1000000)b[x;1023&i]
+y:!8
+z:!8
+\t:20 f[#y;y;z]
+\t:100 t[0;13]
+w:t[0;13]
+\t:100 c[w]
 
 \t:30 m[100]
 \v
 \f
 
 /fixme segv on ubuntu boxes
-/\-x
-/\-y
-/\-z
-/\-w
+\-x
+\-y
+\-z
+\-w
 
 \-a
 \-b
