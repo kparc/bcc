@@ -2,8 +2,8 @@
 #include"c.h"
 #include <stdint.h>
 
-#define ff     (0x3f&*s++)
-#define T(m)   (!((CP)m&c))
+#define ff      (0x3f&*s++)
+#define T(m)    (!((CP)m&c))
 #define uf(b,s) *u=b|(C)(c>>s);
 #define um(i,s) u[i]=0x80|(C)(c>>s);
 #define ut(i)   u[i]=0x80|(C)(c&0x3f)
@@ -12,7 +12,7 @@
 #define U2(c)   0xc0==(0xe0&c)
 
 //! set cp to the first codepoint in s and return the address of the next cp
-S cp(S s,CP*cp){ $(U4(*s),*cp=(0x07&*s++)<<18|ff<<12|ff<<6|ff)$(U3(*s),*cp=(0x0f&*s++)<<12|ff<<6|ff)$(U2(*s),*cp=(0x1f&*s++)<<6|ff)*cp=*s++;R s;}
+S cp(S s,CP*cp){ R*cp=U4(*s)?(0x07&*s++)<<18|ff<<12|ff<<6|ff:U3(*s)?(0x0f&*s++)<<12|ff<<6|ff:U2(*s)?(0x1f&*s++)<<6|ff:*s++,s;}
 S us(S h,S n){CP t;S m,s;P(!*n,h)W(*h){m=h;s=n;W(*h==*s&&(*h&&*s))h++,s++;P(!*s,m)h=cp(m,&t);}R 0;}//! position of utf needle in utf haystack
 S uc(S s,CP c){C u[5]={0,0,0,0,0};P(!c,W(*s)s++;s)$(T(0xffffff80),*u=(C)c)//! find first match of codepoint c in the utf string s
  $(T(0xfffff800),uf(0xc0,6)ut(1))$(T(0xffff0000),uf(0xe0,12)um(1,6)ut(2))$(T(0xffff0000),uf(0xf0,18)um(1,12)um(2,6)ut(3));R us(s,u);}
