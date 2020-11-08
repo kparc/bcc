@@ -282,7 +282,7 @@ UNIT(sym,
 UNIT(nop,TRUE(1,"dummy test"))
 
 UNIT(TODO,
-___
+//___
    //! err
    //ERR("c[x]{$[x;1;2]}",  "x",             "malformed function signature should be an error")
    //ERR("c[x]$[x;1;2]",    "x",             "malformed function signature should be an error")
@@ -329,7 +329,7 @@ TESTS(
 #ifndef SYMS
    U(env)U(mem)U(utf)U(hsh)U(err)U(prs)U(fio)//U(sym)
 #else
-   //X(hsh)X(sym)
+   //U(hsh)X(sym)
    U(TODO)
 #endif
    //X(nop)

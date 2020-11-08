@@ -66,8 +66,8 @@ V setUp(V){}V tearDown(V){}//!< before/after each test
 
 #define UNIT(name,tests...) V skip##_##name(V){TEST_IGNORE();};V unit##_##name(V){W0=ws();tests;WS(W0,"test unit shouldn't leak memory")};
 
-#define U(name) extern V unit##_##name(V);RUN_TEST(unit##_##name);
-#define X(name) extern V skip##_##name(V);RUN_TEST(skip##_##name);
+#define U(name) V unit##_##name(V);RUN_TEST(unit##_##name);
+#define X(name) V skip##_##name(V);RUN_TEST(skip##_##name);
 
 
 enum charsets { CHARSET_ALNUM, CHARSET_AZaz, CHARSET_AZ, CHARSET_az};
