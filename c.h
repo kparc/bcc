@@ -13,6 +13,9 @@ typedef unsigned long long K;
 typedef unsigned char C,*S;typedef int I,CP;typedef long long J;typedef double F;typedef void V;typedef unsigned int UI;typedef unsigned long long UJ;
 //V*memcpy();strlen(const char*);//#define P(b,a...)   if(b)return(a);
 
+enum UCL{UQ,Ul,Ug,Uc,Um,Ua};//!< QQ  Āɏ Ая  Αω  ∀⋿  ⌀⍺  (err, lat, cyr, gre, mth, apl)
+#define UR(cp,s,l) (l>cp-s) //!< unicode range: codepoint, range start, range length+1
+#define UC(x) (9082<x?0:UR(x,256,336)?Ul:UR(x,913,57)?Ug:UR(x,1040,64)?Uc:UR(x,8704,256)?Um:UR(x,8960,123)?Ua:UQ)
 #define R return
 
 #define P(b,a...) if(b)R({a;});

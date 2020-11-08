@@ -113,6 +113,10 @@ UNIT(utf,
    //! uc()
    EQ_I(uc(gr,0x03c0)-gr,   30,    "position of π should be 30")
    EQ_I(uc(cy,',')-cy,      23,    "position of comma must be 23")
+
+   //! UC()
+   char*rng="ΑωАяĀɏ∀⋿⌀⍺𝑗";C rcl[]={Ug,Ug,Uc,Uc,Ul,Ul,Um,Um,Ua,Ua,UQ};
+   CP c,i=0;S tp=rng;W((tp=cp(tp,&c))&&c)EQ_I(UC(c),rcl[i++],"unicode range classes should match expected");
 )
 
 UNIT(err,
@@ -277,8 +281,8 @@ UNIT(sym,
 
 UNIT(nop,TRUE(1,"dummy test"))
 
-
 UNIT(TODO,
+___
    //! err
    //ERR("c[x]{$[x;1;2]}",  "x",             "malformed function signature should be an error")
    //ERR("c[x]$[x;1;2]",    "x",             "malformed function signature should be an error")
@@ -299,14 +303,11 @@ UNIT(TODO,
    *v=ki(16);        //!< assign a value
 */
 
-
    EQ_SYM("LEFT",         "3",                "sum holds the correct scalar value")
    EQ_SYM("RIGHT",        "4",                "sum holds the correct scalar value")
 #endif
 
    _("LEFT+RIGHT",        12,                "parse tree of a simple expression #2")
-
-   ___
 
    //_("prd",                 6,                "p should have expected value")
 
