@@ -25,7 +25,7 @@ ci:
 	$(TESTCC) $O $(LF) $(SRC) -o b $(CF)
 	@#lldb --one-line-on-crash bt -b -o run ./bl t.b
 	@#gdb -ex r -ex bt -ex detach -ex quit --args ./bl t.b
-	@./bl $T
+	@./b $T
 	@CI=1 make test
 
 # llvm
