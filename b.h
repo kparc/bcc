@@ -1,3 +1,4 @@
+#pragma once
 #include"a.h"
 
 #define ID(x) sc((S)"aNW0_",cl(x)) //!< after first 'a'-classed char, these classes are valid identifier chars
@@ -27,6 +28,6 @@
 #define q(x) _q(x,L)
 #define t(x) _t(x,T)
 
-K p(ST),l1(),u(I,K);I U(I i),_t(K x,S sT);
+extern K p(ST),l1(),u(I,K);extern I U(I i),_t(K x,S sT);
 
 //:~
