@@ -15,8 +15,9 @@ endif
 
 # ci
 ci:
-	clang $O $(LF) $(SRC) -o bl $(CF)
-	lldb --one-line-on-crash bt -b -o run ./bl t.b
+	gcc $O $(LF) $(SRC) -o bl $(CF)
+	@#lldb --one-line-on-crash bt -b -o run ./bl t.b
+	gdb -ex r -ex bt -ex detach -ex quit --args ./bl t.b
 
 # llvm
 l:
