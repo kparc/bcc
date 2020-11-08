@@ -34,7 +34,8 @@ l[10]
 a[3;4]
 
 /fixme segv on ubuntu boxes
-/x:!9
+x:!9
+x
 /b[x;7]
 /y:!8
 /z:!8
@@ -66,8 +67,8 @@ m[10]
 /\-x
 /\-y
 /\-z
+/\-w
 
-\-w
 \-a
 \-b
 \-c
