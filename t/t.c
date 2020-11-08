@@ -73,11 +73,14 @@ UNIT(utf8,
       *cy="Мне отмщение, и аз воздам";
          //0123456789012345678901234
 
-   S utfstr=(S)"\xce\x9e\xce\xb5\xcf\x83\xce\xba\xce\xb5\xcf\x80\xce\xac\xce\xb6"
-               "\xcf\x89\x20\xcf\x84\xe1\xbd\xb4\xce\xbd\x20\xcf\x88\xcf\x85\xcf"
-               "\x87\xce\xbf\xcf\x86\xce\xb8\xcf\x8c\xcf\x81\xce\xb1\x20\xce\xb2"
-               "\xce\xb4\xce\xb5\xce\xbb\xcf\x85\xce\xb3\xce\xbc\xce\xaf\xce\xb1";
-               //i uncover the soul-destroying abhorrence
+   S ustr0=(S)"\xce\x9e\xce\xb5\xcf\x83\xce\xba\xce\xb5\xcf\x80\xce\xac\xce\xb6"
+              "\xcf\x89\x20\xcf\x84\xe1\xbd\xb4\xce\xbd\x20\xcf\x88\xcf\x85\xcf"
+              "\x87\xce\xbf\xcf\x86\xce\xb8\xcf\x8c\xcf\x81\xce\xb1\x20\xce\xb2"
+              "\xce\xb4\xce\xb5\xce\xbb\xcf\x85\xce\xb3\xce\xbc\xce\xaf\xce\xb1",
+              //i uncover the soul-destroying abhorrence
+
+     ustr1=(S)"イロハニホヘト チリヌルヲ ワカヨタレソ ツネナラム ウヰノオクヤマ ケフコエテ アサキユメミシ ヱヒモセスン";
+
    //! ul()
    EQ_I(ul(t[0]),            1,     "single 1-byte codepoint should have length 1")
    EQ_I(ul(t[1]),            1,     "single 2-byte codepoint should have length 1")
@@ -86,7 +89,8 @@ UNIT(utf8,
    EQ_I(ul(t[4]),            7,     "test vector length should match expected")
    EQ_I(ul(gr),             25,     "test vector length should match expected")
    EQ_I(ul(cy),             25,     "test vector length should match expected")
-   EQ_I(ul(utfstr),         33,     "test vector length should match expected")
+   EQ_I(ul(ustr0),          33,     "test vector length should match expected")
+   EQ_I(ul(ustr1),          55,     "test vector length should match expected")
 
    //! at()
    EQ_I(at(cy,0),       0x041c,     "utf indexing test #1") // M
@@ -105,8 +109,6 @@ UNIT(utf8,
    EQ_I(c0,             0x041c,     "codepoint scan #1")// M
    EQ_I(c1,             0x043d,     "codepoint scan #2")// н
    EQ_I(c2,             0x0435,     "codepoint scan #3")// e
-
-   O("%s\n",utfstr);
 
    //! uc()
    EQ_I(uc(gr,0x03c0)-gr,   30,    "position of π should be 30")
