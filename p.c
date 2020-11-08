@@ -37,7 +37,7 @@ K sym(I a){S r=Ss;I n;//! scan a symbol from tape
 
 //! parse next token on tape
 K p(ST st){K x,y;I a,b;      //!< a operator, x/y operands, b return type
- O("p Ss=%s\n",Ss);
+ //O("p Ss=%s\n",Ss);
  C qn='0'-cl('-'==(a=*Ss++)?Ss['.'==*Ss]:'.'==a?*Ss:a); //<!special case: if expr starts with a minus, dot or a minus-dot, it may be a number
  C cls=qn?cl(a):'0';
 #ifdef SYMS
