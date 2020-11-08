@@ -27,22 +27,16 @@ ZK pE(I a,I c,ST st){      //!< parse an expr \c cmd \a optional rettype
 //! class           !""#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
 I cl(I c){R 128>c?"  \"+$++ ()++ + +0000000000+;+++  aaaaaaaaaaaaaNaaaaaaaaWaaa[+]+_`aaaaaaaaaaaaaaaaaaaaaaaaaa{+} "[c-32]:0;}
 
-#ifdef SYMS
-K nme(K x){R((B)xx)->k;}K*GG(K x){R&(((B)xx)->v);}
-K sym(I a){S r=Ss;I n;//! scan a symbol from tape
-  W(Ss&&ID(*++Ss)){}//O("sym a=%d *Ss=%d\n",a,*Ss);
-  P(a&&*Ss&&(':'-*Ss),Ss-=Ss-r,NL) //!< FIXME special case to support pcle() logic
-  B b=hget(GT,r,n=Ss-r);K x=kS(1);xx=(K)b;R x;}
-#endif
-
 //! parse next token on tape
 K p(ST st){K x,y;I a,b;      //!< a operator, x/y operands, b return type
  //O("p Ss=%s\n",Ss);
  C qn='0'-cl('-'==(a=*Ss++)?Ss['.'==*Ss]:'.'==a?*Ss:a); //<!special case: if expr starts with a minus, dot or a minus-dot, it may be a number
  C cls=qn?cl(a):'0';
+
 #ifdef SYMS
  cls=LP(cls)&&'('-Ss[1]?'a':cls; //<!special case: if N|W is not followed by (, force class to identifier
 #endif
+
  switch(cls){                //!< current char class:
   case'N':T[sN++]=KI;        //!< 'for' loop, declare a loop variable and fallthrough to W
   C('W',R                    //!< W|N(cnd){body}
@@ -66,7 +60,7 @@ K p(ST st){K x,y;I a,b;      //!< a operator, x/y operands, b return type
     x='['==*Ss?++Ss,pE(      //<! a) if followed by [exp], it is an array indexing or a function call:
      T[b=a-'a']?T[b]-8:      //<! if varname has no type, it is a func call; for arrays, unset high bit
 #ifndef SYMS
-      (x=G[b],x=xy,          //<! xx is the string, xy is the code
+      (x=GGG[b],x=xy,        //<! xx is the string, xy is the code
 #else
       (x=*GG(y),x=xy,        //<! xx is the string, xy is the code
 #endif

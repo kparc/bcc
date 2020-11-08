@@ -322,12 +322,11 @@ UNIT(TODO,
 
 TESTS(
 #ifndef SYMS
-   //U(env)U(mem)U(err)U(prs)U(fio)
-   //U(sym)
+   //U(env)U(mem)U(utf8)U(err)U(prs)U(fio)U(sym)
 #else
    //X(hsh)X(sym)
-   //U(TODO)
-   U(utf8)
+   U(TODO)
+   
 #endif
    //X(nop)
 )

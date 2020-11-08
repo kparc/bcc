@@ -33,14 +33,15 @@ typedef union{V*code;K(*k)();F(*f)();J(*j)();}obj; //!<signatures of compiled fu
 // A    target variable (for assignments)
 
 #ifndef SYMS
-extern K G[];
+extern K GGG[];
 typedef struct{C L[26];C T[26];I M;C D[2];C N;I A;}pst;typedef pst*ST;
 #else
+extern K GGG[];
 typedef struct{C L[26];C T[26];I M;C D[2];C N;K A;}pst;typedef pst*ST; //<! assignment target (A) must be K to hold KS
 extern HT GT;extern K sym(I a),*GG(K h),nme(K h);             //<! symtable manager
 #endif
 
-extern S ucp(S s,CP*cp),ustr(S h,S n),uchr(S s,CP c);UI ulen(S s);CP ui(S s,UI i);//!< utf
+extern S cp(S s,CP*cp),us(S h,S n),uc(S s,CP c);UI ul(S s);CP at(S s,UI i);//!< utf
 extern J nt[],ip();extern K ex(K),ps(S),r1(),tn(),j2(),k0(),sS(),enm(),o();I cl(I c);V exit(),w2(),r0();S pi(),pf(),px();J ws();F fp();
 Z_ I oc(I i){R w2((S)&i),i;}Z_ V nl(){w2("\n");}Z_ S os(S s){R w2(s),nl(),s;}Z_ J oi(J j){R os(pi(j)),j;}Z_ F of(F f){R os(pf(f)),f;}Z_ J ox(J j){R os(px(j)),j;}
 Z_ S _sc(S s,I c){W(*s-c)P(!*s++,(S)0)R s;}

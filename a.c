@@ -20,12 +20,11 @@ F fp(S p,I n){P('-'==*p,-fp(p+1,n-1))I l=scn(p,'e',n),m=scn(p,'.',l),f=l<n?ip(p+
 //! repl daz ftz \wtfvl: \w wssize \t[:n] timer[ntimes] \f funs \v vars \l loadfile \-var release
 //! \G global namespace \fixme 1char literals are tough on the ego
 V dis(K,I);K es();ZK K0;K k0(){R r1(K0);}
+K GGG[26];
 #ifndef SYMS
-K G[26];
-ZK vf(I f){K r=kS(0);N(26,K x=G[i];if(NL-x)if(f^!FN(x))r=j2(r,ks(i)))R r;}
+ZK vf(I f){K r=kS(0);N(26,K x=GGG[i];if(NL-x)if(f^!FN(x))r=j2(r,ks(i)))R r;}
 #else
-HT GT;
-ZK vf(I f){R AB("fixme vf");}
+HT GT;ZK vf(I f){R AB("fixme vf");}
 #endif
 
 K Li(K x,I i){R!xt||KS<xt?Xx:KC==xt?kc(Xc):KI==xt?ki(Xi):ks(Xi);}ZK e1(K(*f)(),K x,K y){K r=kK(xn);N1(rn,Rx=f?f(Li(x,i),y):Li(x,i))R r;}
@@ -55,11 +54,11 @@ ZS1(tm){S t=sc(s,' ');Qs(!t,s)*t=0;I n=':'-*s++?1:10u>*s-'0'?ip(s,t-s):(J)es(s);
 ZS1(rg);S1(es){K x;P('\\'-*s,!*s?NL:(x=ps(s))&&NL-x&&QQ-Ax?X0(ex(x)):x)if(!*++s||'\\'==*s)exit(0);R!s[1]?'w'==*s?ki(ws()):sc("vf",*s)?vf('f'==*s):qs(s):'t'==*s?tm(s+1):'-'==*s?rg(s+1):'l'==*s?ld(s+2):qs(s);}
 
 #ifndef SYMS
-ZS1(rg){I i=*s-'a';K x;Qs(26u<i||!(NL!=(x=G[i])),s)Qs(Ax,"nyi")P(!xr,G[i]=X0(NL))R qs("0<xr");}//!<release global function or vector if refcount is 0
-V init(){csr();*(K*)(K0=kK(0))=c0();N(26,G[i]=NL)}
+ZS1(rg){I i=*s-'a';K x;Qs(26u<i||!(NL!=(x=GGG[i])),s)Qs(Ax,"nyi")P(!xr,GGG[i]=X0(NL))R qs("0<xr");}//!<release global function or vector if refcount is 0
+V init(){csr();*(K*)(K0=kK(0))=c0();N(26,GGG[i]=NL)}
 #else
 ZS1(rg){R AB("nyi");}
-V init(){csr();*(K*)(K0=kK(0))=c0();GT=hnew("G",2,3,0);}
+V init(){csr();*(K*)(K0=kK(0))=c0();GT=hnew("G",2,3,0);N(26,GGG[i]=NL)}
 #endif
 
 ZV km(S*a){init();if(*++a)pr(ld(*a));os("kparc/b x64");W(1)pr(es(r2((S)" ")));}K enm(J x){K r=kI(xi);N(rn,Ri=i)R r;}

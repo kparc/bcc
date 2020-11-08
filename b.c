@@ -49,7 +49,7 @@ ZV lnk(K x,K z,I a){S s=xC;W(s<xC+xn){//O("lnk a=%d\n",a);o(x),o(z);
   if(0xe8==*s||//function call
    (p?8-s[1]/16:4>*s/16||8==*s/16)&&5==(0xc7&s[1+p])){ //<! check if instruction uses relative address argument:
 #ifndef SYMS
-  *(I*)r=(0xe8==*s?a-'a'==*r?x:26==*r?(K)l1:((K*)G[*r])[1]:32>*r?(K)&zF[2+*r-16]:(K)(G+*r-'a'))-(K)r-4;}
+  *(I*)r=(0xe8==*s?a-'a'==*r?x:26==*r?(K)l1:((K*)GGG[*r])[1]:32>*r?(K)&zF[2+*r-16]:(K)(GGG+*r-'a'))-(K)r-4;}
 #else
   *(I*)r=(0xe8==*s?a-'a'==*r?x:26==*r?(K)l1:((K*)*GG(*r))[1]:32>*r?(K)&zF[2+*r-16]:(K)(*GG(*r)))-(K)r-4;}//!< fixme
 #endif
@@ -73,7 +73,7 @@ ZK MV(I t,I r,K y){R O2(t,0,r,u(r,c0()),y);} //!< move value y with type t to re
 #ifndef SYMS
 ZI _q(K x,S sL){I i=xi-'a';R Ax?26u>i&&sL[i]?sL[i]:0:':'==*xC?I(xy):0;}
 #else
-ZI _q(K x,S sL){if(!Ax&&KS==xt){O("q x %p\n",*GG(x));R*GG(x)/* !!! */;}I i=xi-'a';R Ax?26u>i&&sL[i]?sL[i]:0:':'==*xC?I(xy):0;}
+ZI _q(K x,S sL){if(!Ax&&KS==xt){/*O("q x %p\n",*GG(x));*/R*GG(x);}I i=xi-'a';R Ax?26u>i&&sL[i]?sL[i]:0:':'==*xC?I(xy):0;}
 #endif
 
 I  _t(K x,S sT){I a=xi-'a'; //!< determine type of x
@@ -85,7 +85,7 @@ I  _t(K x,S sT){I a=xi-'a'; //!< determine type of x
    126<xi?KI:                //!< small integer atom encoded in a single byte
    26u>a&&sT[a]?sT[a]:       //!< local variable
 #ifndef SYMS
-   A(x=26u>a?G[a]:           //!< global variable
+   A(x=26u>a?GGG[a]:         //!< global variable
 #else
    A(KS==Ax?*GG(x):          //!< global variable
 #endif
@@ -170,31 +170,47 @@ Z_ I m2(S s,S t){R*s==*t&&s[1]==t[1];}ZS bq(S x){W((x=sc(++x,'"'))&&!({I i=0;W('
 #define BLIM 16 //<! nesting limit FIXME add tests
 S bb(S x){C b[BLIM];I n=0,a;S s;x-=1;W(*++x){$(m2(" /",x),s=sc(x,'\n');P(!s,n?x:0)x=s)$('"'==(a=cl(*x)),s=bq(x);P(!s,x)x=s)$(sc("{[(",a),P(BLIM==++n,x)b[n]=*x)if(sc("}])",a))P(!n||b[n--]!=*x-1-*x/64,x)}R n?x:0;}//!< bracket balancer
 
+#ifdef SYMS
+K nme(K x){R((B)xx)->k;}
+K*GG(K x){R&(((B)xx)->v);}
+K sym(I a){S r=Ss;I n;//! scan a symbol from tape
+  W(Ss&&ID(*++Ss)){}//O("sym a=%d *Ss=%d\n",a,*Ss);
+  P(a&&*Ss&&(':'-*Ss),Ss-=Ss-r,NL) //!< FIXME special case to support pcle() logic
+  B b=hget(GT,r,n=Ss-r);K x=kS(1);xx=(K)b;R x;}
+#endif
+Z_ K XXX(K*k,K y){R r0(*k),*k=y,NL;} //!< release an existing value at pointer x and replace it with y
+
 //! parse[->compile->link->exec]
 K pcle(S tp,I dbg){Ss=tp;pst t={{0},{0},0,{1,1},8,0};ST st=&t;//pst t;ST st=&t;sA=M=0;sN=8;D0=D1=1;N(26,L[i]=T[i]=0)N(26,O("%d %d\n",L[i],T[i]))
  S b=bb(tp);P(b,qs(*b?b:(S)"balance")) //<! scan the whole tape and bail on unbalanced "{[( or excessive nesting
+
 #ifndef SYMS
- if(!tp[1])$(26u>*tp-'a',K x=G[*tp-'a'];Qs(NL==x,tp)P(FN(x),os((S)xx),dis(xy),NL))R qs(tp);//!< KPC FIXME quick temporary hack to pretty print-opcodes by referencing function name
+ if(!tp[1])$(26u>*tp-'a',K x=GGG[*tp-'a'];Qs(NL==x,tp)P(FN(x),os((S)xx),dis(xy),NL))R qs(tp);//!< KPC FIXME quick temporary hack to pretty print-opcodes by referencing function name
 #else
  K g=ID(*Ss)?sym(1):NL;//{K x=nme(g);Ss-=xn;} // read an indentifier, if not followed by assign (:), rewind to start
  //O("G tp=%s, Ss=%s %p %c\n",tp,Ss,(V*)g,cl(*Ss));
  if(g&&!*Ss){K x=*GG(g);Qs(NL==x,nme(g))$(FN(x),os((S)xx),dis(xy))R o(x),NL;}//!< KPC FIXME quick temporary hack to pretty print-opcodes by referencing function name
  //if(NL!=g){O("VAR\n");P(!*GG(g),qs("val"))R*GG(g);}
 #endif
+
  S r=!LP(*Ss)&&ARGOPN==Ss[1]&&(r=sc(Ss,ARGCLS))&&*++r?r:0; //!< FIXME function assignment is a lookahead hack
+
 #ifndef SYMS
- K*k=r||':'==Ss[1]?sA=*Ss,Ss+=2,G+sA-'a':0; //! FIXME we should just inform the parser that its entry point is the global scope.
+ K*kkk=r||':'==Ss[1]?sA=*Ss,Ss+=2,GGG+sA-'a':0; //! FIXME we should just inform the parser that its entry point is the global scope.
 #else
- K*k=r||':'==*Ss?sA=nme(g),Ss+=1,GG(g):0;
+ K*kkk=r||':'==*Ss?sA=nme(g),Ss+=1,GG(g):0;
 #endif
- P('!'==*Ss,++Ss,X(k,enm(ki(ip(Ss,strlen((V*)Ss))))))
- z=k2(kp(Ss-!!k),NL);//<!(src;bin)
+
+ P('!'==*Ss,++Ss,XXX(kkk,enm(ki(ip(Ss,strlen((V*)Ss)))))) //!< parse and assign a global vector x:!int FIXME generalize
+ z=k2(kp(Ss-!!kkk),NL);//<!(src;bin)
+
 #ifndef SYMS
- if(!Ss[1]&&26u>*Ss-'a')r1(G[*Ss-'a']);      //!< inc xr of the referenced global var
+ if(!Ss[1]&&26u>*Ss-'a')r1(GGG[*Ss-'a']);      //!< inc xr of the referenced global var
 #else
  if(!Ss[1]&&26u>*Ss-'a')r1(nme(g));          //!< inc xr of the referenced global var
 #endif
- if(r){X(k,k2(r1(zx),u(KI,c2(1,1))));             //!< set types for xyz args
+
+ if(r){XXX(kkk,k2(r1(zx),u(KI,c2(1,1))));             //!< set types for xyz args
   N(r-Ss-1,L[23+i]=D0++,T[23+i]=l((S)" chijefs CHIJEFS",Ss[i]))Ss=r;} //!< FIXME increase argcount limit, more than 3 argdecls is a segv
  K x=p(st);P(dbg,r0(z),x)//o(x);            //!< dump parse tree
  N(23,if(Ti)Li=D[KF==Ti]++)                  //<! set addresses of global vars (i>23 is xyz)
@@ -205,7 +221,7 @@ K pcle(S tp,I dbg){Ss=tp;pst t={{0},{0},0,{1,1},8,0};ST st=&t;//pst t;ST st=&t;s
  // k!=0 is an assignment: function values are (src;bin) tuples,
  // everything else gets assigned with the evaluation result.
  // non-assignining expressions return their value to the printer.
- R k?X(k,r?z:Z0(ex(z))):z;}
+ R kkk?XXX(kkk,r?z:Z0(ex(z))):z;}
 
 //! p->c->l->e
 K ps(S tp){R pcle(tp,0);}
