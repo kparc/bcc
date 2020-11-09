@@ -1,3 +1,4 @@
+#pragma GCC diagnostic ignored "-Wunused-function"
 //#define UNITY_INCLUDE_DOUBLE
 #include"lib/unity.h"
 #include"../a.h"
@@ -12,9 +13,8 @@ ZJ W0=0,Wprev;//!< wssize
 
 extern V init();K1(enm);K1(pr);K Li(K x,I i),sS(I c,K x);S1(es);K pcle(S tp,I dbg);K se(K x,K pt);K bb(S x);//!< NB never forget signatures
 
-C xQ(K x){R QQ==A(x);}ZS str(K x){R(S)es(x);}ZK ptree(S s){K x=pcle(s,1);/*os("PTREE"),o(x);*/R X0(jc(se(x,1),0));}
+ZC xQ(K x){R QQ==A(x);}ZS str(K x){R(S)es(x);}ZK ptree(S s){K x=pcle(s,1);/*os("PTREE"),o(x);*/R X0(jc(se(x,1),0));}
 //ZK out(S x){R pr(es(x));}
-V setUp(V){}V tearDown(V){}//!< before/after each test
 
 #define TYPE(expr) (_Generic((expr), \
   char: 'C', short: 'H', int: 'I', long: 'L', \
@@ -57,17 +57,17 @@ V setUp(V){}V tearDown(V){}//!< before/after each test
 #define WSSAME(msg)        {TEST_ASSERT_EQUAL_INT_MESSAGE(0,ws()-Wprev,msg);}
 #define WS(exp,msg)        {TEST_ASSERT_EQUAL_INT_MESSAGE(exp,ws(),msg);}
 
-#define ___  TEST_ASSERT_MESSAGE(0,"STOP");
+#define ___ TEST_ASSERT_MESSAGE(0,"HALT");
 
-#define TESTS(units...) V hsegv();I main(I a,char**c){hsegv(),init();UNITY_BEGIN();units;R UNITY_END();}
+#define TESTS(units...) ZV hsegv();I main(I a,char**c){hsegv(),init();UNITY_BEGIN();units;R UNITY_END();}V setUp(V){}V tearDown(V){}//!< before/after each test
 
 //#define UNIT(name,tests...) V test##_##name(V){W0=ws();tests;WS(0,"test unit shouldn't leak memory")};
 //#define RUN(unit) RUN_TEST(test##_##unit);
 
-#define UNIT(name,tests...) V skip##_##name(V){TEST_IGNORE();};V unit##_##name(V){W0=ws();tests;WS(W0,"test unit shouldn't leak memory")};
+#define ƒ(name) extern V unit##_##name(V);RUN_TEST(unit##_##name);
+#define ø(name) extern V skip##_##name(V);RUN_TEST(skip##_##name);
 
-#define U(name) V unit##_##name(V);RUN_TEST(unit##_##name);
-#define X(name) V skip##_##name(V);RUN_TEST(skip##_##name);
+#define UNIT(name,tests...) V skip##_##name(V){TEST_IGNORE();};V unit##_##name(V){W0=ws();tests;WS(W0,"test unit shouldn't leak memory")};TESTS(ƒ(name))
 
 
 enum charsets { CHARSET_ALNUM, CHARSET_AZaz, CHARSET_AZ, CHARSET_az};
@@ -103,10 +103,10 @@ ZS rnd_str(S dest,size_t size,C cs){
 #endif
 V stack(I d,I o){V*arr[d];I sz=backtrace(arr, d);char**frames=backtrace_symbols(arr,sz);N(sz-o,os(frames[i+o]));nl();free(frames);}//!< depth+offset
 V handler(I sig,siginfo_t*si,V*c){nl();if(si->si_signo-SIGABRT){nl(),O("rip 0x%zu",(size_t)RIP),osg(""),nl();}osg("");stack(10,0),exit(1);}
-V hsegv(){struct sigaction a;memset(&a,0,sizeof(struct sigaction));a.sa_flags=SA_SIGINFO;a.sa_sigaction=handler;sigaction(SIGSEGV,&a,0);sigaction(SIGABRT,&a,0);}
+ZV hsegv(){struct sigaction a;memset(&a,0,sizeof(struct sigaction));a.sa_flags=SA_SIGINFO;a.sa_sigaction=handler;sigaction(SIGSEGV,&a,0);sigaction(SIGABRT,&a,0);}
 
 #else
-V hsegv(){}
+ZV hsegv(){}
 #endif//SIGHANDLER
 
 //!attic

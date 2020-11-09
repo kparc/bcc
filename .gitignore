@@ -9,3 +9,4 @@ tmp
 *.profraw
 test
 syms
+t/bin
