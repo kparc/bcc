@@ -59,9 +59,8 @@ test: cleantest
 	@./test
 
 syms: cleansyms
-	@$(TESTCC) -DISOMRPH -DUSE_AW_MALLOC -DTST -DSYMS $O $(LF) t/t.c t/lib/unity.c $(SRC) -o syms $(CF) \
-	-fmacro-backtrace-limit=0 $(FIXME)
-	@lldb ./syms
+	@$(TESTCC) -DISOMRPH -DUSE_AW_MALLOC -DTST -DSYMS $O $(LF) t/t.c t/lib/unity.c $(SRC) -o syms $(CF) $(FIXME)
+	@lldb --source-on-crash t/t.lldb -b -o run ./syms
 
 cleantest:
 	@rm -f test
