@@ -70,20 +70,7 @@ ZC xQ(K x){R QQ==A(x);}ZS str(K x){R(S)es(x);}ZK ptree(S s){K x=pcle(s,1);/*os("
 #define UNIT(name,tests...) V skip##_##name(V){TEST_IGNORE();};V unit##_##name(V){W0=ws();tests;WS(W0,"test unit shouldn't leak memory")};TESTS(ƒ(name))
 
 
-enum charsets { CHARSET_ALNUM, CHARSET_AZaz, CHARSET_AZ, CHARSET_az};
-ZS csets[4]={
- (S)"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
- (S)"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
- (S)"ABCDEFGHIJKLMNOPQRSTUVWXYZ",
- (S)"abcdefghijklmnopqrstuvwxyz"
-};
 
-#ifdef TEST_HT_STRESS
-ZS rnd_str(S dest,size_t size,C cs){
-  P(4<cs,(S)0)S dict=csets[cs];size_t dictlen=strlen(dict);
-  N(size,size_t key=rand()%(dictlen-1);dest[i]=dict[key])
-  dest[size]=0;R dest;}
-#endif
 
 #ifdef SIGHANDLER
 

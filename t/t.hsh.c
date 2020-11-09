@@ -1,6 +1,16 @@
 #include"t.h"
 #include"../h.h"
 
+#define TEST_HT_STRESS
+
+enum charsets { CHARSET_ALNUM, CHARSET_AZaz, CHARSET_AZ, CHARSET_az};
+ZS csets[4]={
+ (S)"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
+ (S)"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
+ (S)"ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+ (S)"abcdefghijklmnopqrstuvwxyz"
+};ZS rnd_str(S,SZT,C);
+
 //#define expmem(n) ((n)*(sizeof(pbkt)+1)+total)
 #define expmem(n) ((n)*(sizeof(pbkt)))
 UNIT(hsh,
@@ -38,10 +48,21 @@ UNIT(hsh,
    #ifdef TEST_HT_STRESS
    //! load factor under stress
    N(1000000,I rlen=rand()%100;S s=(S)malloc(rlen+1);total+=rlen;rnd_str(s,rlen,CHARSET_ALNUM);hget(t,s,rlen);free(s))//!< rand load
-   EQ_I(hload(t)>0.8,         1,  "htable load factor should be above 0.8")O("HT: keys=%zu slots=%d load=%f\n",t->cnt,hslot(t),hload(t));
+   EQ_I(hload(t)>0.8,         1,  "htable load factor should be above 0.8")
+
+   hdbg(t,1,0);
+
    #endif
    
    hdel(t); //!< release memory
 )
+
+#ifdef TEST_HT_STRESS
+ZS rnd_str(S dest,size_t size,C cs){
+  P(4<cs,(S)0)S dict=csets[cs];size_t dictlen=strlen(dict);
+  N(size,size_t key=rand()%(dictlen-1);dest[i]=dict[key])
+  dest[size]=0;R dest;}
+#endif
+
 
 //:~
