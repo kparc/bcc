@@ -10,3 +10,4 @@ tmp
 test
 syms
 t/bin
+t/obj

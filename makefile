@@ -1,11 +1,22 @@
-CF=-minline-all-stringops -fno-asynchronous-unwind-tables -fno-stack-protector -Wall -Wno-unknown-warning-option -Wno-parentheses -Wno-pointer-sign -rdynamic
-#LF=-nostdlib -c a.S
+CF=-minline-all-stringops -fno-asynchronous-unwind-tables -fno-stack-protector -Wall -Wno-unknown-warning-option -Wno-parentheses -Wno-pointer-sign
+LF=-rdynamic
+#LF=+-nostdlib -c a.S
 SRC=[abmphu].c
-O=-O0 -g
-T=t.b
+
+BSRC=$(shell ls -1 $(SRC) | sed s/.c/.o/ | xargs)
+BOBJ=$(patsubst %,t/obj/%,$(BSRC))
+TSRC=$(shell basename t/t.*.c | sed s/.c// | xargs)
+TOBJ=$(patsubst %,t/obj/%,$(TSRC),%.o%)
+TBIN=$(patsubst %,t/bin/%,$(TSRC))
+USRC=t/lib/unity.c
+UOBJ=t/obj/unity.o
+TEST=t.b
+
 QUIET=@
+O=-O0 -g -std=gnu11
+TESTC=$(QUIET)clang $O
 FIXME=-Wno-int-conversion -Wno-pointer-to-int-cast -Wno-unused-value -Wno-misleading-indentation -Wno-pragmas
-TESTCC=clang -std=gnu11 $(FIXME)
+TOPTS=-DISOMRPH -DUSE_AW_MALLOC -DTST -DSYMS $(FIXME)
 
 ifeq ($(ISOMRPH),1)
  O+=-DISOMRPH
@@ -18,7 +29,7 @@ ifeq ($(CI),1)
 endif
 
 ifeq ($(shell uname),Darwin)
- CF+= -pagezero_size 1000
+ LF+= -pagezero_size 1000
 endif
 
 # ci
@@ -29,7 +40,6 @@ ci:
 	@#lldb --one-line-on-crash bt -b -o run ./bl t.b
 	@#gdb -ex r -ex bt -ex detach -ex quit --args ./bl t.b
 	@./b $T
-	
 
 # llvm
 l:
@@ -54,13 +64,13 @@ r:
 test: cleantest
 	@echo
 	@#-fprofile-instr-generate -fcoverage-mapping -fdebug-macro -fmacro-backtrace-limit=0
-	$(QUIET)$(TESTCC) -DUSE_AW_MALLOC -DTST $O $(LF) t/t.c t/lib/unity.c $(SRC) -o test $(CF) $(FIXME)
+	$(QUIET)$(TESTC) -DUSE_AW_MALLOC -DTST $O $(LF) t/t.c t/lib/unity.c $(SRC) -o test $(CF) $(FIXME)
 	@echo
 	@./test
 
 syms: cleansyms
-	@$(TESTCC) -DISOMRPH -DUSE_AW_MALLOC -DTST -DSYMS $O $(LF) t/t.c t/lib/unity.c $(SRC) -o syms $(CF) $(FIXME)
-	@lldb --source-on-crash t/t.lldb -b -o run ./syms
+	$(TESTC) -DISOMRPH -DUSE_AW_MALLOC -DTST -DSYMS $O $(LF) $(SRC) t/t.c t/lib/unity.c -o syms $(CF) $(FIXME)
+	@lldb --source-on-crash t/dat/t.lldb -b -o run ./syms
 
 cleantest:
 	@rm -f test
@@ -70,7 +80,36 @@ cleansyms:
 
 all: l g test syms t
 
+##
+## modularized test build
+##
+
+u: uprep urun
+
+ucl:
+	rm -rf t/bin t/obj
+
+uprep:
+	mkdir -p t/bin t/obj
+
+urun: $(BOBJ) $(UOBJ) $(TBIN)
+
+#@#-fprofile-instr-generate -fcoverage-mapping -fdebug-macro -fmacro-backtrace-limit=0
+t/obj/%.o: %.c
+	$(TESTC) $O $(CF) $(TOPTS) $< -o $@ -c
+
+t/obj/t.%.o: t/t.%.c
+	$(TESTC) $O $(CF) $(TOPTS) $< -o $@ -c
+
+$(UOBJ): $(USRC)
+	@$(TESTC) $O $(CF) $(TOPTS) $< -o $@ -c
+
+t/bin/t.%: t/obj/t.%.o $(BOBJ)
+	@$(TESTC)  $(BOBJ)  $(UOBJ) $< -o $@ $(LF)
+	@ls -1 $@
+
+
 clean:
 	@rm -f test bl bg bt r
 
-.PHONY: t clean all cleansyms cleantest t syms
+.PHONY: t clean all cleansyms cleantest t syms ucl uprep urun u

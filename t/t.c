@@ -1,6 +1,9 @@
 #include"t.h"
 #include"../b.h"
 
+extern S Ss;extern K z;//!< \Ss tape \z zx source zy 0xrtype:opcodes:stack
+#define SETSYM(key,val) ({ST0(key);K z,x=tok(0)/*,x=nme(b)*/,*y=GG(x);*y=(val);z=nme(x);O("setsym dbg %.*s %d\n",zn,zC,*zC),x;});
+
 UNIT(TODO,
    //! err
    //ERR("c[x]{$[x;1;2]}",  "x",             "malformed function signature should be an error")
@@ -9,9 +12,6 @@ UNIT(TODO,
 
    //_("s:4",               0,                "parse tree of a simple expression #2")
    //PT("p:s*s",           "('*';`s;`s)",       "parse tree of a simple expression #2")
-#ifdef SYMS
-//#if 0
-   #define SETSYM(key,val) ({ST0(key);K z,x=tok(0)/*,x=nme(b)*/,*y=GG(x);*y=(val);z=nme(x);O("setsym dbg %.*s %d\n",zn,zC,*zC),x;});
 
    ST0("kelas");nxt();O("nxt %c %d\n",Pt,Pn);
    SETSYM("LEFT-",ki(3))
@@ -39,9 +39,6 @@ UNIT(TODO,
 ___
    PT("LEFT*RIGHT",        12,                "parse tree of a simple expression #2")
 
-
-#endif
-
    PT("pr:s*s",           "('*';`s;`s)",    "parse tree of a simple expression #2")
    _("p:s*s",             0,                "parse tree of a simple expression #2")
    _("p",                 9,                "p should have expected value")
@@ -53,6 +50,5 @@ ___
    //PT("prd:sum*sum",        "('*';`sum;`sum)",   "assignment referencing globals should produce correct parse tree")
    //EQ_SYM("prd",           "9",                  "prd holds the correct vector value in the slot FIXME")
 )
-
 
 //:~
