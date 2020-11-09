@@ -170,16 +170,6 @@ Z_ I m2(S s,S t){R*s==*t&&s[1]==t[1];}ZS bq(S x){W((x=sc(++x,'"'))&&!({I i=0;W('
 #define BLIM 16 //<! nesting limit FIXME add tests
 S bb(S x){C b[BLIM];I n=0,a;S s;x-=1;W(*++x){$(m2(" /",x),s=sc(x,'\n');P(!s,n?x:0)x=s)$('"'==(a=cl(*x)),s=bq(x);P(!s,x)x=s)$(sc("{[(",a),P(BLIM==++n,x)b[n]=*x)if(sc("}])",a))P(!n||b[n--]!=*x-1-*x/64,x)}R n?x:0;}//!< bracket balancer
 
-#ifdef SYMS
-K nme(K x){R((B)xx)->k;}
-K*GG(K x){R&(((B)xx)->v);}
-K sym(I a){S r=Ss;I n;//! scan a symbol from tape
-  W(Ss&&ID(*++Ss)){}//O("sym a=%d *Ss=%d\n",a,*Ss);
-  P(a&&*Ss&&(':'-*Ss),Ss-=Ss-r,NL) //!< FIXME special case to support pcle() logic
-  B b=hget(GT,r,n=Ss-r);K x=kS(1);xx=(K)b;R x;}
-#endif
-Z_ K XXX(K*k,K y){R r0(*k),*k=y,NL;} //!< release an existing value at pointer x and replace it with y
-
 //! parse[->compile->link->exec]
 K pcle(S tp,I dbg){Ss=tp;pst t={{0},{0},0,{1,1},8,0};ST st=&t;//pst t;ST st=&t;sA=M=0;sN=8;D0=D1=1;N(26,L[i]=T[i]=0)N(26,O("%d %d\n",L[i],T[i]))
  S b=bb(tp);P(b,qs(*b?b:(S)"balance")) //<! scan the whole tape and bail on unbalanced "{[( or excessive nesting

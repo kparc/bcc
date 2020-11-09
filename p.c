@@ -24,8 +24,20 @@ ZK pE(I a,I c,ST st){      //!< parse an expr \c cmd \a optional rettype
 
 #include"p.h"//pE->E,pF->f
 
-//! class           !""#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
-I cl(I c){R 128>c?"  \"+$++ ()++ + +0000000000+;+++  aaaaaaaaaaaaaNaaaaaaaaWaaa[+]+_`aaaaaaaaaaaaaaaaaaaaaaaaaa{+} "[c-32]:0;}
+#ifdef SYMS
+I ID(x){R sc((S)"aNW0_",cl(x));} //!< after first 'a'-classed char, these classes are valid identifier chars
+K nme(K x){R((B)xx)->k;}K*GG(K x){R&(((B)xx)->v);}
+C nxt(CP*p){S s=Ss;Ss=cp(Ss,p);R Ss-s;}//! scan next codepoint on tape and return its length in bytes
+K sym(I a){S r=Ss;C p,n=0;CP c;
+  W(n=nxt(&c)&&ID(c))p=n;Ss-=p;//O("sym a=%d n=%d s=%.*s\n",a,n,Ss-r,r);
+  P(a&&n&&(':'-*Ss),O("bail on :"),Ss-=Ss-r,NL) //!< FIXME special case to support pcle() logic
+  B b=hget(GT,r,n=Ss-r);K x=kS(1);xx=(K)b;R x;}
+#endif
+K XXX(K*k,K y){R r0(*k),*k=y,NL;} //!< release an existing value at pointer x and replace it with y
+
+
+//! class            !""#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
+I cl(CP c){P(!c,0)R 128>c?"  \"+$++ ()++ + +0000000000+;+++  aaaaaaaaaaaaaNaaaaaaaaWaaa[+]+_`aaaaaaaaaaaaaaaaaaaaaaaaaa{+} "[c-32]:"\0aga++"[UC(c)];}
 
 //! parse next token on tape
 K p(ST st){K x,y;I a,b;      //!< a operator, x/y operands, b return type

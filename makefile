@@ -61,7 +61,7 @@ test: cleantest
 syms: cleansyms
 	@$(TESTCC) -DISOMRPH -DUSE_AW_MALLOC -DTST -DSYMS $O $(LF) t/t.c t/lib/unity.c $(SRC) -o syms $(CF) \
 	-fmacro-backtrace-limit=0 $(FIXME)
-	@./syms
+	@lldb ./syms
 
 cleantest:
 	@rm -f test

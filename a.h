@@ -44,6 +44,8 @@ extern HT GT;extern K sym(I a),*GG(K h),nme(K h);             //<! symtable mana
 #endif
 
 extern S cp(S s,CP*cp),us(S h,S n),uc(S s,CP c);UI ul(S s);CP at(S s,UI i);//!< utf
+extern I ID(CP x);K XXX(K*k,K y);C nxt(CP*p);
+
 extern J nt[],ip();extern K ex(K),ps(S),r1(),tn(),j2(),k0(),sS(),enm(),o();I cl(I c);V exit(),w2(),r0();S pi(),pf(),px();J ws();F fp();
 Z_ I oc(I i){R w2((S)&i),i;}Z_ V nl(){fflush(0),w2("\n");}Z_ S os(S s){R w2(s),nl(),s;}Z_ J oi(J j){R os(pi(j)),j;}Z_ F of(F f){R os(pf(f)),f;}Z_ J ox(J j){R os(px(j)),j;}
 Z_ S _sc(S s,I c){W(*s-c)P(!*s++,(S)0)R s;}

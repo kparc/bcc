@@ -1,8 +1,6 @@
 #pragma once
 #include"a.h"
 
-#define ID(x) sc((S)"aNW0_",cl(x)) //!< after first 'a'-classed char, these classes are valid identifier chars
-
 #ifdef ISOMRPH
 #define ARGOPN '('
 #define ARGCLS ')'

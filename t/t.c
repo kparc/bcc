@@ -282,7 +282,6 @@ UNIT(sym,
 UNIT(nop,TRUE(1,"dummy test"))
 
 UNIT(TODO,
-//___
    //! err
    //ERR("c[x]{$[x;1;2]}",  "x",             "malformed function signature should be an error")
    //ERR("c[x]$[x;1;2]",    "x",             "malformed function signature should be an error")
@@ -292,9 +291,18 @@ UNIT(TODO,
    //PT("p:s*s",           "('*';`s;`s)",       "parse tree of a simple expression #2")
 #ifdef SYMS
 //#if 0
-   #define SETSYM(key,val) ({Ss=(S)(key);K x=sym(0)/*,x=nme(b)*/,*y=GG(x);*y=(val);/*O("setsym dbg %p\n",*y),*/x;});
+   #define SETSYM(key,val) ({Ss=(S)(key);K z,x=sym(0)/*,x=nme(b)*/,*y=GG(x);*y=(val);z=nme(x);O("setsym dbg %.*s\n",zn,zC),x;});
 
-   SETSYM("LEFT",ki(3))SETSYM("RIGHT",ki(4))
+   Ss=(S)"kelas";CP c;
+   C l=nxt(&c);O("nxt %c %d\n",c,l);
+   SETSYM("LEFT-",ki(3))
+   SETSYM("RIGHT+",ki(4))
+   SETSYM("ƒ[]",ki(4))
+   SETSYM("Кеннет_Айверсон;",ki(42))
+   SETSYM("λ",ki(42))
+   SETSYM("∀",ki(42))
+
+
 /*
    Ss=(S)SYM;       //!< set the parser tape to string SYM
    K b=sym(0),      //!< scan an identifier from the tape and return bucket (KS)
@@ -303,20 +311,25 @@ UNIT(TODO,
    *v=ki(16);        //!< assign a value
 */
 
+   SETSYM("LEFT",ki(3))
+   SETSYM("RIGHT",ki(4))
    EQ_SYM("LEFT",         "3",                "sum holds the correct scalar value")
    EQ_SYM("RIGHT",        "4",                "sum holds the correct scalar value")
 #endif
 
-   _("LEFT+RIGHT",        12,                "parse tree of a simple expression #2")
+   PT("LEFT*RIGHT",        "('*';`LEFT;`RIGHT)",                "parse tree of a simple expression #2")
 
-   //_("prd",                 6,                "p should have expected value")
+   PT("LEFT*RIGHT",        12,                "parse tree of a simple expression #2")
 
    PT("pr:s*s",           "('*';`s;`s)",    "parse tree of a simple expression #2")
    _("p:s*s",             0,                "parse tree of a simple expression #2")
    _("p",                 9,                "p should have expected value")
 
+//   PT("pr:s*s",           "('*';`s;`s)",       "parse tree of a simple expression #2")
+//   _("p:s*s",             0,                "parse tree of a simple expression #2")
+//   _("p",                 9,                "p should have expected value")
 
-   PT("prd:sum*sum",        "('*';`sum;`sum)",   "assignment referencing globals should produce correct parse tree")
+   //PT("prd:sum*sum",        "('*';`sum;`sum)",   "assignment referencing globals should produce correct parse tree")
    //EQ_SYM("prd",           "9",                  "prd holds the correct vector value in the slot FIXME")
 )
 
