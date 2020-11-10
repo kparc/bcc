@@ -72,7 +72,7 @@ syms: cleansyms
 	$(TESTC) -DISOMRPH -DUSE_AW_MALLOC -DTST -DSYMS $O $(LF) $(SRC) t/t.c t/lib/unity.c -o syms $(CF) $(FIXME)
 	@lldb --source-on-crash t/dat/t.lldb -b -o run ./syms
 
-all: l g test syms t
+all: l g t
 
 ##
 ## modularized test build
@@ -116,4 +116,4 @@ cleansyms:
 clean:
 	@rm -f test bl bg bt r
 
-.PHONY: t clean all cleansyms cleantest t syms ucl uprep urun u
+.PHONY: t clean all cleansyms cleantest t syms ucl uprep urun u b
