@@ -1,14 +1,13 @@
 #include"t.h"
 
 #ifdef SYMS
-extern S Ss;extern K z;//!< \Ss tape \z zx source zy 0xrtype:opcodes:stack
 
 UNIT(sym,
    //! api test
    #define SYM "xyz"
    ST0(SYM);        //!< set the parser tape to string SYM
    K b=tk(),        //!< scan an identifier from the tape and return bucket (KS)
-     x=nme(b),      //!< lookup literal symbol name string (KS)
+     x=nm(b),      //!< lookup literal symbol name string (KS)
     *v=GG(b);       //!< look up a pointer to the global sym value
     *v=ki(42);      //!< assign a value
 

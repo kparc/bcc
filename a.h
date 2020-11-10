@@ -14,7 +14,7 @@
 #define KS 7ULL
 
 #ifdef SYMS
-#define KSSZ 8 //!< symbol is countains a UI djbhash of the underlying string extended to K, see ks()
+#define KSSZ 8 //!< symbol contains a ks(1) object with xx pointing to htable bucket B
 #else
 #define KSSZ 4
 #endif
@@ -25,39 +25,56 @@
 #define X3 13L
 #define QQ 15L
 
+extern S Ss;extern K z;//!< \Ss tape \z zx source zy 0xrtype:opcodes:stack
 typedef union{V*code;K(*k)();F(*f)();J(*j)();}obj; //!<signatures of compiled funs
 
-// local scope
+// ST   current scope:
 // D0   local vars/args, D1 local floats
 // L/T  values and types of D
 // N    loop counter var name (i,j,k,l..)
 // M    used register count
 // A    target variable (for assignments)
+// Pt   current codepoint
+// Pn   length of the current cpoint in bytes
 
 #ifndef SYMS
-extern K GGG[];
-typedef struct{C L[26];C T[26];I M;C D[2];C N;I A;}pst;typedef pst*ST;
+
+#define ST0(tp) Ss=(S)tp;pst t={  {0},    {0},  0, {1,1},  8,  0};ST st=&t;
+extern K GGG[];typedef struct{C L[26];C T[26];I M;C D[2];C N;I A;}pst;typedef pst*ST;
+
 #else
+
 extern K GGG[];
-typedef struct{C L[26];C T[26];I M;C D[2];C N;K A;}pst;typedef pst*ST; //<! assignment target (A) must be K to hold KS
-extern HT GT;extern K sym(I a),*GG(K h),nme(K h);             //<! symtable manager
-#endif
+#define ST0(tp) Ss=(S)tp;pst t={   {0},    {0},  0, {1,1},  8,   0,   0,   NL};ST st=&t;
+extern HT GT;typedef    struct{C L[26];C T[26];I M;C D[2];C N;CP Pt;C Pn;K A;}pst;typedef pst*ST; //<! assignment target (A) must be K to hold KS
+extern CP _nxt(ST st);extern K _tok(I a,ST st),*GG(K h),nm(K h),_p(ST st); //<! syms
+extern S cp(S s,CP*cp),us(S h,S n),uc(S s,CP c);UI ul(S s);CP at(S s,UI i); //!< utf8
+extern I ID(CP x);
+#define nxt()    _nxt(st)
+#define tok(a)   _tok(a,st)
+#define tk()     _tok(0,st)
 
-extern S cp(S s,CP*cp),us(S h,S n),uc(S s,CP c);UI ul(S s);CP at(S s,UI i);//!< utf
-extern I ID(CP x);K XXX(K*k,K y);C nxt(CP*p);
+#endif//SYMS
 
-extern J nt[],ip();extern K ex(K),ps(S),r1(),tn(),j2(),k0(),sS(),enm(),o();I cl(I c);V exit(),w2(),r0();S pi(),pf(),px();J ws();F fp();
-Z_ I oc(I i){R w2((S)&i),i;}Z_ V nl(){fflush(0),w2("\n");}Z_ S os(S s){R w2(s),nl(),s;}Z_ J oi(J j){R os(pi(j)),j;}Z_ F of(F f){R os(pf(f)),f;}Z_ J ox(J j){R os(px(j)),j;}
-Z_ S _sc(S s,I c){W(*s-c)P(!*s++,(S)0)R s;}
-#define sc(s,c) _sc((S)s,c)
+I _t(K x,S sT),U(I i);K _p(ST st),XXX(K*k,K y);
+#define p()      _p(st)
+#define q(x)     _q(x,L)
+#define t(x)     _t(x,T)
+
+extern J nt[],ip();extern K ex(K),ps(S),r1(K),tn(I,I),k0(),l1(),sS(I,K),enm(J x),o(K);I cl(I c);V exit(I),w2(S),r0(K);S pi(J),pf(F),px(J);J ws();F fp(S,I);K2(j2);
+Z_ I oc(I i){R w2((S)&i),i;}Z_ V nl(){fflush(0),w2((S)"\n");}Z_ S os(S s){R w2(s),nl(),s;}Z_ J oi(J j){R os(pi(j)),j;}Z_ F of(F f){R os(pf(f)),f;}Z_ J ox(J j){R os(px(j)),j;}
 Z_ I _scn(S s,I c,I n){N(n,P(c==s[i],i))R n;}//_ K P1(J x){R(K)(X1<<48|x);}_ K P2(J x){R(K)(X2<<48|x);}_ K P3(J x){R(K)(X3<<48|x);}
+Z_ S _sc(S s,I c){W(*s-c)P(!*s++,(S)0)R s;}
 #define scn(s,c,n) _scn((S)s,c,n)
-Z_ K kK(I n){R tn(0,n);}
+#define sl(s) strlen((char*)s)
+#define sc(s,c) _sc((S)s,c)
+
+Z_ K kK(I n){R tn( 0,n);}
 Z_ K kC(I n){R tn(KC,n);}
 Z_ K kI(I n){R tn(KI,n);}
 Z_ K kJ(I n){R tn(KJ,n);}
 Z_ K kS(I n){R tn(KS,n);}
-Z_ K pn(S s,I n){R(K)memcpy((V*)kC(n),s,n);}Z_ K kp(S s){R pn((S)s,strlen((char*)s));}
+Z_ K pn(S s,I n){R(K)memcpy((V*)kC(n),s,n);}Z_ K kp(S s){R pn(s,sl(s));}
 Z_ K kc(J x){R(K)(KC<<48|x);}
 Z_ K ki(unsigned x){R(K)(KI<<48|(J)x);}
 Z_ K kf(F f){R*(K*)&f;}
@@ -147,17 +164,6 @@ Z_ K jc(K x,C c){R j2(x,kc(c));}
 #define xJ ((J*)x)
 #define zJ ((J*)z)
 
-#define ZV1(f) ZV f(K x)
-#define S1(f)   K f(S s)
-#define ZS1(f) ZK f(S s)
-#define ZK1(f) ZK f(K x)
-#define ZK2(f) ZK f(K x,K y)
-#define ZK3(f) ZK f(K x,K y,K z)
-#define V1(f)   V f(K x)
-#define I1(f)   I f(K x)
-#define K1(f)   K f(K x)
-#define K2(f)   K f(K x,K y)
-#define K3(f)   K f(K x,K y,K z)
 Z_ K1(k1){K r=kK(1);R rx=x,r;}Z_ K2(k2){K r=kK(2);R rx=x,ry=y,r;}Z_ K3(k3){K r=kK(3);R rx=x,ry=y,rz=z,r;}Z_ K3(j3){R j2(j2(x,y),z);}Z_ K2(jk){R j2(x,k1(y));}Z_ K cj(C c,K y){R j2(c1(c),y);}Z_ K u(I u,K x){R xu=u,x;}
 
 #if 0

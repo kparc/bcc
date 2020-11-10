@@ -11,7 +11,7 @@
 
 ZJ W0=0,Wprev;//!< wssize
 
-extern V init();K1(enm);K1(pr);K Li(K x,I i),sS(I c,K x);S1(es);K pcle(S tp,I dbg);K se(K x,K pt);K bb(S x);//!< NB never forget signatures
+extern V init();S1(es);K pcle(S tp,I dbg);K se(K x,K pt);//;K1(pr);K Li(K x,I i),sS(I c,K x);;;K bb(S x);//!< NB never forget signatures
 
 ZC xQ(K x){R QQ==A(x);}ZS str(K x){R(S)es(x);}ZK ptree(S s){K x=pcle(s,1);/*os("PTREE"),o(x);*/R X0(jc(se(x,1),0));}
 //ZK out(S x){R pr(es(x));}
@@ -68,9 +68,6 @@ ZC xQ(K x){R QQ==A(x);}ZS str(K x){R(S)es(x);}ZK ptree(S s){K x=pcle(s,1);/*os("
 #define ø(name) extern V skip##_##name(V);RUN_TEST(skip##_##name);
 
 #define UNIT(name,tests...) V skip##_##name(V){TEST_IGNORE();};V unit##_##name(V){W0=ws();tests;WS(W0,"test unit shouldn't leak memory")};TESTS(ƒ(name))
-
-
-
 
 #ifdef SIGHANDLER
 

@@ -34,21 +34,25 @@ UNIT(TODO,
    EQ_SYM("LEFT",         "3",                "sum holds the correct scalar value")
    EQ_SYM("RIGHT",        "4",                "sum holds the correct scalar value")
 
-   PT("LEFT*RIGHT",        "('*';`LEFT;`RIGHT)",                "parse tree of a simple expression #2")
+#if 0
+   PT("LEFT*RIGHT",  "('*';`LEFT;`RIGHT)",   "parse tree of a simple expression #2")
 
-___
-   PT("LEFT*RIGHT",        12,                "parse tree of a simple expression #2")
+   PT("LEFT*RIGHT",        12,               "parse tree of a simple expression #2")
+   PT("pr:s*s",           "('*';`s;`s)",     "parse tree of a simple expression #2")
+   _("p:s*s",              0,                "parse tree of a simple expression #2")
+   _("p",                  9,                "p should have expected value")
+#endif
 
-   PT("pr:s*s",           "('*';`s;`s)",    "parse tree of a simple expression #2")
-   _("p:s*s",             0,                "parse tree of a simple expression #2")
-   _("p",                 9,                "p should have expected value")
 
-//   PT("pr:s*s",           "('*';`s;`s)",       "parse tree of a simple expression #2")
+//   PT("pr:s*s",           "('*';`s;`s)",    "parse tree of a simple expression #2")
 //   _("p:s*s",             0,                "parse tree of a simple expression #2")
 //   _("p",                 9,                "p should have expected value")
 
-   //PT("prd:sum*sum",        "('*';`sum;`sum)",   "assignment referencing globals should produce correct parse tree")
-   //EQ_SYM("prd",           "9",                  "prd holds the correct vector value in the slot FIXME")
+   //PT("prd:sum*sum",    "('*';`sum;`sum)",  "assignment referencing globals should produce correct parse tree")
+   //EQ_SYM("prd",           "9",             "prd holds the correct vector value in the slot FIXME")
+   extern HT GT;
+   hdel(GT);
+   W0=ws();
 )
 
 //:~

@@ -1,7 +1,6 @@
 #pragma once
 #include<string.h>
 #include<stdio.h>
-#include<signal.h>//! raise
 
 #define ptr(x) (*(S*)&x)
 #define xC ptr(x)
@@ -10,9 +9,7 @@
 #define fC ptr(f)
 #define rC ptr(r)
 
-typedef unsigned long long K;
-typedef unsigned char C,*S;typedef int I,CP;typedef long long J;typedef double F;typedef void V;typedef unsigned int UI;typedef unsigned long long UJ;
-//V*memcpy();strlen(const char*);//#define P(b,a...)   if(b)return(a);
+typedef unsigned long long K;typedef unsigned char C,*S;typedef int I,CP;typedef long long J;typedef double F;typedef void V;typedef unsigned int UI;typedef unsigned long long UJ;
 
 enum UCL{UQ,Ul,Ug,Uc,Um,Ua};//!< QQ  Āɏ Ая  Αω  ∀⋿  ⌀⍺  (err, lat, cyr, gre, mth, apl)
 #define UR(cp,s,l) (l>cp-s) //!< unicode range: codepoint, range start, range length+1
@@ -40,7 +37,24 @@ enum UCL{UQ,Ul,Ug,Uc,Um,Ua};//!< QQ  Āɏ Ая  Αω  ∀⋿  ⌀⍺  (err, lat,
 
 #define Z_ static inline
 
-#define AB(s)       (w2("AB: "),w2(s),raise(SIGABRT),exit(1),(K)0L) //abort string
+#ifdef SIGHANDLER
+#include<signal.h>
+#define AB(s)       (w2((S)"AB: "),w2((S)s),raise(SIGABRT),(K)0L) //abort string
+#else
+#define AB(s)       (w2((S)"AB: "),w2((S)s),nl(),exit(1),(K)0L)           //abort string
+#endif
+
+#define ZV1(f) ZV f(K x)
+#define S1(f)   K f(S s)
+#define ZS1(f) ZK f(S s)
+#define ZK1(f) ZK f(K x)
+#define ZK2(f) ZK f(K x,K y)
+#define ZK3(f) ZK f(K x,K y,K z)
+#define V1(f)   V f(K x)
+#define I1(f)   I f(K x)
+#define K1(f)   K f(K x)
+#define K2(f)   K f(K x,K y)
+#define K3(f)   K f(K x,K y,K z)
 
 //#ifndef __APPLE__
 #if 0

@@ -1,5 +1,6 @@
 //! \file h.c \brief simple hash table with separate chaining
 //! \see https://svn.process-one.net/ejabberd/tags/ejabberd-2.0.5/src/tls/tls_drv.c
+#pragma GCC diagnostic ignored "-Wunknown-warning-option"
 #pragma GCC diagnostic ignored "-Wunused-but-set-variable" //! hi=0|1 for dbg
 #include"a.h"
 #include"h.h"
@@ -23,7 +24,7 @@ inline HTYPE djb2(S x,SZT n){HTYPE h=5381;N(n,h=33*(h^x[i]));R h;}
 inline HTYPE sdbm(S s,SZT n){HTYPE h=0;I c;W(c=*s++)h=c+(h<<6)+(h<<16)-h;R h;}//<! sdbm \see berkeleydb \see sleepycat
 //ZV hcpy(V*d,V*s,SZT n){*((S)memcpy(d,s,n)+n)=0;}//!< copy and terminate
 ZK hcpy(S s,SZT n){K x=kS(n+1);*((S)memcpy((V*)x,s,n)+n)=0;R x;}//!< copy and terminate
-HT hnew(S id,I l,I r,HFN f){HT t=(HT)bcalloc(1,SZHT);tid=hcpy(id,strlen(id));hfn=f?f:DFLT_HFN;rds=r,lvl=l,bkt=(B*)bcalloc(2*l,SZ(B*));R t;}//tid=(S)bmalloc((n=strlen(id))+1);hcpy(t->id,id,n);
+HT hnew(S id,I l,I r,HFN f){HT t=(HT)bcalloc(1,SZHT);tid=hcpy(id,sl(id));hfn=f?f:DFLT_HFN;rds=r,lvl=l,bkt=(B*)bcalloc(2*l,SZ(B*));R t;}//tid=(S)bmalloc((n=sl(id))+1);hcpy(t->id,id,n);
 ZV hbal(HT t);
 
 B hget(HT t,S s,I n){                 //!< lookup or insert string s of length n
@@ -70,11 +71,11 @@ K hdel(HT t){B b,n;                   //!< destroy table
 #ifdef TST
 I hslot(HT t){I r=0;N(lvl<<1,r+=!!bkt[i])R r;}F hload(HT t){R(F)hslot(t)/cnt;}//<! slot count, load factor
 UJ hdbg(HT t,C o,C st){B b;I n,len,LEN=0,CNT=0;UJ csum,CSUM=0;
-  N(lvl<<1,b=bkt[i];n=len=csum=0;$(o,O("%s[%d]: ",(S)tid,i));
-    W(b){$(o,K x=b->k;O("(%.*s) -> ",xn,(S)x));n++,len+=b->n,csum+=b->h;b=b->next;}
-    $(n,csum+=len+n+i);$(o,$(n,O("[cnt=%d,len=%d,sum=%llu]\n",n,len,csum))O("()\n"););
+  N(lvl<<1,b=bkt[i];n=len=csum=0;$(1<o,O("%s[%d]: ",(S)tid,i));
+    W(b){$(1<o,K x=b->k;O("(%.*s) -> ",xn,(S)x));n++,len+=b->n,csum+=b->h;b=b->next;}
+    $(n,csum+=len+n+i);$(1<o,$(n,O("[cnt=%d,len=%d,sum=%llu]\n",n,len,csum))O("()\n"););
     CSUM+=csum;LEN+=len;CNT+=n)
-  $(o,O("HT[%s]: keys=%d len=%d csum=%llu\n",(S)tid,CNT,LEN,CSUM));
+  $(o,O("HT[%s]: keys=%d len=%d csum=%llu load=%f\n",(S)tid,CNT,LEN,CSUM,hload(t)));
   R st?CNT:(CSUM+(lvl<<1));}
 #endif
 

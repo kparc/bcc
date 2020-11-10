@@ -11,11 +11,11 @@ K m1(J n){K x,r;I i=clzl(n+7),j;
     W(!(x=++j<31?M[j]:8+(K)ma(0,16L<<(j=MX(18,i))))){}
     xm=i,M[j]=xx,r=x;
     W(i<j)x+=16L<<xm,M[*(J*)(x-8)=i++]=x,xx=0;R r;}
-V1(l0){if((J)xy)l0(xy),l0(xz);xx=M[xm],M[xm]=x;}K3(l1){K r=m1(24);R rt=8,rn=3,rx=x,ry=y,rz=z,r;}K1(l2){R kp("[]");}//!< struct/fixedarray experiment
+V1(l0){if((J)xy)l0(xy),l0(xz);xx=M[xm],M[xm]=x;}K3(l1){K r=m1(24);R rt=8,rn=3,rx=x,ry=y,rz=z,r;}K1(l2){R kp((S)"[]");}//!< struct/fixedarray experiment
 
 //      0 1 2 3 4 5 6 7
 //!     K c h i j e f s (arr int8 int16 int32 int64 real double sym)
-J nt[]={8,1,2,4,8,4,8,KSSZ};ZJ W=-32;//-32 is the size of the seed alloc c0() in init()
+J nt[]={8,1,2,4,8,4,8,KSSZ};ZJ W=-64;//-64 is the size of the HT header and seed alloc c0() \see init()
 J ws(){R W;}K1(r1){P(Ax,x)R++xr?x:(O("r1\n"),exit(1),(K)0L);/*AB("r1");*/}
 #ifndef SYMS
 V1(r0){if(Ax||!x        )R;if(8==xt){l0(x);R;}if(xr){--xr;R;}if(!xt||KS<xt)N1(xn,r0(Xx))W-=16L<<xm,xx=M[xm],M[xm]=x;}

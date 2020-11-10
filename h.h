@@ -6,7 +6,7 @@
 #define DFLT_HFN sdbm
 //#define DFLT_HFN djb2
 
-#define hval(t,k) (hget(t,k,strlen(k))->v)
+#define hval(t,k) (hget(t,k,sl(k))->v)
 #define hset(t,k,v) (hval=(K)v)
 
 typedef size_t SZT;typedef UI HTYPE;typedef HTYPE(*HFN)(S s,SZT n); //!< //!< hash value type, hshfn function interface

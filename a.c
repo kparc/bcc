@@ -6,21 +6,21 @@
 
 //S mmap();I open(),close(),fstat(),munmap();J read(),write();V exit();
 ZF ms(){J a,d;asm volatile("rdtsc":"=a"(a),"=d"(d));R((d<<32)+a)*.58e-6;}//<! fixme .58e-6
-V w2(S s){write(2,s,strlen((char*)s));}ZS r2(S s){ZC b[256];R w2(s),b[read(0,b,256)-1]=0,b;}
+V w2(S s){write(2,s,sl((char*)s));}ZS r2(S s){ZC b[256];R w2(s),b[read(0,b,256)-1]=0,b;}
 
 //! printf/scanf (almost:)
 ZC b[24];ZS ng(S s){R*--s='-',s;}
 ZS pu(S s,J i){J j;do*--s='0'+i-10*(j=i/10);W(i=j);R s;}
 ZF x(I n){F e=1;N(n,e*=10)R e;}//P(NI==f||0>(j|k),nf)
 S pi(J i){R 0>i?ng(pi(-i)):pu(b+23,i);}//! current state of the art is ryu
-S pf(F f){P(0>f,ng(pf(-f)))P(!f,"0.0")I n=6;W(f<1e6)--n,f*=10;W(f>=1e7)++n,f/=10;S p=n?p=pi(n),*--p='e',p:b+23;n=f+.5;W(99<n&&!(n%10))n/=10;R p=pu(p,n),p[-1]=*p,*p--='.',p;}
+S pf(F f){P(0>f,ng(pf(-f)))P(!f,(S)"0.0")I n=6;W(f<1e6)--n,f*=10;W(f>=1e7)++n,f/=10;S p=n?p=pi(n),*--p='e',p:b+23;n=f+.5;W(99<n&&!(n%10))n/=10;R p=pu(p,n),p[-1]=*p,*p--='.',p;}
 J ip(S p,I n){P('-'==*p,-ip(p+1,n-1))J j=0;N(n,j=10*j+p[i]-'0')R j;}ZS hh(S s,C c){N(2,C a=i?c&15:c>>4;s[i]="0W"[9<a]+a)R s;}S px(J j){S s=b+23;unsigned long k=j;do hh(s-=2,k);W(k>>=8);R s;}
 F fp(S p,I n){P('-'==*p,-fp(p+1,n-1))I l=scn(p,'e',n),m=scn(p,'.',l),f=l<n?ip(p+l+1,n-l-1):0,j=ip(p,m),k;m+=m<l,k=ip(p+m,MN(9,l-=m));k+=j*x(l),f-=l;R 0>f?k/x(-f):k*x(f);} 
 
 //! repl daz ftz \wtfvl: \w wssize \t[:n] timer[ntimes] \f funs \v vars \l loadfile \-var release
-//! \G global namespace \fixme 1char literals are tough on the ego
+
 V dis(K,I);K es();ZK K0;K k0(){R r1(K0);}
-K GGG[26];
+K GGG[26]; //!<  global namespace
 #ifndef SYMS
 ZK vf(I f){K r=kS(0);N(26,K x=GGG[i];if(NL-x)if(f^!FN(x))r=j2(r,ks(i)))R r;}
 #else
@@ -39,7 +39,7 @@ K se(K x,K pt){//! string repr of a K object, pt - parse tree mode (don't use ""
    kp(KI==Ax?pi(xi):KF==Ax?pf(xf):(S)"+"+!xi))
  P(8==xt,l2(x))//< fixme nyi
 #ifdef SYMS
- P(KS==xt,cj('`',nme(x)))
+ P(KS==xt,cj('`',nm(x)))
 #endif
  P(1==xn,cj(',',se(Li(x,0),pt)))
  I t=KS<xt?0:xt;
@@ -61,7 +61,7 @@ ZS1(rg){R AB("nyi");}
 V init(){csr();*(K*)(K0=kK(0))=c0();GT=hnew("G",2,3,0);N(26,GGG[i]=NL)}
 #endif
 
-ZV km(S*a){init();if(*++a)pr(ld(*a));os("kparc/b x64");W(1)pr(es(r2((S)" ")));}K enm(J x){K r=kI(xi);N(rn,Ri=i)R r;}
+ZV km(S*a){init();if(*++a)pr(ld(*a));os((S)"kparc/b x64");W(1)pr(es(r2((S)" ")));}K enm(J x){K r=kI(xi);N(rn,Ri=i)R r;}
 
 #ifdef TST
 #define main b_main
