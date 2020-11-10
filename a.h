@@ -48,7 +48,7 @@ extern K GGG[];
 #define ST0(tp) Ss=(S)tp;pst t={   {0},    {0},  0, {1,1},  8,   0,   0,   NL};ST st=&t;
 extern HT GT;typedef    struct{C L[26];C T[26];I M;C D[2];C N;CP Pt;C Pn;K A;}pst;typedef pst*ST; //<! assignment target (A) must be K to hold KS
 extern CP _nxt(ST st);extern K _tok(I a,ST st),*GG(K h),nm(K h),_p(ST st); //<! syms
-extern S cp(S s,CP*cp),us(S h,S n),uc(S s,CP c);UI ul(S s);CP at(S s,UI i); //!< utf8
+extern S cp(S s,CP*cp),us(S h,S n),uc(S s,CP c);UI ul(S s);CP at(S s,UI i); //!< utf: cp() scan codepoint, us() strstr, uc() strchr, ul() strlen, at() s[i]
 extern C ID(CP x);
 #define nxt()    _nxt(st)
 #define tok(a)   _tok(a,st)
