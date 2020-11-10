@@ -2,7 +2,6 @@
 #pragma GCC diagnostic ignored "-Wsequence-point"
 
 #include"c.h"
-#include <stdint.h>
 
 #define ff      (0x3f&*s++)
 #define M(m)    (!((CP)m&c))
