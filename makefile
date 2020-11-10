@@ -10,7 +10,7 @@ TOBJ=$(patsubst %,t/obj/%,$(TSRC),%.o%)
 TBIN=$(patsubst %,t/bin/%,$(TSRC))
 USRC=t/lib/unity.c
 UOBJ=t/obj/unity.o
-TEST=t.b
+T=t.b
 
 QUIET=@
 O=-O0 -g -std=gnu11

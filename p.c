@@ -22,7 +22,9 @@ ZK pE(I a,I c,ST st){      //!< parse an expr \c cmd \a optional rettype
   W(';'==*Ss++);           //<! semicolon is the expression separator
  R u(a?a:t(x),r);}         //<! set the given rettype, or the rettype of last expr
 
-#include"p.h"//pE->E,pF->f
+//#include"p.h"//pE->E,pF->f
+#define E(a,c) pE(a,c,st)
+#define f(x,b) pF(x,b,st)
 
 #ifdef SYMS
 I ID(x){R sc((S)"aNW0_",cl(x));} //!< after first 'a'-classed char, these classes are valid identifier chars
