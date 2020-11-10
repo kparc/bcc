@@ -44,7 +44,7 @@ ci: test
 # llvm
 l: uprep
 	$(Q)clang $O $(LF) $(SRC) -o b/bl $(CF)
-	lldb b/bl  $T
+	b/bl $T
 
 # gcc
 g: uprep
