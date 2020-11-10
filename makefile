@@ -58,19 +58,20 @@ t: uprep
 
 # ref
 r:
-	$(Q)clang -Os -g r.c -o r&&./r
-	@#objdump -d r
+	$(Q)clang -Os -g r.c -o b/r && b/r
+	@#objdump -d b/r
 
-test: cleantest
-	@echo
+## wip
+wip: cleanwip
 	@#-fprofile-instr-generate -fcoverage-mapping -fdebug-macro -fmacro-backtrace-limit=0
-	$(TESTC) -DUSE_AW_MALLOC -DTST $O $(LF) t/t.c t/lib/unity.c $(SRC) -o test $(CF) $(FIXME)
+	@$(TESTC) $O $(TOPTS) t/t.c t/lib/unity.c $(SRC) -o w $(LF) $(CF) $(FIXME)
 	@echo
-	@./test
 
-syms: cleansyms
-	$(TESTC) -DISOMRPH -DUSE_AW_MALLOC -DTST -DSYMS $O $(LF) $(SRC) t/t.c t/lib/unity.c -o syms $(CF) $(FIXME)
-	@lldb --source-on-crash t/dat/t.lldb -b -o run ./syms
+w: wip
+	@./w
+
+wl: wip
+	lldb --source-on-crash t/dat/t.lldb -b -o run ./w
 
 all: l g t
 
@@ -92,28 +93,25 @@ urun: $(TBIN)
 
 #@#-fprofile-instr-generate -fcoverage-mapping -fdebug-macro -fmacro-backtrace-limit=0
 t/obj/%.o: %.c
-	$(TESTC) $O $(CF) $(TOPTS) $< -o $@ -c
+	$(TESTC) $O $(CF) $(TOPTS) $< -o $@ -c #build b source
 
 t/obj/t.%.o: t/t.%.c
-	$(TESTC) $O $(CF) $(TOPTS) $< -o $@ -c
+	$(TESTC) $O $(CF) $(TOPTS) $< -o $@ -c #build test units
 
 $(UOBJ): $(USRC)
-	$(TESTC) $O $(CF) $(TOPTS) $< -o $@ -c
+	$(TESTC) $O $(CF) $(TOPTS) $< -o $@ -c #build unity
 
 b/t.%: t/obj/t.%.o $(BOBJ)
-	$(TESTC)  $(BOBJ)  $(UOBJ) $< -o $@ $(LF)
+	$(TESTC)  $(BOBJ)  $(UOBJ) $< -o $@ $(LF) #link
 	@ls -1 $@
 
 ##
 ## phony
 ##
-cleantest:
-	@rm -f test
-
-cleansyms:
-	@rm -f syms
+cleanwip:
+	@rm -f w
 
 clean:
-	@rm -f test bl bg bt r
+	@rm -f test b/bl b/bg b/bt b/r
 
-.PHONY: t clean all cleansyms cleantest t syms ucl uprep urun u b
+.PHONY: clean all cleanwip syms ucl uprep urun u b l g t r

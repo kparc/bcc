@@ -2,7 +2,6 @@
 //#define UNITY_INCLUDE_DOUBLE
 #include"lib/unity.h"
 #include"../a.h"
-#include<stdlib.h>//rand
 
 //#define TEST_HT_STRESS
 
@@ -12,8 +11,7 @@
 ZJ W0=0,Wprev;//!< wssize
 
 extern V init();S1(es);K pcle(S tp,I dbg);K se(K x,K pt);//;K1(pr);K Li(K x,I i),sS(I c,K x);;;K bb(S x);//!< NB never forget signatures
-
-ZC xQ(K x){R QQ==A(x);}ZS str(K x){R(S)es(x);}ZK ptree(S s){K x=pcle(s,1);/*os("PTREE"),o(x);*/R X0(jc(se(x,1),0));}
+ZC xQ(K x){R QQ==A(x);}ZS str(K x){R(S)es((S)x);}ZK ptree(S s){K x=pcle(s,1);/*os("PTREE"),o(x);*/R X0(jc(se(x,1),0));}
 //ZK out(S x){R pr(es(x));}
 
 #define TYPE(expr) (_Generic((expr), \
@@ -27,8 +25,8 @@ ZC xQ(K x){R QQ==A(x);}ZS str(K x){R(S)es(x);}ZK ptree(S s){K x=pcle(s,1);/*os("
 #define EQ_S(act,exp,msg) TEST_ASSERT_EQUAL_STRING_MESSAGE(exp,str(act),msg);
 //#define STR(act,exp,msg) TEST_ASSERT_EQUAL_STRING_MESSAGE(exp,act,msg);
 
-#define SYMVAL(s) (S)se(hget(GT,s,strlen(s))->v,0)
-#define EQ_SYM(act,exp,msg) {S x=SYMVAL(act);\
+#define SYMVAL(s) (S)se(hget(GT,s,sl((S)s))->v,0)
+#define EQ_SYM(act,exp,msg) {S x=SYMVAL((S)act);\
  TEST_ASSERT_MESSAGE(!memcmp(x,exp,MN(strlen(exp),xn)), "variable value should match expected");}
 
 #define FAIL(msg) TEST_ASSERT_MESSAGE(0,msg)
@@ -52,7 +50,7 @@ ZC xQ(K x){R QQ==A(x);}ZS str(K x){R(S)es(x);}ZK ptree(S s){K x=pcle(s,1);/*os("
   else{TEST_ASSERT_EQUAL_STRING_MESSAGE(exp,ES(x),msg);r0(0);}cleanup;}
 
 
-#define PT(act,exp,msg) {Wprev=ws();K x=ptree(act);TEST_ASSERT_EQUAL_STRING_MESSAGE(exp,(S)x,msg);r0(x);}
+#define PT(act,exp,msg) {Wprev=ws();K x=ptree((S)act);TEST_ASSERT_EQUAL_STRING_MESSAGE(exp,(S)x,msg);r0(x);}
 #define WS0(msg)           {TEST_ASSERT_EQUAL_INT_MESSAGE(0,ws(),msg);}
 #define WSSAME(msg)        {TEST_ASSERT_EQUAL_INT_MESSAGE(0,ws()-Wprev,msg);}
 #define WS(exp,msg)        {TEST_ASSERT_EQUAL_INT_MESSAGE(exp,ws(),msg);}

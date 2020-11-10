@@ -2,7 +2,7 @@
 #include"../h.h"
 
 #define TEST_HT_STRESS
-
+#include<stdlib.h>//rand
 enum charsets { CHARSET_ALNUM, CHARSET_AZaz, CHARSET_AZ, CHARSET_az};
 ZS csets[4]={
  (S)"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",

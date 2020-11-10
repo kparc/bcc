@@ -2,9 +2,9 @@
 #include"../b.h"
 
 extern S Ss;extern K z;//!< \Ss tape \z zx source zy 0xrtype:opcodes:stack
-#define SETSYM(key,val) ({ST0(key);K z,x=tok(0)/*,x=nme(b)*/,*y=GG(x);*y=(val);z=nme(x);O("setsym dbg %.*s %d\n",zn,zC,*zC),x;});
+#define SETSYM(key,val) ({ST0(key);K z,x=tk(),*y=GG(x);*y=(val);z=nm(x);O("setsym dbg %.*s %d\n",zn,zC,*zC),x;});
 
-UNIT(TODO,
+UNIT(wip,
    //! err
    //ERR("c[x]{$[x;1;2]}",  "x",             "malformed function signature should be an error")
    //ERR("c[x]$[x;1;2]",    "x",             "malformed function signature should be an error")
@@ -34,9 +34,9 @@ UNIT(TODO,
    EQ_SYM("LEFT",         "3",                "sum holds the correct scalar value")
    EQ_SYM("RIGHT",        "4",                "sum holds the correct scalar value")
 
-#if 0
    PT("LEFT*RIGHT",  "('*';`LEFT;`RIGHT)",   "parse tree of a simple expression #2")
 
+#if 0
    PT("LEFT*RIGHT",        12,               "parse tree of a simple expression #2")
    PT("pr:s*s",           "('*';`s;`s)",     "parse tree of a simple expression #2")
    _("p:s*s",              0,                "parse tree of a simple expression #2")

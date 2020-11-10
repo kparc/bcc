@@ -177,7 +177,7 @@ K pcle(S tp,I dbg){ST0(tp);//pst t;ST st=&t;sA=M=0;sN=8;D0=D1=1;N(26,L[i]=T[i]=0
 #else
  K g=ID(*Ss)?tok(1):NL;//{K x=nm(g);Ss-=xn;} // read an indentifier, if not followed by assign (:), rewind to start
  //O("G tp=%s, Ss=%s %p %c\n",tp,Ss,(V*)g,cl(*Ss));
- if(g&&!*Ss){K x=*GG(g);Qs(NL==x,nme(g))$(FN(x),os((S)xx),dis(xy))R o(x),NL;}//!< KPC FIXME quick temporary hack to pretty print-opcodes by referencing function name
+ if(g&&!*Ss){K x=*GG(g);Qs(NL==x,nm(g))$(FN(x),os((S)xx),dis(xy))R o(x),NL;}//!< KPC FIXME quick temporary hack to pretty print-opcodes by referencing function name
  //if(NL!=g){O("VAR\n");P(!*GG(g),qs("val"))R*GG(g);}
 #endif
 

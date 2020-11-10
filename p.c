@@ -3,7 +3,7 @@
 #include"h.h"
 
 #ifdef SYMS
-I ID(CP p){R sc((S)"aNW0_",cl(p));} //!< after first 'a'-classed char, these classes are valid identifier chars
+C ID(CP p){R!!sc((S)"aNW0_",cl(p));} //!< after first 'a'-classed char, these classes are valid identifier chars
 K nm(K x){R((B)xx)->k;}K*GG(K x){R&(((B)xx)->v);}
 CP _nxt(ST st){S s=Ss;Ss=cp(Ss,&Pt);R Pn=Ss-s,Pt;}//! return next codepoint on tape and paste its length into n
 K _tok(I a,ST st){S r=Ss;
