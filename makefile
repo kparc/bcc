@@ -67,8 +67,6 @@ w: wip
 wl: wip
 	lldb --source-on-crash t/dat/t.lldb -b -o run ./w
 
-all: l g t
-
 ##
 ## incremental test build
 ##
@@ -102,6 +100,8 @@ b/t.%: t/obj/t.%.o $(BOBJ)
 ##
 ## phony
 ##
+all: l g t
+
 cleanwip:
 	@rm -f w
 
