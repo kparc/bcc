@@ -33,14 +33,6 @@ ifeq ($(shell uname),Darwin)
  LF+= -pagezero_size 1000
 endif
 
-# ci
-ci: test
-	$(TESTC) $O $(LF) $(SRC) -o b/ci $(CF) $(FIXME)
-	file b/ci
-	@#lldb --one-line-on-crash bt -b -o run ./bl t.b
-	@#gdb -ex r -ex bt -ex detach -ex quit --args ./bl t.b
-	@b/ci $T
-
 # llvm
 l: uprep
 	$(Q)clang $O $(LF) $(SRC) -o b/bl $(CF)
@@ -61,7 +53,9 @@ r:
 	$(Q)clang -Os -g r.c -o b/r && b/r
 	@#objdump -d b/r
 
-## wip
+##
+## wip unit
+##
 wip: cleanwip
 	@#-fprofile-instr-generate -fcoverage-mapping -fdebug-macro -fmacro-backtrace-limit=0
 	@$(TESTC) $O $(TOPTS) t/t.c t/lib/unity.c $(SRC) -o w $(LF) $(CF) $(FIXME)
@@ -76,7 +70,7 @@ wl: wip
 all: l g t
 
 ##
-## modularized test build
+## incremental test build
 ##
 u: uprep udep urun
 
