@@ -1,3 +1,11 @@
+//ZI clzl(I n){R 60-__builtin_clzl(n);}ZI clzl2(I n){I i=0;W(n)n/=2,++i;R i-4;}
+//#define __(n) v|=v>>n;
+//#define pw2(n) __(1)__(2)__(4)__(8)__(16)
+//ZI B[32]={0,9,1,10,13,21,2,29,11,14,16,18,22,25,3,30,8,12,20,28,15,17,24,7,19,27,23,6,26,5,4,31};
+//static inline I clzl3(UI v){pw2(v);R-3+B[(UI)(v*0x07C4ACDDU)>>27];}
+////static inline UI npow2(UI v){v--;pw2(v)R++v;}
+//N(1024,O("clzl(%d+7=%d) = (%d %d %d)\n",i,i+7,clzl(i+7),clzl2(i+7),bkt(i+7)))
+
 //I main(){asm("movl $0x9fc0,-4(%rsp);ldmxcsr -4(%rsp);lea 8(%rsp),%rdi;jmp _km");}
 //V csr(){R;asm("movl $0x9fc0,-4(%rsp);ldmxcsr -4(%rsp);");}
 
