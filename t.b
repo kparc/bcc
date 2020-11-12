@@ -32,6 +32,8 @@ m[i]{k:0;N(x){r:-1.5+2*i%x;N(x){s:-1+2*j%x;p:q:0.;m:50;W(m*4>(t:p*p)+u:q*q){m-:1
 /test
 l[10]
 a[3;4]
+
+/fixme segv on ubuntu boxes
 x:!9
 b[x;7]
 y:!8
@@ -41,10 +43,12 @@ w:t[0;2]
 c[w]
 m[10]
 
-/\w
+\w
 
 /time
 \t:2000 a[3;4]
+
+/fixme segv on ubuntu boxes
 x:!1000
 \t N(1000000)b[x;1023&i]
 y:!8
@@ -53,14 +57,17 @@ z:!8
 \t:100 t[0;13]
 w:t[0;13]
 \t:100 c[w]
+
 \t:30 m[100]
 \v
 \f
 
-\-w
+/fixme segv on ubuntu boxes
 \-x
 \-y
 \-z
+\-w
+
 \-a
 \-b
 \-c
@@ -68,9 +75,11 @@ w:t[0;13]
 \-m
 \-t
 \-l
+
 \v
 \f
 
-/FIXME two bare ctf functions leak 16 bytes each
+/fixme two bare ctf functions leak 16 bytes each
 \w
+
 \\

@@ -84,12 +84,29 @@ c:     e8 ef ff ff ff       call   0
 594:   c3                   retq
 ```
 
-### source
+### usage
+
+
+
+
+### code
+
+`b` uses an idiomatic dialect of ansi c.
+
+`c.h`  dialect
+`a.h`  accessors
 
 `a.S`  kernel interface
 `a.c`  runtime
+`m.c`  malloc
 `p.c`  parser
 `b.c`  compiler
+`h.c`  hash table
+`u.c`  unicode
+
+`d`    reference
+`t`    tests
+`m`    bench
  
 `p()`  parse
 `d()`  to register (constant or global)
@@ -98,7 +115,15 @@ c:     e8 ef ff ff ff       call   0
 
 `ex()` run
 
-### porting
+### build
+
+llvm, gcc, tcc:
+```
+make l g t
+make test
+```
+
+### ports
 
 for riscv, arm, xtensa we need:
 

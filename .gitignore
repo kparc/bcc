@@ -1,10 +1,7 @@
 *.dSYM
 *DS_Store
-bl
-bg
-bt
-r
+b
 tmp
 *.profraw
-test
-syms
+t/obj
+w

@@ -1,3 +1,4 @@
+#pragma once
 #include<string.h>
 #include<stdio.h>
 
@@ -8,17 +9,18 @@
 #define fC ptr(f)
 #define rC ptr(r)
 
-typedef unsigned long long K;
-typedef unsigned char C,*S;typedef int I;typedef long long J;typedef double F;typedef void V;typedef unsigned int UI;
-//V*memcpy();strlen(const char*);//#define P(b,a...)   if(b)return(a);
+typedef unsigned long long K;typedef unsigned char C,*S;typedef int I,CP;typedef long long J;typedef double F;typedef void V;typedef unsigned int UI;typedef unsigned long long UJ;
 
+enum UCL{UQ,Ul,Ug,Uc,Um,Ua};//!< QQ  Āɏ Ая  Αω  ∀⋿  ⌀⍺  (err, lat, cyr, gre, mth, apl)
+#define UR(cp,s,l) (l>cp-s) //!< unicode range: codepoint, range start, range length+1
+#define UC(x) (9082<x?0:UR(x,256,336)?Ul:UR(x,913,57)?Ug:UR(x,1040,64)?Uc:UR(x,8704,256)?Um:UR(x,8960,123)?Ua:UQ)
 #define R return
 
 #define P(b,a...) if(b)R({a;});
 #define W(b...)     while((b))                //while
 #define N(n,a...)   {I i=0,_n=(n);W(i<_n){a;++i;}}
 #define $(b,a...)   if(b){a;}else             //cond
-#define C(i,a...)   case i:{a;}break  ;       //case
+#define C(i,a...)   case i:{a;}break;         //case
 #define S(i,c,a...) switch(i){c default:a;} //switch
 #define O printf
 
@@ -34,7 +36,25 @@ typedef unsigned char C,*S;typedef int I;typedef long long J;typedef double F;ty
 #define ZV static V
 
 #define Z_ static inline
-#define AB(s)       (os((S)s),exit(1),(K)0L) //abort string
+
+#ifdef SIGHANDLER
+#include<signal.h>
+#define AB(s)       (w2((S)"AB: "),w2((S)s),raise(SIGABRT),(K)0L) //abort string
+#else
+#define AB(s)       (w2((S)"AB: "),w2((S)s),nl(),exit(1),(K)0L)           //abort string
+#endif
+
+#define ZV1(f) ZV f(K x)
+#define S1(f)   K f(S s)
+#define ZS1(f) ZK f(S s)
+#define ZK1(f) ZK f(K x)
+#define ZK2(f) ZK f(K x,K y)
+#define ZK3(f) ZK f(K x,K y,K z)
+#define V1(f)   V f(K x)
+#define I1(f)   I f(K x)
+#define K1(f)   K f(K x)
+#define K2(f)   K f(K x,K y)
+#define K3(f)   K f(K x,K y,K z)
 
 //#ifndef __APPLE__
 #if 0

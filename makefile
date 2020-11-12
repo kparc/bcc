@@ -1,7 +1,22 @@
-CF=-minline-all-stringops -fno-asynchronous-unwind-tables -fno-stack-protector -Wall -Wno-parentheses -Wno-pointer-sign
-#LF=-nostdlib -c a.S
-SRC=a.c b.c m.c p.c
-O=-O0 -g
+CF=-minline-all-stringops -fno-asynchronous-unwind-tables -fno-stack-protector -Wall
+#-Wno-unused-command-line-argument -Wno-unknown-warning-option -Wno-parentheses -Wno-pointer-sign
+LF=-rdynamic
+#LF=+-nostdlib -c a.S
+SRC=[abmphu].c
+
+BSRC=$(shell ls -1 $(SRC) | sed s/.c/.o/ | xargs)
+BOBJ=$(patsubst %,t/obj/%,$(BSRC))
+TSRC=$(shell basename t/t.*.c | sed s/.c// | xargs)
+TOBJ=$(patsubst %,t/obj/%,$(TSRC),%.o%)
+TBIN=$(patsubst %,b/%,$(TSRC))
+USRC=t/lib/unity.c
+UOBJ=t/obj/unity.o
+
+#Q=@
+O=-O0 -g -std=gnu11
+TESTC=$(Q)clang $O
+#FIXME=-Wno-int-conversion -Wno-pointer-to-int-cast -Wno-unused-value -Wno-misleading-indentation -Wno-pragmas
+TOPTS=-DISOMRPH -DUSE_AW_MALLOC -DTST -DSYMS $(FIXME)
 T=t.b
 
 ifeq ($(ISOMRPH),1)
@@ -9,50 +24,88 @@ ifeq ($(ISOMRPH),1)
  T=tiso.b
 endif
 
+ifeq ($(CI),1)
+ O=-O0 -DCI
+ QUIET=
+endif
+
 ifeq ($(shell uname),Darwin)
- CF+= -pagezero_size 1000
+ LF+= -pagezero_size 1000
 endif
 
 # llvm
-l:
-	clang $O $(LF) $(SRC) -o bl $(CF)
-	./bl $T
+l: uprep
+	$(Q)clang $O $(LF) $(SRC) -o b/bl $(CF)
+	b/bl $T
 
 # gcc
-g:
-	gcc $O $(LF) $(SRC) -o bg $(CF) -Wno-unused-value -Wno-misleading-indentation
-	./bg $T
+g: uprep
+	$(Q)gcc  $O $(LF) $(SRC) -o b/bg $(CF) $(FIXME)
+	b/bg $T
 
 # tcc
-t:
-	tcc -std=c99 $O $(SRC) -o bt
-	./bt $T
+t: uprep
+	$(Q)tcc  $O $(SRC) -o b/bt
+	b/bt $T
 
 # ref
 r:
-	clang -Os -g r.c -o r&&./r
-	@#objdump -d r
+	$(Q)clang -Os -g r.c -o b/r && b/r
+	@#objdump -d b/r
 
-FIXME=-Wno-pointer-to-int-cast
-test: cleantest
-	@clang -std=gnu99 -DISOMRPH -DUSE_AW_MALLOC -DTST $O $(LF) t/t.c t/lib/unity.c $(SRC) -o test $(CF) -fmacro-backtrace-limit=0 \
-	-fprofile-instr-generate -fcoverage-mapping -fdebug-macro -Wno-int-conversion $(FIXME)
-	@./test
+##
+## wip unit
+##
+wip: cleanwip
+	@#-fprofile-instr-generate -fcoverage-mapping -fdebug-macro -fmacro-backtrace-limit=0
+	@$(TESTC) $O $(TOPTS) t/t.c t/lib/unity.c $(SRC) -o w $(LF) $(CF) $(FIXME)
+	@echo
 
-syms: cleansyms
-	@clang -std=gnu99 -DISOMRPH -DUSE_AW_MALLOC -DTST -DSYMS $O $(LF) t/t.c t/lib/unity.c $(SRC) -o syms $(CF) \
-	-fmacro-backtrace-limit=0 -Wno-int-conversion $(FIXME)
-	@./syms
+w: wip
+	@./w
 
-cleantest:
-	@rm -f test
+wl: wip
+	lldb --source-on-crash t/dat/t.lldb -b -o run ./w
 
-cleansyms:
-	@rm -f syms
+##
+## incremental test build
+##
+u: uprep udep urun
 
-all: l g test syms t
+ucl:
+	@rm -rf b t/obj
+
+uprep:
+	@mkdir -p b t/obj
+
+udep: $(BOBJ) $(UOBJ)
+
+urun: $(TBIN)
+	$<
+
+#@#-fprofile-instr-generate -fcoverage-mapping -fdebug-macro -fmacro-backtrace-limit=0
+t/obj/%.o: %.c
+	$(TESTC) $O $(CF) $(TOPTS) $< -o $@ -c #build b source
+
+t/obj/t.%.o: t/t.%.c
+	$(TESTC) $O $(CF) $(TOPTS) $< -o $@ -c #build test units
+
+$(UOBJ): $(USRC)
+	$(TESTC) $O $(CF) $(TOPTS) $< -o $@ -c #build unity
+
+b/t.%: t/obj/t.%.o $(BOBJ)
+	$(TESTC)  $(BOBJ)  $(UOBJ) $< -o $@ $(LF) #link
+	@ls -1 $@
+
+##
+## phony
+##
+all: l g t
+
+cleanwip:
+	@rm -f w
 
 clean:
-	@rm -f test bl bg bt r
+	@rm -f test b/bl b/bg b/bt b/r
 
-.PHONY: t clean all cleansyms cleantest t
+.PHONY: clean all cleanwip syms ucl uprep urun u b l g t r

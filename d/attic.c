@@ -4,6 +4,7 @@
 //ZI B[32]={0,9,1,10,13,21,2,29,11,14,16,18,22,25,3,30,8,12,20,28,15,17,24,7,19,27,23,6,26,5,4,31};
 //static inline I clzl3(UI v){pw2(v);R-3+B[(UI)(v*0x07C4ACDDU)>>27];}
 ////static inline UI npow2(UI v){v--;pw2(v)R++v;}
+////#define PW2(x) (x&&!(x&x-1)) //!< is integer n x power of 2
 //N(1024,O("clzl(%d+7=%d) = (%d %d %d)\n",i,i+7,clzl(i+7),clzl2(i+7),bkt(i+7)))
 
 //I main(){asm("movl $0x9fc0,-4(%rsp);ldmxcsr -4(%rsp);lea 8(%rsp),%rdi;jmp _km");}
