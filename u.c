@@ -23,7 +23,7 @@ S uc(S s,CP c){C d[5]={0,0,0,0,0};P(!c,W(*s)s++;s)$(M(0xffffff80),*d=(C)c)//!< f
  $(M(0xfffff800),uf(0xc0,6)ut(1))$(M(0xffff0000),uf(0xe0,12)um(1,6)ut(2))$(M(0xffff0000),uf(0xf0,18)um(1,12)um(2,6)ut(3));R us(s,d);}
 UI ul(S s){UI n=0;W(*s){$(U4(*s),s+=4)$(U3(*s),s+=3)$(U2(*s),s+=2)s++;n++;}R n;}//!< count codepoints in utf string s excluding terminal
 CP at(S s,UI i){CP r=0;UI n=0;W(i-n++&&*s){$(U4(*s),s+=4)$(U3(*s),s+=3)$(U2(*s),s+=2)s++;}R cp(s,&r),r;}//!< return codepoint at index i in s
-C cw(CP c){P(!p,1)static const C l[32]={1,1,1,1,1,1,1,2,2,2,2,3,3,3,3,3,4,4,4,4,4,5,5,5,5,5,6,6,6,6,6,7};R l[31-clz(c)];}//!< codepoint width in bytes
+C cw(CP c){P(!c,1)static const C l[32]={1,1,1,1,1,1,1,2,2,2,2,3,3,3,3,3,4,4,4,4,4,5,5,5,5,5,6,6,6,6,6,7};R l[31-clz(c)];}//!< codepoint width in bytes
 //V uen(CP c,S d){C w;S(w=cw(c),ue(7,30)ue(6,24)ue(5,18)ue(4,12)ue(3,6)ue(2,0)*d=(0xFF00uL>>w)|(c>>(6*w-6));break;C(1,*d=(C)c));R w;}//!< encode cp into buffer d (<=7 bytes)
 
 //:~
