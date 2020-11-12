@@ -1,6 +1,8 @@
 #pragma once
 #include"a.h"
 
+#define BLIM 16           //<! nesting limit FIXME add tests
+
 #ifdef ISOMRPH
 #define ARGOPN '('
 #define ARGCLS ')'
