@@ -79,7 +79,6 @@ w:t[0;13]
 \v
 \f
 
-/fixme two bare ctf functions leak 16 bytes each
 \w
 
 \\
