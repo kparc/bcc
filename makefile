@@ -1,4 +1,4 @@
-CF=-minline-all-stringops -fno-asynchronous-unwind-tables -fno-stack-protector -Wall
+CF=-minline-all-stringops -fno-asynchronous-unwind-tables -fno-stack-protector -Wall -Wno-pragmas
 #-Wno-unused-command-line-argument -Wno-unknown-warning-option -Wno-parentheses -Wno-pointer-sign
 LF=-rdynamic
 #LF=+-nostdlib -c a.S
@@ -12,9 +12,14 @@ TBIN=$(patsubst %,b/%,$(TSRC))
 USRC=t/lib/unity.c
 UOBJ=t/obj/unity.o
 
-#Q=@
+Q=@
 O=-O0 -g -std=gnu11
-TESTC=$(Q)clang $O
+LVM=clang
+GCC=$(shell env which gcc-9||env which gcc-8||echo gcc)
+#GCC+= -Wno-unused-value
+TCC=tcc
+TESTC=$(LVM) $O
+
 #FIXME=-Wno-int-conversion -Wno-pointer-to-int-cast -Wno-unused-value -Wno-misleading-indentation -Wno-pragmas
 TOPTS=-DISOMRPH -DUSE_AW_MALLOC -DTST -DSYMS $(FIXME)
 T=t.b
@@ -24,33 +29,38 @@ ifeq ($(ISOMRPH),1)
  T=tiso.b
 endif
 
-ifeq ($(CI),1)
- O=-O0 -DCI
+ifeq ($(NOSYMS),1)
+ TOPTS+=-USYMS
  QUIET=
 endif
 
 ifeq ($(shell uname),Darwin)
  LF+= -pagezero_size 1000
+ CF+= -I$(shell xcrun --show-sdk-path)/usr/include
 endif
 
 # llvm
 l: uprep
-	$(Q)clang $O $(LF) $(SRC) -o b/bl $(CF)
+	$(Q)$(LVM) $O $(LF) $(SRC) -o b/bl $(CF)
 	b/bl $T
+
+lsyms: uprep
+	$(Q)$(LVM) $O $(LF) $(SRC) -DSYMS -o b/blsyms $(CF)
+	b/blsyms $T
 
 # gcc
 g: uprep
-	$(Q)gcc  $O $(LF) $(SRC) -o b/bg $(CF) $(FIXME)
+	$(Q)$(GCC) $O $(LF) $(SRC) -o b/bg $(CF) $(FIXME)
 	b/bg $T
 
 # tcc
 t: uprep
-	$(Q)tcc  $O $(SRC) -o b/bt
+	$(Q)$(TCC) $O $(SRC) -o b/bt
 	b/bt $T
 
 # ref
 r:
-	$(Q)clang -Os -g r.c -o b/r && b/r
+	$(Q)$(TESTC) -Os -g r.c -o b/r && b/r
 	@#objdump -d b/r
 
 ##
@@ -58,7 +68,7 @@ r:
 ##
 wip: cleanwip
 	@#-fprofile-instr-generate -fcoverage-mapping -fdebug-macro -fmacro-backtrace-limit=0
-	@$(TESTC) $O $(TOPTS) t/t.c t/lib/unity.c $(SRC) -o w $(LF) $(CF) $(FIXME)
+	$(Q)$(TESTC) $O $(TOPTS) t/t.c t/lib/unity.c $(SRC) -o w $(LF) $(CF) $(FIXME)
 	@echo
 
 w: wip
@@ -81,21 +91,21 @@ uprep:
 udep: $(BOBJ) $(UOBJ)
 
 urun: $(TBIN)
-	$<
 
 #@#-fprofile-instr-generate -fcoverage-mapping -fdebug-macro -fmacro-backtrace-limit=0
 t/obj/%.o: %.c
-	$(TESTC) $O $(CF) $(TOPTS) $< -o $@ -c #build b source
+	$(Q)$(TESTC) $O $(CF) $(TOPTS) $< -o $@ -c #build b source
 
 t/obj/t.%.o: t/t.%.c
-	$(TESTC) $O $(CF) $(TOPTS) $< -o $@ -c #build test units
+	$(Q)$(TESTC) $O $(CF) $(TOPTS) $< -o $@ -c #build test units
 
 $(UOBJ): $(USRC)
-	$(TESTC) $O $(CF) $(TOPTS) $< -o $@ -c #build unity
+	$(Q)$(TESTC) $O $(CF) $(TOPTS) $< -o $@ -c #build unity
 
-b/t.%: t/obj/t.%.o $(BOBJ)
-	$(TESTC)  $(BOBJ)  $(UOBJ) $< -o $@ $(LF) #link
-	@ls -1 $@
+b/t.%: t/obj/t.%.o
+	$(Q)$(TESTC)  $(BOBJ)  $(UOBJ) $< -o $@ $(LF) #link
+	@#ls -la $@
+	@#$@
 
 ##
 ## phony
@@ -108,4 +118,4 @@ cleanwip:
 clean:
 	@rm -f test b/bl b/bg b/bt b/r
 
-.PHONY: clean all cleanwip syms ucl uprep urun u b l g t r
+.PHONY: clean all cleanwip syms ucl uprep urun u b l g t r w
