@@ -5,13 +5,12 @@
 UNIT(sym,
    //! api test
    #define SYM "xyz"
-   ST0(SYM);        //!< set the parser tape to string SYM
-   K b=tk(),        //!< scan an identifier from the tape and return bucket (KS)
-     x=nm(b),      //!< lookup literal symbol name string (KS)
-    *v=GG(b);       //!< look up a pointer to the global sym value
-    *v=ki(42);      //!< assign a value
+   ST0(SYM);            //!< set the parser tape to string SYM
+   B b=tk();            //!< scan an identifier from the tape and return its GT bucket
+   K x=gset(b,ki(42)),  //!< assign value v to global symbol b
+     y=nm(x);           //!< lookup literal symbol name string (KS)
 
-   MEM(x,                 SYM,               xn)
+   MEM(y,                 SYM,               xn)
    EQ_SYM(SYM,           "42",               "assigned variable holds the correct scalar value")
 
    PT("ccall+go_fn+42",  "('+';`ccall;('+';`go_fn;0xaa))",   "basic multichar identifiers are supported by parser")
@@ -39,7 +38,7 @@ UNIT(sym,
    //_("prd:sum*sum",       0,              "product of two global variables")
    //EQ_SYM("prd",         "9",             "prd holds the correct vector value in the slot FIXME")
 
-   W0=ws();                                 //! FIXME variable identifiers should probably be excluded from wssize
+   Wstart=ws();                                 //! FIXME variable identifiers should probably be excluded from wssize
 )
 
 #else
