@@ -36,7 +36,7 @@ UNIT(hsh,
    EQ_K(hdbg(t,0,0), CSM(0),      "htable checksum must match expected")
 
    N(n,if(bkts[i]!=hget(t,(S)keys[i],sl(keys[i])))FAIL("hash table must be stable"))
-   EQ_I(t->cnt,      n,           "htable should still remain the same")
+   EQ_I(t->cnt,      n,           "htable counter should stay the same")
    EQ_I(hdbg(t,0,1), t->cnt,      "htable counter should match internal check")
    EQ_I(t->mem,      expmem(n),   "htable mem usage should match expected")
    EQ_K(hdbg(t,0,0), CSM(0),      "htable checksum must match expected")
