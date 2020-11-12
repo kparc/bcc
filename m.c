@@ -20,7 +20,7 @@ K m1(J n){K x,r;             //!< allocate a memory block
      M[*(J*)(x-8)=i++]=x,    //!< ..is assigned to a bucket in a corresponding slot with 8 byte preamble.
      xx=0;R r;}
 
-V1(l0){if((J)xy)l0(xy),l0(xz);xx=M[xm],M[xm]=x;}K3(l1){K r=m1(24);R rt=8,rn=3,rx=x,ry=y,rz=z,r;}K1(l2){R kp("[]");}//!< struct/fixedarray experiment
+V1(l0){if((J)xy)l0(xy),l0(xz);xx=M[xm],M[xm]=x;}K3(l1){K r=m1(24);R rt=8,rn=3,rx=x,ry=y,rz=z,r;}K1(l2){R kp((S)"[]");}//!< struct/fixedarray experiment
 
 //      0 1 2 3 4 5 6 7
 //!     K c h i j e f s (arr int8 int16 int32 int64 real double sym)

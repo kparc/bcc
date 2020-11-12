@@ -88,10 +88,10 @@ K _p(ST st){K x,y;CP a;I b;      //!< a operator, x/y operands, b return type
      a,st                    //<! op is the array|function name
     ):kc(a);break;           //<! b) it is variable reference.
 #endif
-  default:AB(Ss-1);}         //<! bail on unmapped class or whitespace
+  default:R AB(Ss-1);}       //<! bail on unmapped class or whitespace
 
  P(qt(),x)                   //<! if reached expr end, return the parse tree
- if('+'-cl(a=*Ss++))AB(Ss-1);//<! otherwise next char should be an operator, bail if not
+ P('+'-cl(a=*Ss++),AB(Ss-1)) //<! otherwise next char should be an operator, bail if not
  if(':'==*Ss)++Ss,a+=128;    //<! for assignment, set high bit of op char byte
  y=p();b=t(y);               //<! parse right operand into y and get its type into b
  $(':'==a&&Ax,T[xi-'a']=b)   //<! for assignment, set result type to the type of the right operand
