@@ -114,16 +114,16 @@ ZK f(I r,K x,ST st){K y=e(r,x,st);R r-yu?MV(t(x),r,y):y;} //<! if not a function
 
 ZK E(I r,K x,ST st){I i=xn-1;K z=e(r,Xx,st),y=kK(i--);r=zu,Yx=z;W(i--)Yx=e(0,xK[i+1],st);R u(r,sS(0,y));}
 ZK vh(K x,I n,I r,ST st){R++Ss,1<n?e(0,x,st):f(r,x,st);}
+//! translate $[ctf]
+ZK vh(K x,I n,I r,ST st){R++Ss,1<n?e(0,x,st):f(r,x,st);}
 
 //! translate $[ctf]
+ZK vh(K x,I n,I r,ST st){R++Ss,1<n?e(0,x,st):f(r,x,st);}
 ZK v(I r,K x,I n,ST st){
-#ifndef SYMS
  K y=xz,z;I c=!n&&!Ay&&sA==*yC,l=M; //!< fixme
-#else
- K y=xz,z;I c=!n&&!Ay&&sA==y,l=M;
-#endif
- z=vh(xK[3],n,r,st),M=l,y=vh(y,n,r,st),x=b(1,xy,st);yn-=c*B5;I jj=1-n?n-xn-yn-3:zn;
- K j=jmp(jj);y=j2(y,n||c?yn,j:c1(RET));R j3(jc(x,yn),y,z);}
+ z=vh(xK[3],n,r,st),M=l,y=vh(y,n,r,st),x=b(1,xy,st);
+ //yn-=c*B5;I jj=1-n?n-xn-yn-3:zn;K j=jmp(jj);y=j2(y,n||c?yn,j:c1(RET));R j3(jc(x,yn),y,z);}
+ y=j2(y,n||c?yn-=c*B5,jmp(1-n?n-xn-yn-3:zn):c1(RET));R j3(jc(x,yn),y,z);}
 
 //! w() translate W|N loop
 ZV mm(K x,ST st){I i;$(Ax,if(26u>xi-'a'&&L[i=xi-'a'])M|=1<<L[i])$(':'==*xC&&A(xy),i=I(xy)-'a',M&=~(1<<L[i]),mm(xz,st))N(xn,mm(sc("{WNC",*xC)?xK[xn-1-i]:Xx,st))}
