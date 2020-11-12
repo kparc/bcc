@@ -3,14 +3,23 @@
 #include"m.h"
 //! malloc/free:  mturnnnn list join (k[cifs] k[CIFS])
 //! K is mturnnnn: membucket, type, flags, refcount, length
-ZK M[31];ZI clzl(I n);V csr();//!< malloc is a classic pow2 buddy allocator w/o coalescing
+ZI clzl(I n);V csr();ZK M[31];//!< M memory buckets (linked lists)
 S ma(I d,J n){ZJ p=BASE;p+=d?0:n;V*r=mmap((V*)(d?0:p-n),n,PROT_READ|PROT_WRITE|PROT_EXEC,d?MAP_PRIVATE:(MAP_ANON|MAP_PRIVATE|MAP_FIXED),d-!d,0);P(r==MAP_FAILED,O("%s\n",strerror(errno)),(S)0)R r;}
 K mf(S s,J*n){struct stat b;I d=open((V*)s,0);Qs(0>d,(S)s)R(K)(fstat(d,&b),s=(*n=b.st_size)?ma(d,*n):s,close(d),s);}
-K m1(J n){K x,r;I i=clzl(n+7),j;
-    P((x=M[i]),M[i]=xx,x)j=i;
-    W(!(x=++j<31?M[j]:8+(K)ma(0,16L<<(j=MX(18,i))))){}
-    xm=i,M[j]=xx,r=x;
-    W(i<j)x+=16L<<xm,M[*(J*)(x-8)=i++]=x,xx=0;R r;}
+
+K m1(J n){K x,r;             //!< allocate a memory block
+    I i=clzl(n+7),j=i;       //!< i is the bucket id, log2((I)n)
+    P((x=M[i]),M[i]=xx,x);   //!< if there is a free block on top of the list M[i], pop and return
+    W(!(x=++j<31             //!< otherwise, scan for a free block of a larger size
+      ?M[j]:                 //!< if one exists, use it, otherwise..
+      8+(K)ma(0,16L<<(j=MX(18,i))))); //!< ..mmap additional ram, at least 4mb + 8 bytes for mturnnnn
+    xm=i,M[j]=xx,r=x;        //!< assign bucket id to the new block and push it on top of the list M[j]
+    //! assign  fill the smaller empty buckets as follows:
+    W(i<j)                   //!< j-i are the empty memory slots
+     x+=16L<<xm,             //!< the next available memory region x..
+     M[*(J*)(x-8)=i++]=x,    //!< ..is assigned to a bucket in a corresponding slot with 8 byte preamble.
+     xx=0;R r;}
+
 V1(l0){if((J)xy)l0(xy),l0(xz);xx=M[xm],M[xm]=x;}K3(l1){K r=m1(24);R rt=8,rn=3,rx=x,ry=y,rz=z,r;}K1(l2){R kp("[]");}//!< struct/fixedarray experiment
 
 //      0 1 2 3 4 5 6 7
