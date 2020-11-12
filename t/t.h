@@ -3,26 +3,25 @@
 #include"lib/unity.h"
 #include"../a.h"
 
-//#define TEST_HT_STRESS
-
 #define NONE 0
 #define ES(x) ((S)(-1UL>>16&(J)x))
 
-ZJ W0=0,Wprev;//!< wssize
+ZJ Wstart,Wprev;//!< wssize
 
-extern V init();S1(es);K pcle(S tp,I dbg);K se(K x,K pt);//;K1(pr);K Li(K x,I i),sS(I c,K x);;;K bb(S x);//!< NB never forget signatures
-ZC xQ(K x){R QQ==A(x);}ZS str(K x){R(S)es((S)x);}ZK ptree(S s){K x=pcle(s,1);/*os("PTREE"),o(x);*/R X0(jc(se(x,1),0));}
+extern V init();S1(es);K pcle(S tp,I dbg);K se(K x,K pt);/*;K1(pr);K sS(I c,K x);*/K Li(K x,I i),bb(S x);//!< NB never forget signatures
+ZC xQ(K x){R QQ==A(x);}ZK str(S x){R es((S)x);}ZK ptree(S s){K x=pcle(s,1);/*os("PTREE"),o(x);*/R X0(jc(se(x,1),0));}
 //ZK out(S x){R pr(es(x));}
 
 #define TYPE(expr) (_Generic((expr), \
   char: 'C', short: 'H', int: 'I', long: 'L', \
-  long long: 'J', unsigned char*: 'K', \
+  long long: 'J', unsigned long long: 'K', \
   float: 'E', double: 'F', \
   void*: '_', char*: 'S', default: '?'))
 
 #define EQ_I(act,exp,msg) TEST_ASSERT_EQUAL_INT_MESSAGE(exp,act,msg);
+#define EQ_K(act,exp,msg) TEST_ASSERT_EQUAL_UINT64_MESSAGE(exp,act,msg);
 #define EQ_F(act,exp,msg) TEST_ASSERT_EQUAL_FLOAT_MESSAGE(exp,act,msg);
-#define EQ_S(act,exp,msg) TEST_ASSERT_EQUAL_STRING_MESSAGE(exp,str(act),msg);
+#define EQ_S(act,exp,msg) TEST_ASSERT_EQUAL_STRING_MESSAGE(exp,(S)str((S)act),msg);
 //#define STR(act,exp,msg) TEST_ASSERT_EQUAL_STRING_MESSAGE(exp,act,msg);
 
 #define SYMVAL(s) (S)se(hget(GT,s,sl((S)s))->v,0)
@@ -38,7 +37,7 @@ ZC xQ(K x){R QQ==A(x);}ZS str(K x){R(S)es((S)x);}ZK ptree(S s){K x=pcle(s,1);/*o
 #define ASSERT(act,exp,msg) S(TYPE(exp),\
   C('S',EQ_S(act,exp,msg))    \
   C('I',EQ_I(I(act),exp,msg)) \
-  C('L',EQ_I(I(act),exp,msg)) \
+  C('K',EQ_K(act,exp,msg)) \
   ,TEST_ASSERT_MESSAGE(0,"unknown type"))
 
 #define _(act,exp,msg,cleanup...) Wprev=ws();if(TYPE(act)=='S'){K x=str((S)(J)(act));\
@@ -59,13 +58,12 @@ ZC xQ(K x){R QQ==A(x);}ZS str(K x){R(S)es((S)x);}ZK ptree(S s){K x=pcle(s,1);/*o
 
 #define TESTS(units...) ZV hsegv();I main(I a,char**c){hsegv(),init();UNITY_BEGIN();units;R UNITY_END();}V setUp(V){}V tearDown(V){}//!< before/after each test
 
-//#define UNIT(name,tests...) V test##_##name(V){W0=ws();tests;WS(0,"test unit shouldn't leak memory")};
-//#define RUN(unit) RUN_TEST(test##_##unit);
+#define _run(name) extern V unit##_##name(V);RUN_TEST(unit##_##name);
+#define _skip(name) extern V skip##_##name(V);RUN_TEST(skip##_##name);
 
-#define ƒ(name) extern V unit##_##name(V);RUN_TEST(unit##_##name);
-#define ø(name) extern V skip##_##name(V);RUN_TEST(skip##_##name);
+#define UNIT(name,tests...) V skip##_##name(V){TEST_IGNORE();};V unit##_##name(V){Wstart=Wprev=ws();tests;WS(Wstart,"test unit shouldn't leak memory")};TESTS(_run(name))
 
-#define UNIT(name,tests...) V skip##_##name(V){TEST_IGNORE();};V unit##_##name(V){W0=ws();tests;WS(W0,"test unit shouldn't leak memory")};TESTS(ƒ(name))
+#define TN(label,laps,task...) {F _avg,_ttl,_ms=ms();N(laps,({task;}));_ttl=ms()-_ms;_avg=_ttl/laps;O("\nclk %s: laps %d elapsed %d avg %.3f\n",label,laps,(I)_ttl,_avg);}
 
 #ifdef SIGHANDLER
 
