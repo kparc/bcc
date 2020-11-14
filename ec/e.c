@@ -42,6 +42,6 @@ I main(I c,char**v){
  N(32,xkeygen(sec1,pub1,s1),xkeygen(sec2,pub2,s2),
   xshared(shr1,sec1,pub2),xshared(shr2,sec2,pub1);
   P(memcmp(shr1,shr2,32),O("mismatch\n"),-1))
-  R O("x25512 ok\n"),0;}
+  R O("x25519 ok\n"),0;}
 
 //:~
