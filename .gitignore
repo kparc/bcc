@@ -5,4 +5,5 @@ tmp
 *.profraw
 t/obj
 w
-ec/e
+ec/e32
+ec/e64

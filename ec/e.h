@@ -1,5 +1,8 @@
 #include<string.h>//mcpy
 #include<stdio.h>//printf
+
+typedef void _;typedef unsigned short H;typedef unsigned int V;typedef unsigned char*S,G;typedef int I;
+
 #define W(a...)   while(({a;}))
 #define N(n,a...) {V _n=(n),i=-1;W(++i<_n){a;}}
 #define Nj(n,a...) {V _n=(n),j=-1;W(++j<_n){a;}}
@@ -34,10 +37,10 @@
 #define RDc RD(Rg)
 #define RDC c=(c>>7)*19;RDc
 #define RDCC r[31]=c&127;RDC
-#define RSX mul(r,s,x)
-#define SRX mul(s,r,x)
-#define SRR mul(s,r,r)
-#define RSS mul(r,s,s)
+#define RSX prd(r,s,x)
+#define SRX prd(s,r,x)
+#define SRR prd(s,r,r)
+#define RSS prd(r,s,s)
 #define SRSX SRR,RSX
 #define HX ((H)Xg)
 #define HY ((H)Yg)
@@ -53,4 +56,5 @@
 #define FPah FP(a)FP(b)FP(c)FP(d)FP(e)FP(f)FP(g)FP(h);
 #define XYTZ3 mul(Px,e,f),mul(Py,g,h),mul(Pt,e,h),mul(Pz,f,g);
 
+#define dsn(d,s,n) memcpy((S)d,(S)s,n);
 //:~
