@@ -61,9 +61,10 @@ ZC xQ(K x){R QQ==A(x);}ZK str(S x){R es((S)x);}ZK ptree(S s){K x=pcle(s,1);/*os(
 #define _run(name) extern V unit##_##name(V);RUN_TEST(unit##_##name);
 #define _skip(name) extern V skip##_##name(V);RUN_TEST(skip##_##name);
 
-#define UNIT(name,tests...) V skip##_##name(V){TEST_IGNORE();};V unit##_##name(V){Wstart=Wprev=ws();tests;WS(Wstart,"test unit shouldn't leak memory")};TESTS(_run(name))
+#define UNIT(name,tests...) V skip##_##name(V){TEST_IGNORE();};V unit##_##name(V){Wstart=Wprev=ws();tests;\
+  /*WS(Wstart,"test unit shouldn't leak memory")*/};TESTS(_run(name))
 
-#define TN(label,laps,task...) {F _avg,_ttl,_ms=ms();N(laps,({task;}));_ttl=ms()-_ms;_avg=_ttl/laps;O("\nclk %s: laps %d elapsed %d avg %.3f\n",label,laps,(I)_ttl,_avg);}
+//#define TN(label,laps,task...) {F _avg,_ttl,_ms=ms();N(laps,({task;}));_ttl=ms()-_ms;_avg=_ttl/laps;O("\nclk %s: laps %d elapsed %d avg %.3f\n",label,laps,(I)_ttl,_avg);}
 
 #ifdef SIGHANDLER
 

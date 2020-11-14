@@ -37,6 +37,7 @@ typedef union{V*code;K(*k)();F(*f)();J(*j)();}obj; //!<signatures of compiled fu
 // Pt   current codepoint
 // Pn   length of the current cpoint in bytes
 
+extern S cp(S s,CP*cp),us(S h,S n),uc(S s,CP c);UI ul(S s);CP at(S s,UI i);C cw(CP p); //!< utf: cp() scan codepoint, us() strstr, uc() strchr, ul() strlen, at() s[i], cpw() cw byte width
 #ifndef SYMS
 
 #define ST0(tp) Ss=(S)tp;pst t={  {0},    {0},  0, {1,1},  8,  0};ST st=&t;
@@ -47,8 +48,8 @@ extern K GGG[];typedef struct{C L[26];C T[26];I M;C D[2];C N;I A;}pst;typedef ps
 extern K GGG[];
 #define ST0(tp) Ss=(S)tp;pst t={   {0},    {0},  0, {1,1},  8,   0,   0,   NL};ST st=&t;
 extern HT GT;typedef    struct{C L[26];C T[26];I M;C D[2];C N;CP Pt;C Pn;K A;}pst;typedef pst*ST; //<! assignment target (A) must be K to hold KS
-extern CP _nxt(ST st);extern K _tok(I a,ST st),*GG(K h),nm(K h),_p(ST st); //<! syms
-extern S cp(S s,CP*cp),us(S h,S n),uc(S s,CP c);UI ul(S s);CP at(S s,UI i); //!< utf: cp() scan codepoint, us() strstr, uc() strchr, ul() strlen, at() s[i]
+extern CP _nxt(ST st);extern B _tok(I a,ST st);K*GG(K h),nm(K h); //<! syms
+K gget(B b),gset(B b,K v),*gval(K x);C gpos(B x),gtyp(K x),GP(K x);
 extern C ID(CP x);
 #define nxt()    _nxt(st)
 #define tok(a)   _tok(a,st)
@@ -61,6 +62,7 @@ I _t(K x,S sT),U(I i);K _p(ST st),XXX(K*k,K y);
 #define q(x)     _q(x,L)
 #define t(x)     _t(x,T)
 
+I clzl(I n);V csr();F ms();//<! s.c
 extern J nt[],ip();extern K ex(K),ps(S),r1(K),tn(I,I),k0(),l1(),sS(I,K),enm(J x),o(K);I cl(I c);V exit(I),w2(S),r0(K);S pi(J),pf(F),px(J);J ws();F fp(S,I);K2(j2);
 Z_ I oc(I i){R w2((S)&i),i;}Z_ V nl(){fflush(0),w2((S)"\n");}Z_ S os(S s){R w2(s),nl(),s;}Z_ J oi(J j){R os(pi(j)),j;}Z_ F of(F f){R os(pf(f)),f;}Z_ J ox(J j){R os(px(j)),j;}
 Z_ I _scn(S s,I c,I n){N(n,P(c==s[i],i))R n;}//_ K P1(J x){R(K)(X1<<48|x);}_ K P2(J x){R(K)(X2<<48|x);}_ K P3(J x){R(K)(X3<<48|x);}
@@ -134,6 +136,7 @@ Z_ K jc(K x,C c){R j2(x,kc(c));}
 #define Y0(e)  ({typeof(e)_e=(e);r0(y);_e;})
 #define Az A(z)
 #define zi I(z)
+#define zr zC[-7] //ref
 #define zu zC[-6]
 #define zt zC[-5]
 #define zn zI[-1]

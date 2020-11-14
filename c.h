@@ -9,7 +9,7 @@
 #define fC ptr(f)
 #define rC ptr(r)
 
-typedef unsigned long long K;typedef unsigned char C,*S;typedef int I,CP;typedef long long J;typedef double F;typedef void V;typedef unsigned int UI;typedef unsigned long long UJ;
+typedef unsigned long long K,UJ;typedef unsigned char C,*S;typedef int I,CP;typedef long long J;typedef double F;typedef void V;typedef unsigned int UI;
 
 enum UCL{UQ,Ul,Ug,Uc,Um,Ua};//!< QQ  Āɏ Ая  Αω  ∀⋿  ⌀⍺  (err, lat, cyr, gre, mth, apl)
 #define UR(cp,s,l) (l>cp-s) //!< unicode range: codepoint, range start, range length+1
@@ -62,5 +62,13 @@ enum UCL{UQ,Ul,Ug,Uc,Um,Ua};//!< QQ  Āɏ Ая  Αω  ∀⋿  ⌀⍺  (err, lat,
 #else
 #define BASE 0x70000000L
 #endif
+
+#if (__x86_64__||i386)&&!__TINYC__
+Z_ I clzl(I n){R 60-__builtin_clzl(n);}Z_ V csr(){R;asm("movl $0x9fc0,-4(%rsp);ldmxcsr -4(%rsp);");}//V csr(){volatile I mxcsr=0x9fc0;asm("ldmxcsr %0":"=m"(mxcsr));}
+#else
+Z_ I clzl(I n){I i=0;W(n)n/=2,++i;R i-4;}Z_ V csr(){R;}  //<! FIXME tcc ldmxcsr nyi
+#endif
+
+Z_ F ms(){J a,d;asm volatile("rdtsc":"=a"(a),"=d"(d));R((d<<32)+a)*.58e-6;}//<! fixme .58e-6
 
 //:~

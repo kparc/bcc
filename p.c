@@ -2,16 +2,24 @@
 #include"b.h"
 #include"h.h"
 
-#ifdef SYMS
-C ID(CP p){R!!sc((S)"aNW0_",cl(p));} //!< after first 'a'-classed char, these classes are valid identifier chars
-K nm(K x){R((B)xx)->k;}K*GG(K x){R&(((B)xx)->v);}
-CP _nxt(ST st){S s=Ss;Ss=cp(Ss,&Pt);R Pn=Ss-s,Pt;}//! return next codepoint on tape and paste its length into n
-K _tok(I a,ST st){S r=Ss;
-  W(nxt()&&ID(Pt));Ss-=Pn;O("tok a=%d n=%d s=%.*s\n",a,Pn,(I)(  Ss-r),r);
-  P(a&&(':'==Pt),O("bail on ':'\n"),Ss-=Ss-r,NL) //!< FIXME special case to support pcle() logic
-  B b=hget(GT,r,Ss-r);K x=kS(1);R xu=Pn,xx=(K)b,x;}
-#endif
 K XXX(K*k,K y){R r0(*k),*k=y,NL;} //!< release an existing value at pointer x and replace it with y
+#ifdef SYMS //!< fixme rationalize var management api
+C ID(CP p){R!!sc((S)"aNW0_",cl(p));} //!< after first 'a'-classed char, these classes are valid identifier chars
+K nm(K x){R((B)xx)->k;}K*GG(K x){P(NL==x,(K*)0)R&(((B)xx)->v);}
+ZC nextg=0;
+C GP(K x){R(25u<xu)?xu-26u:27;}
+C gpos(B b){R GP(b->k);}
+K gget(B b){P(!b||NL==(K)b,NL)C c=gpos(b);R 27-c?GGG[c]:NL;}
+K gset(B b,K v){K x,y;C c=gpos(b);P(27-c,XXX(GG(x=GGG[c]),v),x)P(26==nextg,AB("glim"))R x=kS(1),b->v=v,xx=(K)b,y=b->k,yu=26+nextg,GGG[nextg++]=x;}
+K*gval(K x){R GG(GGG[GP(x)]);}
+C gtyp(K x){K*v=gval(x);R v?A(*v):QQ;}
+CP _nxt(ST st){S s=Ss;Ss=cp(Ss,&Pt);R Pn=Ss-s,Pt;}//! return next codepoint on tape and paste its length into Pt
+B _tok(I a,ST st){S r=Ss;
+  W(nxt()&&ID(Pt)){};Ss-=Pn;
+  P(a&&(':'-*Ss),Ss-=Ss-r,(B)NL) //!< FIXME special case for assignment to support pcle() logic
+  //O("tok hget %s (%d)\n",r,Ss-r);
+  R hget(GT,r,Ss-r);}
+#endif
 
 ZS qt(){R sc(";})]",*Ss);} //<! test whether current char is an expression terminator
 ZK Na(){S r=Ss;W(10u>*++Ss-'0'||'.'==*Ss){};I f=0;N(Ss-r,f|='.'==r[i])R f?kf(fp(r,Ss-r)):ki(ip(r,Ss-r));}//!< parse numbers, int|fp (floats as 1e6 must contain a dot)
@@ -35,10 +43,10 @@ ZK pE(I a,I c,ST st){      //!< parse an expr: c cmd, a optional rettype
 #define E(a,c) pE(a,c,st)
 
 #ifndef SYMS
-//! class            !""#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
+//! class                   !""#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
 I cl(CP c){P(!c,0)R 128>c?"  \"+$++ ()++ + +0000000000+;+++  aaaaaaaaaaaaaNaaaaaaaaWaaa[+]+_`aaaaaaaaaaaaaaaaaaaaaaaaaa{+} "[c-32]:0;}
 #else
-//! class            !""#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
+//! class                   !""#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
 I cl(CP c){P(!c,0)R 128>c?"  \"+$++ ()++ + +0000000000+;+++  aaaaaaaaaaaaaNaaaaaaaaWaaa[+]+_`aaaaaaaaaaaaaaaaaaaaaaaaaa{+} "[c-32]:"\0aga++"[UC(c)];}
 #endif
 
@@ -70,23 +78,24 @@ K _p(ST st){K x,y;CP a;I b;      //!< a operator, x/y operands, b return type
     --Ss;x=n(Na()))          //<! parse number
   case'a':                   //<! identifier:
 #ifdef SYMS
-    {--Ss;K y=tok(0);//o(y); //<! tok() parses the complete identifier and stores it in the hash table
+    {--Ss;B t=tk();K y=gget(t); //<! tok() parses the complete identifier and stores it in the hash table
 #endif
-    x='['==*Ss?++Ss,pE(      //<! a) if followed by [exp], it is an array indexing or a function call:
-     T[b=a-'a']?T[b]-8:      //<! if varname has no type, it is a func call; for arrays, unset high bit
+    x='['==*Ss?++Ss,E(       //<! a) if followed by [exp], it is an array indexing or a function call:
 #ifndef SYMS
+     T[b=a-'a']?T[b]-8:      //<! if varname has no type, it is a func call; for arrays, unset high bit
       (x=GGG[b],x=xy,        //<! xx is the string, xy is the code
 #else
-      (x=*GG(y),x=xy,        //<! xx is the string, xy is the code
+     T[b=gpos(y)]?T[b]-8:    //<! if varname has no type, it is a func call; for arrays, unset high bit
+      (x=gval(y),x=xy,       //<! xx is the string, xy is the code
 #endif
        D0=MX(D0,xC[xn-2]),   //<! D[0] and D[1] are stored after RET
        D1=MX(D1,xC[xn-1]),xu),
 #ifdef SYMS
-     nm(y),st               //<! op is the array|function name
-    ):nm(y);};break;        //<! b) it is variable reference.
+     y                       //<! op is the array|function name
+    ):ks(GP(t->k)+'a');};break;             //<! b) it is variable reference.
 #else
-     a,st                    //<! op is the array|function name
-    ):kc(a);break;           //<! b) it is variable reference.
+     a                       //<! op is the array|function name
+    ):ks(a);break;           //<! b) it is variable reference.
 #endif
   default:R AB(Ss-1);}       //<! bail on unmapped class or whitespace
 
@@ -94,7 +103,11 @@ K _p(ST st){K x,y;CP a;I b;      //!< a operator, x/y operands, b return type
  P('+'-cl(a=*Ss++),AB(Ss-1)) //<! otherwise next char should be an operator, bail if not
  if(':'==*Ss)++Ss,a+=128;    //<! for assignment, set high bit of op char byte
  y=p();b=t(y);               //<! parse right operand into y and get its type into b
+#ifndef SYMS
  $(':'==a&&Ax,T[xi-'a']=b)   //<! for assignment, set result type to the type of the right operand
+#else
+ $(':'==a&&Ax,T[gpos(x)]=b)  //<! for assignment, set result type to the type of the right operand
+#endif
  b='%'-a?MX(b,t(x)):KF;      //<! for div, force it to float, for the rest, use the widest one (KF>KJ>KI>KC)
 
  R u(U('<')<=U(a)?KI:b,      //<! if operator is a comparison (<=>), force return type to int

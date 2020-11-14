@@ -1,9 +1,6 @@
 #include"t.h"
-#define pass(s) _(bb(s),0,s)
-#define fail(s,exp) {S b=bb(s);_(exp==(b?(C)*b:(C)b),1,exp)}
-
-//! bracket balancer
-//! TODO add nesting limit tests
+#define pass(s) _(bb((S)s),0,s)
+#define fail(s,exp) {ERR(s,exp,"unbalanced input should return an error")}
 
 UNIT(prs,//<! parse trees
 
@@ -22,6 +19,8 @@ UNIT(prs,//<! parse trees
    PT("l[i]{r:0;N(x){r+:2};r}",  "('{';(':';r;0x80);('N';x;('{';(0xab;r;0x82)));r)", "loop function decl ptree")
    _("\\-l",        NONE, "release of l[] should return memory to the heap")
 
+   //! bracket balancer
+   //! TODO add nesting limit tests
 
    pass("")
    pass("\n")
@@ -29,9 +28,9 @@ UNIT(prs,//<! parse trees
    pass("[]\n")
    pass("[\"asdf]asdf{\"]")
    pass("$[x&1;(\\x)+x+1;/x]")
-   fail("[}]",'}')
-   fail("[\"]",'\"')
-   fail("[\"\"",0)
+   fail("[}]","}]")
+   fail("[\"]","\"]")
+   fail("[\"\"","balance")
 
    //! unit must pass (wss should be zero)
 )
