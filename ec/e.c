@@ -7,7 +7,7 @@ Z_ sel(S r,S x,S y,G c){X(Rg=-c&(Yg^Xg)^Xg)}//!< select, normalize, product, con
 Z_ nrm(S r){FP(y);H c=(r[31]>>7)*19;CORK;RDc;c=19;N(31,c+=Rg;Yg=c;c>>=8)c+=((H)r[31])-128;y[31]=c;sel(r,y,r,(c>>15)&1);}
 Z_ prd(S r,S x,S y){V c=0;X(c>>=8;Nj(i+1,c+=Vx(j)*Vy(i-j))Nj(31-i,c+=Vx(i+1+j)*Vy(31-j)*38)Rg=c)RDCC}
 Z_ sub(S r,S x,S y){V c=218;N(31,c+=VX-VY+65280;Rg=c;c>>=8)c+=Vx(31)-Vy(31);RDCC}
-Z_ neg(S r,S x){    V c=218;N(31,c+=65280-VX;   Rg=c;c>>=8)c-=Vx(31);       RDCC}
+Z_ neg(S r,S x){    V c=218;N(31,c+=  -VX+65280;Rg=c;c>>=8)c-=Vx(31);       RDCC}
 Z_ inv(S r,S x){FP(s)prd(s,x,x);RSX;N(248,SRSX)SRR,RSS,SRX,RSS;N(2,SRSX)}
 Z_ prc(S r,S x,V y){V c=0;X(c>>=8;c+=y*VX;Rg=c)CORK;c>>=7;c*=19;RDc}
 Z_ sum(S r,S x,S y){H c=0;X(c>>=8;c+=HX+HY;Rg=c)CORK;RDC}
