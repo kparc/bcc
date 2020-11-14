@@ -56,5 +56,5 @@ typedef void _;typedef unsigned short H;typedef unsigned int V;typedef unsigned 
 #define FPah FP(a)FP(b)FP(c)FP(d)FP(e)FP(f)FP(g)FP(h);
 #define XYTZ3 mul(Px,e,f),mul(Py,g,h),mul(Pt,e,h),mul(Pz,f,g);
 
-#define dsn(d,s,n) memcpy((S)d,(S)s,n);
+#define dsn(d,s,n) memcpy((S)d,(S)s,n)
 //:~
