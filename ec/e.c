@@ -3,7 +3,7 @@ typedef struct _pt {FP(x)FP(y)FP(t)FP(z)} PT;typedef PT*pt;ZFP(ONE)={1};ZFP(BP)=
 PT NP={.x={0},.y={1,0},.t={0},.z={1,0}};Z_ prp(S x){x[0]&=0xf8;x[31]&=0x7f;x[31]|=0x40;}Z_ ecp(pt d,pt s){dsn(d,s,SZ(PT))}
 
 // mod 2^255-19 primitives
-Z_ sel(S r,S x,S y,G c){X(Rg=-c&(Yg^Xg)^Xg)}//!< select, normalize, product, constmult, subtract, negate, inverse. sum
+Z_ sel(S r,S x,S y,G c){X(Rg=-c&(Yg^Xg)^Xg)}//!< select, normalize, product, subtract, negate, inverse, multxconst, sum
 Z_ nrm(S r){FP(y);H c=(r[31]>>7)*19;CORK;RDc;c=19;N(31,c+=Rg;Yg=c;c>>=8)c+=((H)r[31])-128;y[31]=c;sel(r,y,r,(c>>15)&1);}
 Z_ prd(S r,S x,S y){V c=0;X(c>>=8;Nj(i+1,c+=Vx(j)*Vy(i-j))Nj(31-i,c+=Vx(i+1+j)*Vy(31-j)*38)Rg=c)RDCC}
 Z_ sub(S r,S x,S y){V c=218;N(31,c+=VX-VY+65280;Rg=c;c>>=8)c+=Vx(31)-Vy(31);RDCC}
