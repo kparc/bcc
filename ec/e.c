@@ -29,7 +29,7 @@ ZZ xmul(S r,S q,S e){FP(xm)FP(xms)FP(zms)G zm[32]={1},xm1[32]={1},zm1[32]={0};ds
    inv(zm1,zm),mul(r,zm1,xm),nrm(r);}// freeze out projective coords
 
 // x25519 ecdh
-_ xkeygen(G sec[32],G pub[32],G rnd[32]){dsn(sec,rnd,32),prp(sec),xmul(pub,BP,sec),rfc(pub);}
-_ xshared(G shr[32],G sec[32],G pub[32]){xmul(shr,pub,sec);}//_ xrandom(S x,V n){N(n,Xk=r8())}
+_ xkeygen(fp sec,fp pub,fp rnd){dsn(sec,rnd,32),prp(sec),xmul(pub,BP,sec),rfc(pub);}
+_ xshared(fp shr,fp sec,fp pub){xmul(shr,pub,sec);}//_ xrandom(S x,V n){N(n,Xk=r8())}
 
 //:~

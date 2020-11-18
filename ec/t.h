@@ -4,6 +4,7 @@
 #include<time.h>//time
 #include"e.h"
 
+#define O printf
 #define nl() O("\n")
 #define dump(x) X(O("%02x",x[i]))
 #define seed(x) N(8,((V*)x)[i]=pcg(&prng))
