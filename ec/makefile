@@ -1,25 +1,35 @@
-O=-Os -std=gnu11 -DTST -pedantic -Wno-gnu-statement-expression -Wno-variadic-macros e.c
+M=64
+C=clang
+O=-Os -m$M -std=gnu11 -DTST -pedantic -minline-all-stringops -fno-asynchronous-unwind-tables -fno-stack-protector -Wno-gnu-statement-expression -Wno-variadic-macros
+SO=-shared -rdynamic -fPIC -nostdlib
 
 #C=$(shell env which gcc-9||env which gcc-8||echo gcc)
-C=clang
 ifeq ($(shell uname),Darwin)
  O+= -I$(shell xcrun --show-sdk-path)/usr/include
 endif
 
-e64:
-	$C $O -o e64&&./e64
+e: so
+	@$C $O -UTST t.c -L. -le$M -o e$M
+	strip -K _main e$M
+	ls -lah e$M
+	./e$M
 
-e32:
-	$C $O -m32 -o e32&&./e32
+t: tso
+	$C $O t.c -L. -le$Mt -o t$M && ./t$M
 
+so:
+	@$C $O $(SO) -UTST e.c -o libe$M.so
 
-install:
+tso:
+	$C $O $(SO) e.c -o libe$Mt.so
+
+goinstall:
 	go install golang.org/x/crypto/curve25519 encoding/hex
 
 go:
 	go build e.go
 	./e
 
-all: e64
+all: t
 
-.PHONY: all e32 e64 clean
+.PHONY: all clean
