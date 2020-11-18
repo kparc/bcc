@@ -1,7 +1,7 @@
 O=-Os -std=gnu11 -DTST -pedantic -Wno-gnu-statement-expression -Wno-variadic-macros e.c
 
 #C=$(shell env which gcc-9||env which gcc-8||echo gcc)
-C=gcc
+C=clang
 ifeq ($(shell uname),Darwin)
  O+= -I$(shell xcrun --show-sdk-path)/usr/include
 endif
