@@ -10,9 +10,8 @@ endif
 
 e: so
 	@$C $O -UTST t.c -L. -le$M -o e$M
-	strip -K _main e$M
-	ls -lah e$M
-	LD_LIBRARY_PATH=. ./e$M
+	@strip -K _main e$M
+	@LD_LIBRARY_PATH=. ./e$M
 
 t: tso
 	$C $O t.c -L. -le$Mt -o t$M
@@ -20,6 +19,7 @@ t: tso
 
 so:
 	@$C $O $(SO) -UTST e.c -o libe$M.so
+	ls -lah libe$M.so
 
 tso:
 	$C $O $(SO) e.c -o libe$Mt.so

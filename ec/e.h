@@ -1,14 +1,16 @@
 #include<string.h>//mcpy
 
 typedef void _;typedef unsigned short H;typedef unsigned int V;typedef unsigned char*S,G;typedef int I;typedef unsigned long long UJ;typedef G fp[32];
-#define ZFP(x) static fp x
-ZFP(ONE)={1};ZFP(BP)={9};//!< x25519 base point
+#define FP(x) fp x;
+
 extern _ xkeygen(fp sec,fp pub,fp rnd),xshared(fp shr,fp sec,fp pub);
 
 #ifndef TST
+#define ZFP(x) static fp x
 #define ZG static G
 #define ZZ Z_
 #else
+#define ZFP(x) fp x
 #define ZG G
 #define ZZ _
 extern ZG eql(S x,S y);extern ZZ prp(S x),xmul(S r,S q,S e);
@@ -45,11 +47,12 @@ extern ZG eql(S x,S y);extern ZZ prp(S x),xmul(S r,S q,S e);
 #define VY ((V)Yg)
 #define Vx(i) ((V)x[i])
 #define Vy(i) ((V)y[i])
-#define FP(x) fp x;
-#define CORK r[31]&=127
+
+#define SUB(y,yy)V c=218;N(31,c+=y-VX+0xff00;Rg=c;c>>=8)c+=yy-Vx(31);RDCC
 #define BIT(x) G bit=(x[i>>3]>>(i&7))&1;
 #define dsn(d,s,n) memcpy((S)d,(S)s,n)
 #define rfc(x) x[31]&=0x7f
 #define sq(r,x) mul(r,x,x)
+#define RFC rfc(r)
 
 //:~

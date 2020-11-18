@@ -15,6 +15,7 @@ static V pcg(pcg32*r){ //<! do not use in prod
     R(xorsh>>rot)|(xorsh<<((-rot)&31));}
 
 #ifdef TST
+extern fp ONE,BP;//base point
 #define FR(x) free(x);
 #define EQL(x,y) assert(eql(x,y));
 #define NVEC(x) (SZ(x)/SZ(x[0]))
