@@ -6,10 +6,12 @@ ifeq ($(shell uname),Darwin)
  O+= -I$(shell xcrun --show-sdk-path)/usr/include
 endif
 
-e32:
-	$C $O -m32 -o e32&&./e32
 e64:
 	$C $O -o e64&&./e64
+
+e32:
+	$C $O -m32 -o e32&&./e32
+
 
 install:
 	go install golang.org/x/crypto/curve25519 encoding/hex
