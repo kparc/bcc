@@ -37,8 +37,8 @@ typedef void _;typedef unsigned short H;typedef unsigned int V;typedef unsigned 
 #define RDc RD(Rg)
 #define RDC c=(c>>7)*19;RDc
 #define RDCC r[31]=c&127;RDC
-#define RSX prd(r,s,x)
-#define SRX prd(s,r,x)
+#define RSX mul(r,s,x)
+#define SRX mul(s,r,x)
 #define SRR sq(s,r)
 #define RSS sq(r,s)
 #define SRSX SRR,RSX
@@ -55,8 +55,7 @@ typedef void _;typedef unsigned short H;typedef unsigned int V;typedef unsigned 
 #define BIT(x) G bit=(x[i>>3]>>(i&7))&1;
 #define SEL(f) sel(r.f,r.f,s.f,bit);
 #define FPah FP(a)FP(b)FP(c)FP(d)FP(e)FP(f)FP(g)FP(h);
-#define XYTZ3 mul(Px,e,f),mul(Py,g,h),mul(Pt,e,h),mul(Pz,f,g);
-#define sq(r,x) prd(r,x,x)
+#define sq(r,x) mul(r,x,x)
 #define dsn(d,s,n) memcpy((S)d,(S)s,n)
 #define rfc(x) x[31]&=0x7f
 
