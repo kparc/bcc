@@ -4,3 +4,5 @@ e64
 t32
 t64
 *.so
+*.wasm
+e.js

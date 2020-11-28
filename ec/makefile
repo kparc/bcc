@@ -2,6 +2,7 @@ M=64
 C=clang
 O=-Os -m$M -std=gnu11 -DTST -pedantic -minline-all-stringops -fno-asynchronous-unwind-tables -fno-stack-protector -Wno-gnu-statement-expression -Wno-variadic-macros
 SO=-shared -rdynamic -fPIC -nostdlib
+EMOPT=${shell grep -v '@see' wop | xargs}
 
 #C=$(shell env which gcc-9||env which gcc-8||echo gcc)
 ifeq ($(shell uname),Darwin)
@@ -23,6 +24,9 @@ so:
 
 tso:
 	$C $O $(SO) e.c -o libe$Mt.so
+
+wso:
+	emcc e.c -m32 -o e.html -O3 $(EMOPT)
 
 goinstall:
 	go install golang.org/x/crypto/curve25519 encoding/hex
