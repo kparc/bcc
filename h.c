@@ -26,8 +26,8 @@ ZK hcpy(S s,SZT n){K x=kS(n+1);*((S)memcpy((V*)x,s,n)+n)=0;R x;}//!< copy and te
 HT hnew(S id,I l,I r){HT t=(HT)bcalloc(1,SZHT);tid=hcpy(id,sl(id));rds=r,lvl=l,bkt=(B*)bcalloc(2*l,SZ(B*));R t;}//tid=(S)bmalloc((n=sl(id))+1);hcpy(t->id,id,n);
 ZV hbal(HT t);
 
-B hget(HT t,S s,SZT n){                 //!< lookup or insert string s of length n
- K x;B b;HTYPE h=HFN(s,n), hi=0,       //!< b bucket, h hash, hi use full range (dbg)
+B hget(HT t,S s,SZT n){               //!< lookup or insert string s of length n
+ K x;B b;HTYPE h=HFN(s,n), hi=0,      //!< b bucket, h hash, hi use full range (dbg)
  idx=hmap(h,lvl);                     //!< first, try to map hash value to the 1st half of table
  $(idx<spl,hi=1,idx=hmap(h,lvl<<1));  //!< if idx is above split position, remap to the entire table
  b=bkt[idx];                          //!< retrieve the bucket from the slot idx
@@ -47,7 +47,7 @@ B hget(HT t,S s,SZT n){                 //!< lookup or insert string s of length
 ZV hbal(HT t){B*bp,mov;               //!< balance hash table load
   N(rds,                              //!< perform rds balancing attempts:
    bp=&bkt[spl];                      //!< retrieve the head bucket at spl
-   SZT topidx=lvl+spl;                  //!< index of a slot in the upper part
+   SZT topidx=lvl+spl;                //!< index of a slot in the upper part
    W(*bp){                            //!< while the slot at spl is not empty
     $(hmap((*bp)->h,lvl<<1)==topidx,  //!< if the bucket's hash maps to topidx
      mov=*bp;*bp=(*bp)->next;         //!< remove it from the list at spl
