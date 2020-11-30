@@ -5,4 +5,7 @@ t32
 t64
 *.so
 *.wasm
+e.html
+w.html
+w.js
 e.js
