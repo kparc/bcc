@@ -2,9 +2,9 @@
 
 compared to the original, available in the initial commit for reference, so far:
 
-1. the original is using a somewhat opinionated superset of ISO C. specifically, it makes prominent use of nested functions, a gcc-specific extension, essentially unportable to any compliant compiler of C language. the modified codebase is free of nested functions and other artefacts, and can be bulit with `gcc9`, `clang12` and `tcc`, albeit with some cosmetic non-pedantic warnings on macos and recent linuces.
+1. the original is using a somewhat opinionated superset of ISO C. specifically, it makes prominent use of nested functions, a gcc-specific extension, unportable to any compliant compiler of C language. the modified codebase is free from nested functions and some other compiler-specific gotchas (e.g. naked function signatures), and can be bulit with `gcc9`, `clang12` and `tcc`, albeit with some cosmetic non-pedantic warnings, on macos and recent linuces.
 
-2. much of the code is being gradually reformatted to make inline comments possible - this makes source files taller, but makes them more accessible.
+2. much of the code is being gradually reformatted to make inline comments possible - this makes source files taller, but makes them slightly more user-friendly.
 
 3. the inline comments are a mixture of the narrative from the google doc and our own. in former case, the wording is often shortened and makes use of established naming conventions.
 
@@ -24,7 +24,7 @@ this signature, referred to as *preamble*, is `1+1+1+1+4` bytes long, and is fol
 
 5. an important change compared to the original is that `K`, which is traditionally disguised as `unsigned char*` pointer, is redefined as `unsigned long long`, which doesn't depend on the pointer size of target architecture. For the most part, this change does not impact the code at all.
 
-6. the parser and object code emitter are split into two separate files, `p.c` and `b.c` respectively, to save on scrolling, to better separate concerns and narrow down static globals.
+6. the parser and object code emitter are split into two separate files, `p.c` and `b.c` respectively, to save on scrolling, to better separate concerns and isolate globals.
 
 7. since `K` is not a true struct, its members are addressed using so called *accessors*, defined in `a.h` along with more accessors, convenience macros and other sugar designed to keep the code compact:
 
@@ -39,7 +39,7 @@ this signature, referred to as *preamble*, is `1+1+1+1+4` bytes long, and is fol
 #define xz xK[2]  // 3rd
 ```
 
-8. `a.h` defines a roughly identical set of accessors for common local variable/argument names - it is very rare to see any other local identifiers other than:
+8. `a.h` defines a roughly identical set of accessors for common local variable/argument names. it is very rare to see any other local identifiers other than:
 
 ```
 x,y,z - typically function arguments
@@ -63,7 +63,7 @@ the smallest possible block size is 64 bytes. the difference between the actual 
 
 in short, `m.c` defines a static array `M` of 31 pointers to the heads of 31 linked lists. Every element of a list is called a bucket. the id of a bucket is a base two logarithm of its size with a small offset, i.e. sizes of buckets in successive lists start from 64 bytes, 128, 256, ... up to M[31]. buckets above 31 are OOM, a condition that is currently not handled (watchdog of the OS is likely to kill the process earlier)
 
-memory is managed by reference counting using functions `r1/r0`. buckets occupied by lists with no more references are returned to the heap for re-use, no block coalescing, zeroing or `munmap` is performed. *the release of resources is responsibility of a callee*, with a notable exception *when the callee reuses one of the incoming lists as its pass-through return value, possibly mutating it in-place*.
+memory is managed by reference counting using functions `r1/r0`. buckets occupied by lists with no more references are returned to the heap for re-use, no block coalescing, zeroing or `munmap` is performed. **the release of resources is responsibility of a callee**, with a notable exception **when the callee reuses one of the incoming arguments as its pass-through return value, possibly mutating it in-place**.
 
 typical idioms seen at the end of a function are `X0(e)/Y0(e)/...` which attempt to release no longer needed `x,y,..` and return some `e`.
 
@@ -75,23 +75,37 @@ further on general coding style and organization:
 
 0. the indent is strictly one `0x20`.
 
-1. Functions are written in a way that can be described as "fail fast". The function body usually starts with declarations of local vars, immediately followed by a set of `P(cond,retval)` macros (a good mnemonic for `P` is `panic`, although the proper expansion is `predicate`). Panics typically test the arguments for sanity, and bail early if something doesn't look right, which flattens the control flow of the main bulk of the function. Since most functions return a `K`, `retval` is presumed to be a `K`. That said, `P()` macro is not limited to early sanity tests and is ubiqutous.
+1. functions are written in a way that can be described as "fail fast". The function body usually starts with declarations of local vars, immediately followed by a set of `P(cond,retval)` macros (a good mnemonic for `P` is `panic`, although the proper expansion is `predicate`). Panics typically test the arguments for sanity, and bail early if something doesn't look right, which flattens the control flow of the main bulk of the function. Since most functions return a `K`, `retval` is presumed to be a `K`. that said, `P()` macro is not limited to early sanity tests and is ubiqutous.
 
-2. It is very common that instead of declaring and assigning an explicit `r` for return value, the tail of a function body would be in form `R expr,expr,expr,...,retval;` where exprs and retval can be fairly complex C expressions, possibly with inline assignments, function calls and other side effects, evaluated left to right as per C spec, where only the final value has anything to do with `R`. i.e. is actually returned.
+2. it is very common that instead of declaring and assigning an explicit `r` for return value, the tail of a function body would be in form `R expr,expr,expr,...,retval;` where exprs and retval can be fairly complex C expressions, possibly with inline assignments, function calls and other side effects, evaluated left to right as per C spec, where only the final value has anything to do with `R`. i.e. is actually returned.
 
 3. we generally avoid inequality `x!=y`, because it is two chars. instead, we test with `x-y`, which holds true when operands are not the same. this takes time to get used to, especially when used inline, or for example `a-'a'`
 
-4. inequality tests against constants are always backwards, ie `42<x` instead of `x>42`, by convention. pre-increment/decrement `++x/--x` is preferred to their post- counterparts.
+4. inequality tests against constants are always backwards, ie `42<x` instead of `x>42` by convention. pre-increment/decrement `++x/--x` are preferred to their post- counterparts.
 
 5. Loops are strictly implicit and use two macros `W while` and `N for` with some exceptions that are rare enough not to warrant an extra macro, e.g. when the `for` loop goes backwards.
 
 6. `switch/case` and `if/else if/else` are not uncommon, but generally avoided. What is used instead is informally known as `ternary cascades` of the general form `cond0?then0:cond1?then1:...` ad infinitum, very often with side effects in conds and thens, which can be a bit treacherous sometimes.
 
-7. Since explicit parens are avoided where possible to save space, the precedence is sometimes tricky to read, especially in case of ternaries.
+7. since explicit parens are avoided where possible to save space, the precedence is sometimes tricky to read, especially in case of ternaries.
 
-8. hard-coded magic numbers are not uncommon, and make assumptions about underlying ISA, e.g. pointer width. These are the priority patients to be turned into proper defines and documented.
+8. hard-coded magic numbers are not uncommon, and make assumptions about underlying ISA, e.g. pointer width. these are the priority patients to be turned into proper defines and properly documented.
 
-9. no part of the code is thread-safe, there is a fair amount of *global state* going on, which is gradually being narrowed down to static globals where possible, and moved closer to functions that use them. Of special care are cases when globals are using names of staple locals (`xyzrf`) which can impair comprehension and result in bugs.
+9. no part of the code is thread-safe, there is a fair amount of *global state* going on. which is gradually being narrowed down to static globals where possible, and moved closer to functions that use them. Of special care are cases when globals are using names of staple locals (`xyzrf`) which can impair comprehension and result in bugs.
 
+
+# tests
+
+1. due to the specifics of how the system is being implemented, `bcc` is fully reliant on an adequate battery of documented tests, around which the ongoing development is centered.
+
+1. `bcc` uses `unity`, primarily designed for embedded targets. units are kept in `t/t.*.c`.
+
+2. while the harness enables writing tests in plain freehand C, every effort is made to keep the number of test primitives to a minimum, which is an evolving process.
+
+3. `bcc`-specific test macros, in excess of those shipped with `unity`, are defined in `t/t.h`
+
+4. test units are designed to run independently from each other as separate binaries, memory leakage is checked automatically at the end of each unit
+
+5. by design, a unit is expected to focus on a single major functional component of the system, although this is not strictly enforced. some degree of redundancy across units is considered natural and unavoidable in the general case.
 
 `/:~`
