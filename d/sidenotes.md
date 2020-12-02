@@ -2,14 +2,15 @@
 
 compared to the original, available in the initial commit for reference, so far:
 
-0. undertested / untested / experimental code is fenced by conditional feature flags, e.g. `#ifdef SYMS`.
+1. the original is using a somewhat opinionated superset of ISO C. specifically, it makes prominent use of nested functions, a gcc-specific extension, essentially unportable to any compliant compiler of C language. the modified codebase is free of nested functions and other artefacts, and can be bulit with `gcc9`, `clang12` and `tcc`, albeit with some cosmetic non-pedantic warnings on macos and recent linuces.
 
-1. much of the code is being gradually reformatted to make inline comments possible - this makes source files taller, but makes them more accessible.
+2. much of the code is being gradually reformatted to make inline comments possible - this makes source files taller, but makes them more accessible.
 
-2. the inline comments are a mixture of the narrative from the google doc and our own. in former case, the wording is often shortened and makes use of established naming conventions.
+3. the inline comments are a mixture of the narrative from the google doc and our own. in former case, the wording is often shortened and makes use of established naming conventions.
 
-3. implementation uses a one-size-fits-all fundamental datatype called `K`, which is basically a `struct` used for *lists* (but not atoms). `K` is an opaque quasi-struct based on relative offsets, members are familiar:
+4. implementation uses a one-size-fits-all fundamental datatype called `K`, which is basically a `struct` used for *lists* (but not atoms). `K` is an opaque quasi-struct based on relative offsets, members are familiar:
 
+5. undertested / untested / experimental code is fenced by conditional feature flags, e.g. `#ifdef SYMS`.
 
 ```
 K is mturnnnn:
