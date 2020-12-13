@@ -13,7 +13,7 @@ USRC=t/lib/unity.c
 UOBJ=t/obj/unity.o
 
 Q=@
-O=-O0 -g -std=gnu11
+O=-O0 -g -std=gnu11 -DUSE_AW_MALLOC
 LVM=clang
 GCC=$(shell env which gcc-9||env which gcc-8||echo gcc)
 #GCC+= -Wno-unused-value
@@ -21,7 +21,7 @@ TCC=tcc
 TESTC=$(LVM) $O
 
 #FIXME=-Wno-int-conversion -Wno-pointer-to-int-cast -Wno-unused-value -Wno-misleading-indentation -Wno-pragmas
-TOPTS=-DISOMRPH -DUSE_AW_MALLOC -DTST -DSYMS $(FIXME)
+TOPTS=-DISOMRPH -DTST -DSYMS $(FIXME)
 T=t.b
 
 ifeq ($(ISOMRPH),1)
