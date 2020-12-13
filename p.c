@@ -5,7 +5,8 @@
 K XXX(K*k,K y){R r0(*k),*k=y,NL;} //!< release an existing value at pointer x and replace it with y
 #ifdef SYMS //!< fixme rationalize var management api
 C ID(CP p){R!!sc((S)"aNW0_",cl(p));} //!< after first 'a'-classed char, these classes are valid identifier chars
-K nm(K x){R((B)xx)->k;}K*GG(K x){P(NL==x,(K*)0)R&(((B)xx)->v);}
+K nm(K x){R((B)xx)->k;}
+K*GG(K x){P(NL==x,(K*)0)R&(((B)xx)->v);}
 ZC nextg=0;
 C GP(K x){R(25u<xu)?xu-26u:27;}
 C gpos(B b){R GP(b->k);}

@@ -4,6 +4,8 @@
 
 UNIT(prs,//<! parse trees
 
+   PT("2*x",   "('\\';x)",         "2*x should translate to monadic left shift")
+
    PT("#x",    "('#';x)",          "ptree of basic monadic op")
 
    PT("2*x",   "('\\';x)",         "2*x should translate to monadic left shift")

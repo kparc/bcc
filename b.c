@@ -33,8 +33,8 @@ ZK o2(I t,I o,I r,I x,I y){K z;//O("o: t=%c o=%d r=%d x=%p y=%p\n"," chijefs CHI
   //       mov  add  sub  mul  div  cmp      i2f
   h((C[]){0x10,0x58,0x5c,0x59,0x5e,0x2e,0,0,0x2a}[o],r,y)))
  I a=126<y,s;
- P(0<=o&&r==x&&(!a||3-o),4-o?o2f(o,r,y):129-y?AB("/"):i(0xd1,16+7,r))//<!shl/shr
- P(0<o&&r==y,z=o2f(o,r,x),2-o?z:j2(z,i(0xf7,16+3,r)))//<!neg
+ P(0<=o&&r==x&&(!a||3-o),4-o?o2f(o,r,y):129-y?AB("/"):i(0xd1,16+7,r))//!< shl/shr
+ P(0<o&&r==y,z=o2f(o,r,x),2-o?z:j2(z,i(0xf7,16+3,r)))//!< neg
  P((a?3:1)<o,j2(o2f(0,r,x),o2f(o,r,y)))//      mov  mov      lea imul
  R s=0<o?0:3+(o+1)/2,rex(r,a?0:y,x,c3(0>o?1&o?0x8b:0x89:3-o?0x8d:0x6b,m(3-o?a:3,A[r],a?A[x]:4),a?(2-o?y-128:128-y)<<s:m(s,A[y],A[x])));}
 
@@ -96,9 +96,9 @@ I  _t(K x,S sT){I a=xi-'a';  //!< determine type of x
 ZK e(I r,K x,ST st){K y=d(r,x,st);     //!< expr x to register r
   if(Ay){
     I qz=128==yi||(32>yi&&!zK[2+yi-16]); //!< if y is zero, either coded as a small int(128), or in the z array
-    R qz?ZR(t(x),r)                       //!< set register to zero
-        :MV(t(x),r,y);                    //!< otherwise move value to register
-  }else R y;}                             //!< for arrays and functions, pass y.
+    R qz?ZR(t(x),r)                      //!< set register to zero
+        :MV(t(x),r,y);                   //!< otherwise move value to register
+  }else R y;}                            //!< for arrays and functions, pass y.
 
 ZK b(I f,K x,ST st){K y=d(16,x,st);R(K)(Ay?AB("b"):16==yu?yC[yn-1]=JJ[yC[yn-1]+f*4],y:j3(y,tst(t(x),yu),c1(JJ[f?2:6])));}
 

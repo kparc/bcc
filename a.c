@@ -33,19 +33,20 @@ K sS(I c,K x){I n=c?xn:0;N(xn,K y=Xx;n+=yn)K r=kC(n);if(c)--rn;S s=rC;N(xn,K y=X
 ZK c(K x,K pt){N(xn,if(94u<Xc-32){K r=kC(2*xn);N(xn,hh(rC+2*i,Xc))R j2(c2('0'+xu,'x'),r);})
  C qt='"';if(pt)qt=2>xn&&'a'==cl(*xC)?0:'\'';R!qt?r1(x):cj(qt,jc(r1(x),qt));}
 K se(K x,K pt){//! string repr of a K object, pt - parse tree mode (don't use "", skip '' for identifiers)
- //if(!Ax)O("se x %.*s xt %d xn %d\n",xn,(S)x,xt,xn);
+ //if(!Ax)O("se LIST x %.*s xt %d xn %d\n",xn,(S)x,xt,xn);
+ //else O("se ATOM x %llx xt %d\n",x, Ax);
  P(Ax,
 #ifndef SYMS
    KS==Ax?c2('`','a'+xi):
 #else
-   KS==Ax?cj('`',nm(GGG[xi-'a'])):
+   KS==Ax?/*O("se KS x (%llx) %d xi %d xc %d\n",x,x,xi,xi-'a'),*/cj('`',nm(GGG[xi-'a'])):
    //KS==Ax?cj('`',x):
 #endif
    KC==Ax?X0(c(x=c1(xi),pt)):
    kp(KI==Ax?pi(xi):KF==Ax?pf(xf):(S)"+"+!xi))
  P(8==xt,l2(x))//< fixme nyi
 #ifdef SYMS
- P(KS==xt,cj('`',x))
+ P(KS==xt,/*O("se xc %s %d %d\n",xC,x,xn),*/cj('`',c(x,pt)))
  //P(KS==xt,cj('`',x))
  //P(KS==xt,O("se KS==xt %s %p\n",xC,x),cj('`',x))
 #endif
