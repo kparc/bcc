@@ -85,8 +85,8 @@ K _p(ST st){K x,y;CP a;I b;      //!< a operator, x/y operands, b return type
      T[b=a-'a']?T[b]-8:      //<! if varname has no type, it is a func call; for arrays, unset high bit
       (x=GGG[b],x=xy,        //<! xx is the string, xy is the code
 #else
-     T[b=gpos(y)]?T[b]-8:    //<! if varname has no type, it is a func call; for arrays, unset high bit
-      (x=gval(y),x=xy,       //<! xx is the string, xy is the code
+     T[b=gpos(t)]?T[b]-8:    //<! if varname has no type, it is a func call; for arrays, unset high bit
+      (x=*GG(y),x=xy,       //<! xx is the string, xy is the code
 #endif
        D0=MX(D0,xC[xn-2]),   //<! D[0] and D[1] are stored after RET
        D1=MX(D1,xC[xn-1]),xu),
@@ -106,7 +106,7 @@ K _p(ST st){K x,y;CP a;I b;      //!< a operator, x/y operands, b return type
 #ifndef SYMS
  $(':'==a&&Ax,T[xi-'a']=b)   //<! for assignment, set result type to the type of the right operand
 #else
- $(':'==a&&Ax,T[gpos(x)]=b)  //<! for assignment, set result type to the type of the right operand
+ $(':'==a&&Ax,T[GP(x)]=b)  //<! for assignment, set result type to the type of the right operand
 #endif
  b='%'-a?MX(b,t(x)):KF;      //<! for div, force it to float, for the rest, use the widest one (KF>KJ>KI>KC)
 
