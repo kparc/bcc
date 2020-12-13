@@ -12,7 +12,7 @@ K m1(J n);V1(r0);V1(l0);K3(l1);K1(l2);K tn(I t,I n),r1(K),xiy(K x,I i,K y);K2(j2
 #ifndef SYMS
 #define W0 -32 //32 is the size of seed alloc c0() \see init()
 #else
-#define W0 -64 //64 is the size of seed alloc c0() plus HT header \see init()
+#define W0 -128-64 //64 is the size of seed alloc c0() plus HT header \see init()
 #endif
 
 #ifdef USE_AW_MALLOC

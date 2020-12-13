@@ -5,6 +5,12 @@
 #include"a.h"
 #include"h.h"
 
+#include"m.h"
+#define bmalloc  aw_malloc
+#define bcalloc  aw_calloc
+#define brealloc aw_realloc
+#define bfree    aw_free
+
 #define SZ sizeof
 #define rea brealloc
 #define F(p) bfree(p)

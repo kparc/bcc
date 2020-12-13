@@ -177,10 +177,12 @@ Z_ K1(k1){K r=kK(1);R rx=x,r;}Z_ K2(k2){K r=kK(2);R rx=x,ry=y,r;}Z_ K3(k3){K r=k
 #define brealloc aw_realloc
 #define bfree    aw_free
 #else
+/*
 #define bmalloc  malloc
 #define bcalloc  calloc
 #define brealloc realloc
 #define bfree    free
+*/
 #endif
 
 
