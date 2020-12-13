@@ -43,15 +43,25 @@ ZK cm(I t,I x,I y){R o2(t,5,x,x,y);}ZK cv(I x,I y){R o2(KF,8,x,x,A[y]);}ZK sh(I 
 //!opcode length
 ZI ln(S s){I o=*s++,h=o/16,p=0xc5==o?2:0x0f==o;R 4==h?1+ln(s):RET==o||5==h?1:*JJ==o||7==h?2:0xe==h||0xb==h?5:p&&8==*s/16?6:p+(3==s[p]/64?2+(0x83==o||0x6b==o):5==(0xc7&s[p])?6:3);}
 
-//!linker: fix relative addresses
+//! linker: fix relative addresses
 ZV lnk(K x,K z,I a){S s=xC;W(s<xC+xn){//O("lnk a=%d\n",a);o(x),o(z);
-  I n=ln(s+=4==*s/16),p=0xc5==*s?2:0x0f==*s;S r=s+n-4;// 4==*s/16 => *s is a REX instruction, skip it
-  if(0xe8==*s||//function call
-   ((p?8-s[1]/16:4>*s/16||8==*s/16)&&(5==(0xc7&s[1+p])))){ //<! check if instruction uses relative address argument:
+  I n=ln(s+=4==*s/16),p=0xc5==*s?2:0x0f==*s;S r=s+n-4; //!< 4==*s/16 => *s is a REX instruction, skip it
+  if(0xe8==*s|| //!< function call
+   ((p?8-s[1]/16:4>*s/16||8==*s/16)&&(5==(0xc7&s[1+p])))){ //!< check if instruction uses relative address argument:
 #ifndef SYMS
   *(I*)r=(0xe8==*s?a-'a'==*r?x:26==*r?(K)l1:((K*)GGG[*r])[1]:32>*r?(K)&zF[2+*r-16]:(K)(GGG+*r-'a'))-(K)r-4;}
 #else
-  *(I*)r=(0xe8==*s?a-'a'==*r?x:26==*r?(K)l1:((K*)GG(GGG[*r]))[1]:32>*r?(K)&zF[2+*r-16]:(K)(GG(GGG[*r-'a'])))-(K)r-4;}
+  *(I*)r=(
+    0xe8==*s
+      ?a-'a'==*r
+        ?x
+        :26==*r
+          ?(K)l1
+          :((K*)GG(GGG[*r]))[1]
+      :32>*r
+        ?(K)&zF[2+*r-16]
+        :(K)(GG(GGG[*r-'a']))
+    )-(I)r-4;}
 #endif
   s+=n;}}
 
@@ -173,7 +183,7 @@ K pcle(S tp,I dbg){ST0(tp);//pst t;ST st=&t;sA=M=0;sN=8;D0=D1=1;N(26,L[i]=T[i]=0
 #ifndef SYMS
  if(!Ss[1]&&26u>*Ss-'a')r1(GGG[*Ss-'a']);     //!< inc xr of the referenced global var
 #else
- if(!Ss[1]&&26u>*Ss-'a')r1(nm(g));            //!< inc xr of the referenced global var
+ if(!Ss[1]&&26u>*Ss-'a')r1(g);            //!< inc xr of the referenced global var
 #endif
 
  if(r){XXX(kkk,k2(r1(zx),u(KI,c2(1,1))));    //!< assign a global
