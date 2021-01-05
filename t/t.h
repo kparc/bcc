@@ -1,5 +1,5 @@
 #pragma GCC diagnostic ignored "-Wunused-function"
-//#define UNITY_INCLUDE_DOUBLE
+#define UNITY_INCLUDE_DOUBLE
 #include"lib/unity.h"
 #include"../a.h"
 
@@ -20,12 +20,13 @@ ZC xQ(K x){R QQ==A(x);}ZK str(S x){R es((S)x);}ZK ptree(S s){K x=pcle(s,1);/*os(
 
 #define EQ_I(act,exp,msg) TEST_ASSERT_EQUAL_INT_MESSAGE(exp,act,msg);
 #define EQ_K(act,exp,msg) TEST_ASSERT_EQUAL_UINT64_MESSAGE(exp,act,msg);
-#define EQ_F(act,exp,msg) TEST_ASSERT_EQUAL_FLOAT_MESSAGE(exp,act,msg);
+#define EQ_E(act,exp,msg) TEST_ASSERT_EQUAL_FLOAT_MESSAGE(exp,act,msg);
+#define EQ_F(act,exp,msg) TEST_ASSERT_EQUAL_DOUBLE_MESSAGE(exp,act,msg);
 #define EQ_S(act,exp,msg) TEST_ASSERT_EQUAL_STRING_MESSAGE(exp,(S)str((S)act),msg);
 //#define STR(act,exp,msg) TEST_ASSERT_EQUAL_STRING_MESSAGE(exp,act,msg);
 
 #define SYMVAL(s) (S)se(hget(GT,s,sl((S)s))->v,0)
-#define EQ_SYM(act,exp,msg) {S x=SYMVAL((S)act);\
+#define EQ_SYM(act,exp,msg) {O("SYMVAL %llx\n",hget(GT,act,sl((S)act))->v);S x=SYMVAL((S)act);O("EQ_SYM %llx %\n",x);\
  TEST_ASSERT_MESSAGE(!memcmp(x,exp,MN(strlen(exp),xn)), "variable value should match expected");}
 
 #define FAIL(msg) TEST_ASSERT_MESSAGE(0,msg)
@@ -34,15 +35,19 @@ ZC xQ(K x){R QQ==A(x);}ZK str(S x){R es((S)x);}ZK ptree(S s){K x=pcle(s,1);/*os(
 
 //#define EQ_NL(act,msg)    TEST_ASSERT_MESSAGE(out(act)==NL,msg);
 
+//C('F',EQ_F(*(F*)&act,*(F*)&exp,msg))
+//C('F',EQ_F(act,exp,msg))
 #define ASSERT(act,exp,msg) S(TYPE(exp),\
-  C('S',EQ_S(act,exp,msg))    \
+  C('S',EQ_S(act,(K)exp,msg))    \
   C('I',EQ_I(I(act),exp,msg)) \
+  C('F',K y=act;F flt=*(F*)&y;EQ_E(flt,exp,msg)) \
   C('K',EQ_K(act,exp,msg)) \
   ,TEST_ASSERT_MESSAGE(0,"unknown type"))
 
+//O("___ %llx\n",x);
 #define _(act,exp,msg,cleanup...) Wprev=ws();if(TYPE(act)=='S'){K x=str((S)(J)(act));\
   if(xQ(x)){TEST_ASSERT_EQUAL_STRING_MESSAGE("ok",ES(x),"unexpected error");r0(x);}\
-  else{ASSERT(X0(x),exp,msg)}}else{ASSERT(act,exp,msg)};cleanup;
+  else{ASSERT(X0(x),exp,msg)}}/*else{ASSERT(act,exp,msg)}*/;cleanup;
 
 #define ERR(act,exp,msg,cleanup...) Wprev=ws();{K x=str((S)(J)(act));\
   if(!xQ(x)){TEST_ASSERT_EQUAL_STRING_MESSAGE(exp,"ok","expected an error");r0(x);}\
