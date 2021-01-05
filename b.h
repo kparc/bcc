@@ -1,6 +1,8 @@
 #pragma once
 #include"a.h"
 
+#define k2c(o,x) k2(kc(o),x)
+
 #define BLIM 16           //<! nesting limit FIXME add tests
 
 #ifdef ISOMRPH
