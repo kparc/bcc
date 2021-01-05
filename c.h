@@ -2,6 +2,12 @@
 #include<string.h>
 #include<stdio.h>
 
+#ifndef QUIET
+#define O printf
+#else
+#define O
+#endif
+
 #define ptr(x) (*(S*)&x)
 #define xC ptr(x)
 #define yC ptr(y)
@@ -22,7 +28,6 @@ enum UCL{UQ,Ul,Ug,Uc,Um,Ua};//!< QQ  Āɏ Ая  Αω  ∀⋿  ⌀⍺  (err, lat,
 #define $(b,a...)   if(b){a;}else             //cond
 #define C(i,a...)   case i:{a;}break;         //case
 #define S(i,c,a...) switch(i){c default:a;} //switch
-#define O printf
 
 #define MN(a,b)    ({typeof(a)_a=(a);typeof(a)_b=(b);_a<_b?_a:_b;})
 #define MX(a,b)    ({typeof(a)_a=(a);typeof(a)_b=(b);_a>_b?_a:_b;})
