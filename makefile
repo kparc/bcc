@@ -1,4 +1,4 @@
-CF=-minline-all-stringops -fno-asynchronous-unwind-tables -fno-stack-protector -Wall -Wno-pragmas
+CF=-minline-all-stringops -fno-asynchronous-unwind-tables -fno-stack-protector -Wall -Wno-pragmas -Wno-unused-value
 #-Wno-unused-command-line-argument -Wno-unknown-warning-option -Wno-parentheses -Wno-pointer-sign
 LF=-rdynamic
 #LF=+-nostdlib -c a.S
@@ -13,7 +13,8 @@ USRC=t/lib/unity.c
 UOBJ=t/obj/unity.o
 
 Q=@
-O=-O0 -g -std=gnu11 -DUSE_AW_MALLOC
+# -DSYMS
+O=-O0 -g -std=gnu11 -DUSE_AW_MALLOC -DQUIET
 LVM=clang
 GCC=$(shell env which gcc-9||env which gcc-8||echo gcc)
 #GCC+= -Wno-unused-value
@@ -21,6 +22,7 @@ TCC=tcc
 TESTC=$(LVM) $O
 
 #FIXME=-Wno-int-conversion -Wno-pointer-to-int-cast -Wno-unused-value -Wno-misleading-indentation -Wno-pragmas
+FIXME=-Wno-format -Wno-pointer-sign
 TOPTS=-DISOMRPH -DTST -DSYMS $(FIXME)
 T=t.b
 
@@ -42,11 +44,13 @@ endif
 # llvm
 l: uprep
 	$(Q)$(LVM) $O $(LF) $(SRC) -o b/bl $(CF)
-	b/bl $T
+	@b/bl
+	# $T
 
-lsyms: uprep
-	$(Q)$(LVM) $O $(LF) $(SRC) -DSYMS -o b/blsyms $(CF)
-	b/blsyms $T
+# llvm syms
+s: uprep
+	$(Q)$(LVM) $O $(LF) $(SRC) -o b/wip $(CF) -DSYMS
+	@b/wip
 
 # gcc
 g: uprep
@@ -68,7 +72,7 @@ r:
 ##
 wip: cleanwip
 	@#-fprofile-instr-generate -fcoverage-mapping -fdebug-macro -fmacro-backtrace-limit=0
-	$(Q)$(TESTC) $O $(TOPTS) t/t.c t/lib/unity.c $(SRC) -o w $(LF) $(CF) $(FIXME)
+	$(Q)$(TESTC) $O $(TOPTS) t/t.c t/lib/unity.c $(SRC) -o w $(LF) $(CF) $(FIXME) -fmacro-backtrace-limit=0
 	@echo
 
 w: wip
@@ -76,6 +80,12 @@ w: wip
 
 wl: wip
 	lldb --source-on-crash t/dat/t.lldb -b -o run ./w
+	@echo
+	@objdump -b binary -m i386 -M intel,x86-64 -D raw.bin | tail -n+8
+	@echo
+	@echo
+	@objdump -b binary -m i386 -M intel,x86-64 -D lnk.bin | tail -n+8
+	@echo
 
 ##
 ## incremental test build
@@ -94,16 +104,16 @@ urun: $(TBIN)
 
 #@#-fprofile-instr-generate -fcoverage-mapping -fdebug-macro -fmacro-backtrace-limit=0
 t/obj/%.o: %.c
-	$(Q)$(TESTC) $O $(CF) $(TOPTS) $< -o $@ -c #build b source
+	$(Q)$(TESTC) $O $(CF) $(TOPTS) $< -o $@ -c    # build b source
 
 t/obj/t.%.o: t/t.%.c
-	$(Q)$(TESTC) $O $(CF) $(TOPTS) $< -o $@ -c #build test units
+	$(Q)$(TESTC) $O $(CF) $(TOPTS) $< -o $@ -c    # build test units
 
 $(UOBJ): $(USRC)
-	$(Q)$(TESTC) $O $(CF) $(TOPTS) $< -o $@ -c #build unity
+	$(Q)$(TESTC) $O $(CF) $(TOPTS) $< -o $@ -c    # build unity
 
 b/t.%: t/obj/t.%.o
-	$(Q)$(TESTC)  $(BOBJ)  $(UOBJ) $< -o $@ $(LF) #link
+	$(Q)$(TESTC)  $(BOBJ)  $(UOBJ) $< -o $@ $(LF) # link
 	@#ls -la $@
 	@#$@
 
