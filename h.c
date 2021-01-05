@@ -47,6 +47,7 @@ B hget(HT t,S s,SZT n){               //!< lookup or insert string s of length n
  //hcpy(b->k,s,n);                    //!< copy string to the bucket and terminate it
  x=b->k=pn(s,n);xt=KS;                //!< internalize the string
  b->next=bkt[idx];bkt[idx]=b;         //!< push the new bucket to the head of the slot
+ //O("hget() %llx %llx %llx %llx %llx\n",b,b->k,&b->k,b->v,(&b->k)[-1]);//exit(0);
  if(b->next)hbal(t);                  //!< if slot has a tail, try to split it
  R cnt++,b;}                          //!< increment bucket count and return new bucket
 
