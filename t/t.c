@@ -10,6 +10,27 @@ UNIT(wip,
 
    O("----------- WIP ----------\n");
 
+   _("1|0",                        1,     "or truth table #1")
+   _("0|1",                        1,     "or truth table #2")
+   _("1|1",                        1,     "or truth table #3")
+   _("0|0",                        0,     "or truth table #4")
+
+   O("-----------------------------------------------------\n");
+
+   _("1&0",                        0,     "and truth table #1")
+   _("0&1",                        0,     "and truth table #2")
+   _("1&1",                        1,     "and truth table #3")
+   _("0&0",                        0,     "and truth table #4")
+
+   O("-----------------------------------------------------\n");
+
+   _("1^0",                        1,     "xor truth table #1")
+   _("0^1",                        1,     "xor truth table #2")
+   _("1^1",                        0,     "xor truth table #3")
+   _("0^0",                        0,     "xor truth table #4")
+
+//___
+
    //GSET("ƒ[]", ki(4))
    //GSET("λ",ki(42))
    //GSET("∀",ki(42))

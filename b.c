@@ -26,11 +26,11 @@ ZK o2f(I o,I x,I y){
 #else
  K v = y;
 #endif
- R 127>v //    0    1    2     3      4    5    6   7   8   9
-    //ints:  mov  add  sub  imul         cmp  and
-    ?i((I[]){0x8b,0x03,0x2b,0x0faf, 0x0,0x3b,0x23,0x0,0x0,0x0}[o],x,y)
-    :rex(0,0,x,o?c3(0x83,m(3," \0\5  \7\4\1  "[o],A[x]),y-128):c5(0xb8+(7&A[x]),y-128));}//!< move to register x
-//                            0 1 234 5 6 789                                            //!< add,sub,cmp,and,or
+ R 127>v //    0    1    2     3      4    5    6   7   8   9   10
+    //ints:  mov  add  sub  imul         cmp  and              xor
+    ?i((I[]){0x8b,0x03,0x2b,0x0faf, 0x0,0x3b,0x23,0x0,0x0,0x0,0x33}[o],x,y)
+    :rex(0,0,x,o?c3(0x83,m(3," \0\5  \7\4\1  \6"[o],A[x]),y-128):c5(0xb8+(7&A[x]),y-128));}//!< move to register x
+//                            0 1 234 5 6 78910                                            //!< add,sub,cmp,and,or,xor
 
 //!return object code to execute opcode o with arguments x and y and leave the argument of type t in register r
 ZK o2(I t,I o,I r,I x,I y){K z; //O("o2: t=%c o=%d r=%d x=%p y=%p\n"," chijefs CHIJEFS"[t],o,r,x,y);
@@ -50,8 +50,8 @@ ZK o2(I t,I o,I r,I x,I y){K z; //O("o2: t=%c o=%d r=%d x=%p y=%p\n"," chijefs C
  P((a?3:1)<o,j2(o2f(0,r,x),o2f(o,r,y))) //     mov  mov      lea imul
  R s=0<o?0:3+(o+1)/2,rex(r,a?0:y,x,c3(0>o?1&o?0x8b:0x89:3-o?0x8d:0x6b,m(3-o?a:3,A[r],a?A[x]:4),a?(2-o?y-128:128-y)<<s:m(s,A[y],A[x])));}
 
-//!opmap         0123456789012
-I U(I i){R l((S)" +-*% &|  <=>",i);}           //!< TODO cst mod neq not flr ...
+//!opmap         01234567890123
+I U(I i){R l((S)" +-*% &|  ^<=>",i);}           //!< TODO cst mod neq not flr ...
 
 //!comparison|operator|funcall dispatch
 ZK O2(I t,I f,I r,K x,K y){I i=Ay?yi:yu;       //!< y is either value or function name
