@@ -35,9 +35,9 @@ endif
 l: uprep
 	$(LVM) $O $(LF) $(SRC) -o b/bl $(CF)
 	@b/bl $T
-	@echo
-	@objdump -b binary -m i386 -M intel,x86-64 -D lnk.bin | tail -n+8
-	@echo
+	@#@echo
+	@#@objdump -b binary -m i386 -M intel,x86-64 -D lnk.bin | tail -n+8
+	@#@echo
 
 
 # llvm syms
