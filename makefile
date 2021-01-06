@@ -23,18 +23,8 @@ TESTC=$(LVM) $O
 
 #FIXME=-Wno-int-conversion -Wno-pointer-to-int-cast -Wno-unused-value -Wno-misleading-indentation -Wno-pragmas
 FIXME=-Wno-format -Wno-pointer-sign
-TOPTS=-DISOMRPH -DTST -DSYMS $(FIXME)
-T=t.b
-
-ifeq ($(ISOMRPH),1)
- O+=-DISOMRPH
- T=tiso.b
-endif
-
-ifeq ($(NOSYMS),1)
- TOPTS+=-USYMS
- QUIET=
-endif
+TOPTS=-UISOMRPH -DTST -DSYMS $(FIXME)
+T=tiso.b
 
 ifeq ($(shell uname),Darwin)
  LF+= -pagezero_size 1000
@@ -43,9 +33,8 @@ endif
 
 # llvm
 l: uprep
-	$(Q)$(LVM) $O $(LF) $(SRC) -o b/bl $(CF)
-	@b/bl
-	# $T
+	$(LVM) $O $(LF) $(SRC) -o b/bl $(CF)
+	@b/bl $T
 
 # llvm syms
 s: uprep
