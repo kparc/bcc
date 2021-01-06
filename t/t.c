@@ -42,8 +42,8 @@ UNIT(wip,
    //PT("f[i]{x}",        "('{';x)",     "ptree of a simple function #2")
    //PT("λ[i]{λ[i]}",       "FIXME",     "ptree of a basic recursive fn with utf identifier")
 
-   _("-42",                     -42,     "negation (int)")
-   _("-42.5",                 -42.5,     "negation (float)")
+   _("-42",                     -42,     "int negation")
+   _("-42.5",                 -42.5,     "float negation")
    _("/42",                      21,     "shift")
    _("//42",                     10,     "double shift")
    _("%42",                    42.0,     "cast to float")
@@ -58,10 +58,11 @@ UNIT(wip,
 
    //PT("f[i]{$[10>x;f[x+1];x]}",        "asdf",    "basic function declaration with unicode identifier")
    //PT("ƒ[i]{x}",          "('{';x)",   "basic function declaration with unicode identifier")
-   //_("f[i]{$[10>x;f[x+1];x]}",         NONE,    "basic function declaration with unicode identifier")
+   //_("f[i]{$[10>x;f[x+1];x]}",            NONE,    "basic function declaration with unicode identifier")
    
    //_("f[2]",                     4,    "basic function call")
    //_("f",                      123,    "disasm")
+
 
    //FIXME PT("TEST+NONE","('+';TEST;NONE)",     "addition of non-existent globals hould produce correct parse tree")
    //FIXME ERR("123+NONE",              "NONE",    "sum holds the correct scalar value")
