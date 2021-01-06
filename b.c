@@ -56,8 +56,8 @@ I U(I i){R l((S)" +-*% &|  <=>",i);}           //!< TODO cst mod neq not flr ...
 //!comparison|operator|funcall dispatch
 ZK O2(I t,I f,I r,K x,K y){I i=Ay?yi:yu;       //!< y is either value or function name
  R u(r,j3(Ay?c0():y,x,
-   U('<')>f?o2(t,f,r,xu,i)                     //!< operator
-   :j2(cm(t,xu,i),16>r?cc(f-9,r):c1(f-9))));}  //!< comparison or function call
+    U('<')>f?o2(t,f,r,xu,i)                     //!< operator
+   :j2(cm(t,xu,i),16>r?cc(f-U('^'),r):c1(f-U('^')))));}  //!< comparison or function call (^ is ops|conds boundary in U())
 
 //!compare, convert to float, sh nyi
 ZK cm(I t,I x,I y){R o2(t,5,x,x,y);}ZK cv(I x,I y){R o2(KF,8,x,x,A[y]);}ZK sh(I t,I r){R AB("sh");}
