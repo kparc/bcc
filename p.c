@@ -33,7 +33,7 @@ ZK pF(K x,I b,ST st){       //!< promote rettype to float if needed
 #endif
       :u(KF,k2c('%',x));}
 
-ZK pE(I a,I c,ST st){        //!< parse an expr: c cmd, a optional rettype
+ZK pE(I a,I c,ST st){        //!< parse an expr: c operator, a optional rettype
  K r=k1(kc(c)),x;            //!< store operator as char in K array
  do r=jk(r,x=qt()            //!< append parse trees of subsequent exprs to r
       ?n(ki(0))              //!< null-terminate expr when reached ;})]
