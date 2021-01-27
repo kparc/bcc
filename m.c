@@ -32,8 +32,8 @@ K tn(I t,I n){K x=m1(MX(1,n)*nt[KS<t?0:t]);R W+=16L<<xm,xu=0,xt=t,xn=n,x;}
 
 //! append items of y after the i-th element of x
 K xiy(K x,I i,K y){
- memcpy(xC+NX*i,(V*)y,NX*yn);   //!< NX is the width of x item type
- if(!yt)N(yn,r1(Yx))            //!< if y is an mixed list, increase refcounts of items in y
+ memcpy(xC+NX*i,(V*)y,NX*yn);   //!< NX is the (N)ative byte width of a single item in the list x
+ if(!yt)N(yn,r1(Yx))            //!< if y is a mixed list, increase refcounts of items in y
  R Y0(x);}                      //!< recursively decrease refcounts of y and return x
 
 //! join two lists
@@ -53,7 +53,7 @@ V*aw_realloc(V*p,size_t n){K x=(K)p;
     P(!x||!n,$(x,aw_free(p));aw_malloc(n?n:1))        //!< if ptr is null, realloc() is same as malloc(n), if size is 0 and ptr is not, ptr is freed and a new byte-sized object is allocated
     P(KC-xt,O("`nyi"),(V*)0)                          //!< realloc only supports char-typed lists
     P(xn<=(I)n||(!xr&&8+NX*(J)n<16L<<xm),xu=0,xn=n,p) //!< if new size is less than current, or x has no refs and there is enough space in the block, set xn to requested length and return x
-    R(V*)xiy(tn(xt,n),0,x);}                          //!< otherwise, copy x to a fresh list of the requested size and release the old one.
+    R(V*)xiy(tn(xt,n),0,x);}                          //!< otherwise, copy contents of x into to a fresh list of requested size and release the old one.
 V*aw_calloc(size_t n,size_t sz){                      //!< allocate n*sz bytes and fill with zero
     I nn=MX(1,n)*MX(1,sz);K x=tn(KC,nn);              //!< calculate new length and allocate a new list
     //N(nn/8,xJ[i]=0LL)N(nn%8,((C*)x)[nn-i]=0)R x;}   //<! zero out first with 8-byte stride, then byte-wise
