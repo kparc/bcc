@@ -83,7 +83,7 @@ further on general coding style and organization:
 
 4. comparison against something known is always backwards by convention, i.e. subject of a test is strictly east, `42<x` instead of `x>42`. there are good reasons for that, but takes time to get used to.
 
-5. `++x`/`--x` are preferred to their counterparts when both are valid. no good reason anymore, goes back to the days of old.
+5. `++x/--x` are used instead of their post- counterparts when any is valid. no good reason anymore, goes back to the days of old.
 
 6.  `SW(C,..[,default])` and `Z()[else]` are omni-present, but generally preferred to what is informally known as ternary cascade, of general form `cond0?then0:cond1?then1:..else`. it is preferred because it is a value and hence can be used in assignment. unlike `C` in `SW`, it allows side effects in conds, which is used all over the place and can sometimes be a bit challenging.
 
