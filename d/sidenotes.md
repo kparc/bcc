@@ -73,25 +73,29 @@ for more details, refer to `m.c` which should be adequately documented by now.
 
 further on general coding style and organization:
 
-0. the indent is strictly one `0x20`.
+0. indent is strictly one `0x20`.
 
 1. functions are written in a way that can be described as "fail fast". The function body usually starts with declarations of local vars, immediately followed by a set of `P(cond,retval)` macros (a good mnemonic for `P` is `panic`, although the proper expansion is `predicate`). Panics typically test the arguments for sanity, and bail early if something doesn't look right, which flattens the control flow of the main bulk of the function. Since most functions return a `K`, `retval` is presumed to be a `K`. that said, `P()` macro is not limited to early sanity tests and is ubiqutous.
 
 2. it is very common that instead of declaring and assigning an explicit `r` for return value, the tail of a function body would be in form `R expr,expr,expr,...,retval;` where exprs and retval can be fairly complex C expressions, possibly with inline assignments, function calls and other side effects, evaluated left to right as per C spec, where only the final value has anything to do with `R`. i.e. is actually returned.
 
-3. we generally avoid inequality `x!=y`, because it is two chars. instead, we test with `x-y`, which holds true when operands are not the same. this takes time to get used to, especially when used inline, or for example `a-'a'`
+3. inequality `x!=y` is not used at all, because it is two chars. instead, we test with `x-y`, which holds true when operands differ. this takes time to get used to, especially when used inline, or e.g. `a-'a'`.
 
-4. inequality tests against constants are always backwards, ie `42<x` instead of `x>42` by convention. pre-increment/decrement `++x/--x` are preferred to their post- counterparts.
+4. comparison against something known is always backwards by convention, i.e. subject of a test is strictly east, `42<x` instead of `x>42`. there are good reasons for that, but takes time to get used to.
 
-5. Loops are strictly implicit and use two macros `W while` and `N for` with some exceptions that are rare enough not to warrant an extra macro, e.g. when the `for` loop goes backwards.
+5. `++x/--x` are used instead of their post- counterparts when any is valid. no good reason anymore, goes back to the days of old.
 
-6. `switch/case` and `if/else if/else` are not uncommon, but generally avoided. What is used instead is informally known as `ternary cascades` of the general form `cond0?then0:cond1?then1:...` ad infinitum, very often with side effects in conds and thens, which can be a bit treacherous sometimes.
+6.  `SW(C,..[,default])` and `Z()[else]` are omni-present, but generally preferred to what is informally known as ternary cascade, of general form `cond0?then0:cond1?then1:..else`. it is preferred because it is a value and hence can be used in assignment. unlike `C` in `SW`, it allows side effects in conds, which is used all over the place and can sometimes be a bit challenging.
 
-7. since explicit parens are avoided where possible to save space, the precedence is sometimes tricky to read, especially in case of ternaries.
+7. `Z()` saves a lot of keystrokes, but can be absolutely deadly if the invisible `else` is not properly clamped with `;` where it should be.
 
-8. hard-coded magic numbers are not uncommon, and make assumptions about underlying ISA, e.g. pointer width. these are the priority patients to be turned into proper defines and properly documented.
+8. Loops are strictly implicit and use two macros `W while` and `N for` with some exceptions that are rare enough not to warrant an extra macro, e.g. when the `for` loop goes backwards.
 
-9. no part of the code is thread-safe, there is a fair amount of *global state* going on. which is gradually being narrowed down to static globals where possible, and moved closer to functions that use them. Of special care are cases when globals are using names of staple locals (`xyzrf`) which can impair comprehension and result in bugs.
+9. since explicit parens are avoided where possible to save space, the precedence is sometimes tricky to read, especially in case of ternaries.
+
+10. hard-coded magic numbers are not uncommon, and make assumptions about underlying ISA, e.g. pointer width. these are the priority patients to be turned into proper defines and properly documented.
+
+11. no part of the code is thread-safe, there is a fair amount of *global state* going on. which is gradually being narrowed down to static globals where possible, and moved closer to functions that use them. Of special care are cases when globals are using names of staple locals (`xyzrf`) which can impair comprehension and result in bugs.
 
 
 # tests

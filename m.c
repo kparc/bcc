@@ -17,7 +17,7 @@ K m1(J n){K x,r;             //!< allocate a memory block
     //! assign  fill the smaller empty buckets as follows:
     W(i<j)                   //!< j-i are the empty memory slots
      x+=16L<<xm,             //!< the next available memory region x..
-     M[*(J*)(x-8)=i++]=x,    //!< ..is assigned to a bucket in a corresponding slot with 8 byte preamble.
+     M[*(J*)(x-8)=i++]=x,    //!< ..is assigned to a bucket in a corresponding slot with 8-byte preamble.
      xx=0;R r;}
 
 V1(l0){if((J)xy)l0(xy),l0(xz);xx=M[xm],M[xm]=x;}K3(l1){K r=m1(24);R rt=8,rn=3,rx=x,ry=y,rz=z,r;}K1(l2){R kp((S)"[]");}//!< struct/fixedarray experiment
@@ -32,18 +32,18 @@ K tn(I t,I n){K x=m1(MX(1,n)*nt[KS<t?0:t]);R W+=16L<<xm,xu=0,xt=t,xn=n,x;}
 
 //! append items of y after the i-th element of x
 K xiy(K x,I i,K y){
- memcpy(xC+NX*i,(V*)y,NX*yn);   //!< NX is the width of x item type
- if(!yt)N(yn,r1(Yx))            //!< if y is an mixed list, increase refcounts of items in y
- R Y0(x);}                      //!< recursively decrease refcounts of y and return x
+ memcpy(xC+NX*i,(V*)y,NX*yn);   //!< NX is the (N)ative byte width of a single item in the list x
+ if(!yt)N(yn,r1(Yx))            //!< if y is a mixed list, increase refcounts of items in y
+ R Y0(x);}                      //!< recursively decrease refcounts of y and return x.
 
-//! join two lists
-K2(j2){I m=xn,n=m+(Ay?1:yn);    //!< m is the old size, n is the new one (inc n by 1 if y is an atom)
+//! join two lists x and y, or append an atom y to list x
+K2(j2){I m=xn,n=m+(Ay?1:yn);    //!< m is the old size of x, n is the new one (inc n by 1 if y is an atom)
     P(!m&&!xt,X0(y))            //!< if x is empty, decrease refcount of x and return y
-    if(xr||8+NX*n>16L<<xm)      //!< if x has references, or there is not enough space left in the x's ram block...
-      x=xiy(tn(xt,n),0,x);      //!< ..copy it to a new array of the size n
-    else xu=0,xn=n;             //!< otherwise, the size of x to the new size, then:
+    if(xr||8+NX*n>16L<<xm)      //!< if x has references, or there is not enough space left in the x's membucket...
+      x=xiy(tn(xt,n),0,x);      //!< ..copy x to a new array of size n
+    else xu=0,xn=n;             //!< otherwise, set the size of x to the new size, then:
     Ay?(K)memcpy(xC+NX*m,&y,NX) //<! for atoms, append the new item via memcpy
-      :xiy(x,m,y);R x;}         //<! for lists, use xiy to append y items to the x's tail
+      :xiy(x,m,y);R x;}         //<! for lists, use xiy to append y items to the x's tail.
 
 //! posix wrappers for benchmarking
 #ifdef USE_AW_MALLOC
@@ -53,7 +53,7 @@ V*aw_realloc(V*p,size_t n){K x=(K)p;
     P(!x||!n,$(x,aw_free(p));aw_malloc(n?n:1))        //!< if ptr is null, realloc() is same as malloc(n), if size is 0 and ptr is not, ptr is freed and a new byte-sized object is allocated
     P(KC-xt,O("`nyi"),(V*)0)                          //!< realloc only supports char-typed lists
     P(xn<=(I)n||(!xr&&8+NX*(J)n<16L<<xm),xu=0,xn=n,p) //!< if new size is less than current, or x has no refs and there is enough space in the block, set xn to requested length and return x
-    R(V*)xiy(tn(xt,n),0,x);}                          //!< otherwise, copy x to a fresh list of the requested size and release the old one.
+    R(V*)xiy(tn(xt,n),0,x);}                          //!< otherwise, copy contents of x into to a fresh list of requested size and release the old one.
 V*aw_calloc(size_t n,size_t sz){                      //!< allocate n*sz bytes and fill with zero
     I nn=MX(1,n)*MX(1,sz);K x=tn(KC,nn);              //!< calculate new length and allocate a new list
     //N(nn/8,xJ[i]=0LL)N(nn%8,((C*)x)[nn-i]=0)R x;}   //<! zero out first with 8-byte stride, then byte-wise
