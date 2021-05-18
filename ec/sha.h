@@ -12,6 +12,10 @@
 #include <stddef.h>
 #include <string.h>
 
+#define dsn memcpy
+#define mset memset
+#define mmv memmove
+
 /* SHA512 state. State is updated as data is fed in, and then the final
  * hash can be read out in slices.
  *
@@ -28,7 +32,7 @@ extern const struct sha_state sha_initial_state;
 /* Set up a new context */
 static inline void sha_ini(struct sha_state *s)
 {
-	memcpy(s, &sha_initial_state, sizeof(*s));
+	dsn(s, &sha_initial_state, sizeof(*s));
 }
 
 /* Feed a full block in */

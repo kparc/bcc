@@ -2,7 +2,7 @@ M=64
 C=clang
 O=-Os -m$M -std=gnu11 -DTST -pedantic -minline-all-stringops -fno-asynchronous-unwind-tables -fno-stack-protector -Wno-gnu-statement-expression -Wno-variadic-macros -Wno-incompatible-pointer-types-discards-qualifiers
 SO=-shared -rdynamic -fPIC
-# -nostdlib
+#-nostdlib
 EMOPT=${shell grep -v '@see' wop | xargs}
 EMOPT2=${shell grep -v '@see' wop2 | xargs}
 

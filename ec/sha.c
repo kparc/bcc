@@ -170,12 +170,12 @@ void sha_end(struct sha_state *s, const uint8_t *blk,
 	const size_t last_size = total_size & (SHA512_BLOCK_SIZE - 1);
 
 	if (last_size)
-		memcpy(temp, blk, last_size);
+		dsn(temp, blk, last_size);
 	temp[last_size] = 0x80;
 
 	if (last_size > 111) {
 		sha_add(s, temp);
-		memset(temp, 0, sizeof(temp));
+		mset(temp, 0, sizeof(temp));
 	}
 
 	/* Note: we assume total_size fits in 61 bits */
@@ -207,7 +207,7 @@ void sha_get(const struct sha_state *s, uint8_t *hash,
 			c = len;
 
 		store64(tmp, s->h[i++]);
-		memcpy(hash, tmp + offset, c);
+		mmv(hash, tmp + offset, c);
 		len -= c;
 		hash += c;
 	}
@@ -224,7 +224,7 @@ void sha_get(const struct sha_state *s, uint8_t *hash,
 		uint8_t tmp[8];
 
 		store64(tmp, s->h[i]);
-		memcpy(hash, tmp, len);
+		mmv(hash, tmp, len);
 	}
 }
 #endif

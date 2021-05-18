@@ -1,5 +1,10 @@
 #include<string.h>//mcpy
 #include<printf.h>//printf
+
+#define dsn memcpy
+#define mmv memmove
+#define mset memset
+
 #include"sha.h"
 
 typedef void _;typedef unsigned short H;typedef unsigned int V;typedef unsigned char*S,G;typedef int I;typedef unsigned long long UJ;
@@ -59,7 +64,6 @@ extern ZG eql(S x,S y);extern ZZ prp(S x),xmul(S r,S q,S e);
 #define SUB(y,yy)  V c=218;N(31,c+=y-VX+0xff00;Rg=c;c>>=8)c+=yy-Vx(31);RDCC
 #define BIT(x)     G bit=(x[i>>3]>>(i&7))&1;
 #define SEL(f)     sel(r.f,r.f,s.f,bit);
-#define dsn(d,s,n) memcpy((S)d,(S)s,n)
 #define rfc(x)     x[31]&=0x7f
 #define RFC        rfc(r)
 #define sq(r,x)    mul(r,x,x)
@@ -76,5 +80,12 @@ extern ZG eql(S x,S y);extern ZZ prp(S x),xmul(S r,S q,S e);
 #define P2y p2->y
 #define P2z p2->z
 #define P2t p2->t
+
+//! nolibc
+#if 0
+unsigned char*dsn(unsigned char*d,unsigned char*s,size_t n)  {W(n--)*d++=*s++;R d;}
+unsigned char*mmv(unsigned char*d,unsigned char*s,size_t n)  {P(s<d&&d<s+n,d+=n,s+=n;W(n--)*--d=*--s;d)R dsn(d,s,n);}
+unsigned char*mset(unsigned char* s,int c,size_t n)          {N(n,s[n]=c);R s;}
+#endif
 
 //:~
