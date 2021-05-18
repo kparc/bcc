@@ -58,3 +58,16 @@ char*A_PRI="77076d0a7318a57d3c16c17251b26645df4c2f87ebc0992ab177fba51db92c2a",//
 #endif
 
 //:~
+
+/*
+typedef unsigned char*S;typedef int I;
+#define W(a...)    while(({a;}))
+#define N(n,a...)  {I _n=(n),i=-1;W(++i<_n){a;}}
+#define X(x)       N(32,x)
+#define O printf
+#define nl() O("\n")
+#define dump(x) X(O("%02x",x[i]))
+#define XI(p) (*(p) <= '9'? (*(p)- '0'): *(p) <= 'F'? (*(p)-'A'+10):(*(p)-'a'+10))
+#define xtoi(p) ((XI(p)*16)+XI((p)+1))
+static S hex(char*x){char*s;S b=malloc(strlen((char*)x)/2+1);I l=0;for(s=x;*s;s+=2){((S)b)[l++]=xtoi(s);}return b;}
+*/

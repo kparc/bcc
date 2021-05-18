@@ -61,12 +61,13 @@ K _ss(S x){R ss(x);}K evl(S x){R ev(ss(x));}S ver(){R(S)__DATE__;}extern I w;I s
 I r4(I);U r8();_ SHA5(_*r,S msg,U mn,S sig,U sn);
 
 #define O printf
-#define _Pp(s,x,n) O("%s ",s);Nj(n,O("%02x",x[j]));NL
+/*#define _Pp(s,x,n) O("%s ",s);Nj(n,O("%02x",x[j]));NL
 #define _Pr(s,x,n) O("\nuint8_t %s[%d]={",s,n);Nj(n,O("0x%02x%s%s",x[j],(j!=n-1)?",":"",((j!=n-1)&&(j%8==7))?"\n\t\t ":""));O("};\n\n");
 #define Pp(s,x)  _Pp(s,x,32)
 #define PP(s,x)  _Pp(s,x,64)
 #define Prr(s,x) _Pr(s,x,32)
 #define PRR(s,x) _Pr(s,x,64)
+*/
 
 #define SZ sizeof
 #define FP(x) G x[32];
@@ -94,12 +95,12 @@ I r4(I);U r8();_ SHA5(_*r,S msg,U mn,S sig,U sn);
 #define CORK r[31]&=127
 
 #define cpy(x,a) mcp(x,a,32)
-#define BIT(x) const G bit=(x[i>>3]>>(i&7))&1;
-#define SEL(f) sel(r.f,r.f,s.f,bit);
-#define Px p->x
-#define Py p->y
-#define Pz p->z
-#define Pt p->t
+#define BIT(x)   const G bit=(x[i>>3]>>(i&7))&1;
+#define SEL(f)   sel(r.f,r.f,s.f,bit);
+#define Px  p->x
+#define Py  p->y
+#define Pz  p->z
+#define Pt  p->t
 #define P1x p1->x
 #define P1y p1->y
 #define P1z p1->z
@@ -130,9 +131,8 @@ ZFP(EK)={0x59,0xf1,0xb2,0x26,0x94,0x9b,0xd6,0xeb,0x56,0xb1,0x83,0x82,0x9a,0x14,0
 
 //mod p=2^255-19 compare,load,select,normalize,add,multiply,constmult,subtract,negate,reciprocal,pow2^252-3,sqrt
 /*
-G cmp(S x,S y){G r=0;X(r|=Xg^Yg)sm(4)sm(2)sm(1)R(r^1)&1;}
-_ lod(S r,V c){X(Rg=0)N(SZ(c),Rg=c;c>>=8)}
-*/
+G cmp(S x,S y){G r=0;X(r|=Xg^Yg)sm(4)sm(2)sm(1)R(r^1)&1;}*/
+_ loa(S r,V c){X(Rg=0)N(SZ(c),Rg=c;c>>=8)}
 _ sel(S r,S x,S y,G c){X(Rg=-c&(Yg^Xg)^Xg)}
 _ nrm(S r){FP(y);H c=(r[31]>>7)*19;CORK;RDc;c=19;N(31,c+=Rg;Yg=c;c>>=8)c+=((H)r[31])-128;y[31]=c;sel(r,y,r,(c>>15)&1);}
 _ sum(S r,S x,S y){H c=0;X(c>>=8;c+=HX+HY;Rg=c)CORK;RDC}
@@ -140,10 +140,9 @@ _ mul(S r,S x,S y){V c=0;X(c>>=8;Nj(i+1,c+=Vx(j)*Vy(i-j))Nj(31-i,c+=Vx(i+1+j)*Vy
 _ mlc(S r,S x,V y){V c=0;X(c>>=8;c+=y*VX;Rg=c)CORK;c>>=7;c*=19;RDc}
 _ sub(S r,S x,S y){V c=218;N(31,c+=VX-VY+65280;Rg=c;c>>=8)c+=Vx(31)-Vy(31);RDCC}
 _ neg(S r,S x){    V c=218;N(31,c+=65280-VX;   Rg=c;c>>=8)c-=Vx(31);       RDCC}
-_ inv(S r,S x){FP(s)mul(s,x,x);RSX;N(248,SRSX)SRR,RSS,SRX,RSS;N(2,SRSX)}
-/*
-_ xpn(S r,S x,S s){ mul(r,x,x);SRX;N(248,RSS,SRX)RSS,SRSX;}
-_ sqr(S r,S a){FP(v)FP(i)FP(x)FP(y)mlc(x,a,2),xpn(v,x,y),mul(y,v,v),mul(i,x,y),lod(y,1),sub(i,i,y),mul(x,v,a),mul(r,x,i);}
+_ inv(S r,S x){FP(s)sq(s,x);RSX;N(248,SRSX)sq(s,r),sq(r,s),SRX,sq(r,s);N(2,SRSX)}
+_ exp(S r,S x,S s){ sq(r,x);SRX;N(248,sq(r,s),SRX)sq(r,s),sq(s,r),RSX;}
+_ sqt(S r,S a){FP(v)FP(i)FP(x)FP(y)mlc(x,a,2),exp(v,x,y),sq(y,v),mul(i,x,y),loa(y,1),sub(i,i,y),mul(x,v,a),mul(r,x,i);}
 
 
 I msb(S x){G y;_N(32,if((y=Xg)){i<<=3;W(y){y>>=1;i++;}R--i;})R 0;}
@@ -161,12 +160,6 @@ _ fmul(S r,S a,S b,S m){memset(r,0,32);_N(msb(m),BIT(b);FP(plusa);shb(r,1),rsb(r
 static inline _ ecp(pt d,pt s){mcp(d,s,SZ(*d));}
 static inline _ prp(S x){x[0]&=0xf8;x[31]&=0x7f;x[31]|=0x40;}
 /*
-_ prj(pt p,S x,S y){cpy(Px,x),cpy(Py,y),lod(Pz,1),mul(Pt,x,y);}
-_ upj(S x,S y,pt p){FP(z);inv(z,Pz),mul(x,Px,z),mul(y,Py,z),nrm(x),nrm(y);}
-_ pck(S c,S x,S y){FP(t);G p;cpy(t,x),nrm(t);cpy(c,y);nrm(c);c[31]|=(t[0]&1)<<7;}
-G try(S x,S y,S comp){I p=comp[31]>>7;FP(a)FP(b)FP(c);cpy(y,comp);y[31]&=127;
-  mul(c,y,y),mul(b,c,ED),sum(a,b,ONE),inv(b,a),sub(a,c,ONE),mul(c,a,b),sqr(a,c),neg(b,a),sel(x,a,b,(a[0]^p)&1),mul(a,x,x),nrm(a),nrm(c);R cmp(a,c);}
-G upk(pt p,S packed){FP(x)FP(y)G ok=try(x,y,packed);R prj(p,x,y),ok;}
 */
 
 _ smm(pt p,pt p1,pt p2){FPah;sub(c,P1y,P1x),sub(d,P2y,P2x),mul(a,c,d),sum(c,P1y,P1x),sum(d,P2y,P2x),mul(b,c,d),
