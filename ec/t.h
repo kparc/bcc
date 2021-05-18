@@ -67,6 +67,7 @@ typedef unsigned char*S;typedef int I;
 #define O printf
 #define nl() O("\n")
 #define dump(x) X(O("%02x",x[i]))
+
 #define XI(p) (*(p) <= '9'? (*(p)- '0'): *(p) <= 'F'? (*(p)-'A'+10):(*(p)-'a'+10))
 #define xtoi(p) ((XI(p)*16)+XI((p)+1))
 static S hex(char*x){char*s;S b=malloc(strlen((char*)x)/2+1);I l=0;for(s=x;*s;s+=2){((S)b)[l++]=xtoi(s);}return b;}
