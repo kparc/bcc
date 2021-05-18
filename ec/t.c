@@ -38,9 +38,12 @@ I main(I c,char**v){srand(time(0));pcg32 prng={rand(),rand()|1};
  edkeygen(sec,pub,seed);edsign(sig,pub,sec,msg,MSG_SIZE);
  P(!edverify(sig,pub,msg,MSG_SIZE),O("failed on good plaintext\n"),-1)
  msg[1]^=0x10;P(edverify(sig,pub,msg,MSG_SIZE),O("failed on bad plaintext\n"),-1)
- O("ed25519 smoke test ok\n");
+ O("ed25519 smoke test ok\n");free(msg),free(SEED);
 
- /* rfc8072 7.1 */
+//! rfc8072 test vectors
+#define RFC8032(test) O("rfc8032_%s_verify: %s\n",test,edverify(SIG,PUB,MSG,LEN)?"ok":"FAIL"); \
+ edsign(TESTSIG,PUB,PRI,MSG,LEN);O("rfc8032_%s_sign: %s\n",test,memcmp(TESTSIG,SIG,64)?"FAIL":"ok"); \
+ free(PRI),free(PUB),free(SIG),free(MSG);
 
  G TESTSIG[64];
 
@@ -118,9 +121,7 @@ I main(I c,char**v){srand(time(0));pcg32 prng={rand(),rand()|1};
              "0618983f8741c5ef68d3a101e8a3b8ca"
              "c60c905c15fc910840b94c00a0b9d0");
 
- O("rfc8032_test1024_verify: %s\n",edverify(SIG,PUB,MSG,LEN)?"ok":"FAIL");
- edsign(TESTSIG,PUB,PRI,MSG,LEN);
- O("rfc8032_test1024_sign: %s\n", memcmp(TESTSIG,SIG,64)?"FAIL":"ok");
+ RFC8032("test1024")
 
  PRI = hex("833fe62409237b9d62ec77587520911e"
            "9a759cec1d19755b7da901b96dca3d42");
@@ -136,9 +137,7 @@ I main(I c,char**v){srand(time(0));pcg32 prng={rand(),rand()|1};
            "2192992a274fc1a836ba3c23a3feebbd"
            "454d4423643ce80e2a9ac94fa54ca49f");
 
- O("rfc8032_testABC_verify: %s\n",edverify(SIG,PUB,MSG,LEN)?"ok":"FAIL");
- edsign(TESTSIG,PUB,PRI,MSG,LEN);
- O("rfc8032_testABC_sign: %s\n", memcmp(TESTSIG,SIG,64)?"FAIL":"ok");
+ RFC8032("testABC")
 
  PRI = hex("c5aa8df43f9f837bedb7442f31dcb7b1"
            "66d38535076f094b85ce3a2e0b4458f7");
@@ -148,12 +147,9 @@ I main(I c,char**v){srand(time(0));pcg32 prng={rand(),rand()|1};
            "0ce548a284743a445e3680d7db5ac3ac"
            "18ff9b538d16f290ae67f760984dc659"
            "4a7c15e9716ed28dc027beceea1ec40a");
- LEN = 2;
- MSG = hex("af82");
+ LEN = 2;MSG = hex("af82");
 
- O("rfc8032_test3_verify: %s\n",edverify(SIG,PUB,MSG,LEN)?"ok":"FAIL");
- edsign(TESTSIG,PUB,PRI,MSG,LEN);
- O("rfc8032_test3_sign: %s\n", memcmp(TESTSIG,SIG,64)?"FAIL":"ok");
+ RFC8032("test3")
 
  PRI = hex("4ccd089b28ff96da9db6c346ec114e0f"
            "5b8a319f35aba624da8cf6ed4fb8a6fb");
@@ -163,12 +159,9 @@ I main(I c,char**v){srand(time(0));pcg32 prng={rand(),rand()|1};
            "a2b27b5416503f8fb3762223ebdb69da"
            "085ac1e43e15996e458f3613d0f11d8c"
            "387b2eaeb4302aeeb00d291612bb0c00");
- LEN = 1;
- MSG = hex("72");
+ LEN = 1;MSG = hex("72");
 
- O("rfc8032_test2_verify: %s\n",edverify(SIG,PUB,MSG,LEN)?"ok":"FAIL");
- edsign(TESTSIG,PUB,PRI,MSG,LEN);
- O("rfc8032_test2_sign: %s\n", memcmp(TESTSIG,SIG,64)?"FAIL":"ok");
+ RFC8032("test2")
 
  PRI = hex("9d61b19deffd5a60ba844af492ec2cc4"
            "4449c5697b326919703bac031cae7f60");
@@ -180,10 +173,7 @@ I main(I c,char**v){srand(time(0));pcg32 prng={rand(),rand()|1};
            "d25bf5f0595bbe24655141438e7a100b");
  LEN = 0;MSG = hex("");
 
- O("rfc8032_test1_verify: %s\n",edverify(SIG,PUB,MSG,LEN)?"ok":"FAIL");
- edsign(TESTSIG,PUB,PRI,MSG,LEN);
- O("rfc8032_test1_sign: %s\n", memcmp(TESTSIG,SIG,64)?"FAIL":"ok");
-
+ RFC8032("test1")
 
  R 0;}
 

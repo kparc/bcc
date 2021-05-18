@@ -35,7 +35,7 @@ ZZ xmul(S r,S q,S e){fp xm,xms,zms,zm={1},xm1={1},zm1={0};dsn(xm,q,32); //!< p(m
     sel(xm1,xm1,xm,bit),sel(zm1,zm1,zm,bit),sel(xm,xm,xms,bit),sel(zm,zm,zms,bit))//!< bit?(p(2m+1),p(2m)):(p(2m),p(2m-1))
    inv(zm1,zm),mul(r,zm1,xm),nrm(r);}//!< freeze out projective coords
 
-// x25519 ecdh
+//! x25519 ecdh
 _ xkeygen(fp sec,fp pub,fp rnd){dsn(sec,rnd,32),prp(sec),xmul(pub,BP,sec),rfc(pub);}
 _ xshared(fp shr,fp sec,fp pub){xmul(shr,pub,sec);}//_ xrandom(S x,V n){N(n,Xk=r8())}
 
