@@ -1,14 +1,14 @@
 ## notable changes
 
-compared to the original, available in the initial commit for reference, so far:
+here are notable changes compared to the original, which is available in the initial commit for reference:
 
-1. the original is using a somewhat opinionated superset of ISO C. specifically, it makes prominent use of nested functions, a gcc-specific extension, unportable to any compliant compiler of C language. the modified codebase is free from nested functions and some other compiler-specific gotchas (e.g. naked function signatures), and can be bulit with `gcc9`, `clang12` and `tcc`, albeit with some cosmetic non-pedantic warnings, on macos and recent linuces.
+1. the original is using an opinionated superset of ISO C. specifically, it makes prominent use of nested functions, a gcc-specific extension unportable to any compliant compiler of C language. the modified codebase is free from nested functions and some other compiler-specific gotchas (e.g. naked function signatures). it can be built with `gcc9`, `clang12` or `tcc` on macos and recent linuces, with some cosmetic compilation warnings.
 
-2. much of the code is being gradually reformatted to make inline comments possible - this makes source files taller, but makes them slightly more user-friendly.
+2. the code is is gradually reformatted to make inline comments possible. this makes source files taller, but makes them more user-friendly.
 
-3. the inline comments are a mixture of the narrative from the google doc and our own. in former case, the wording is often shortened and makes use of established naming conventions.
+3. code comments use doxygen syntax. inline comments exclusively narrate the line they are on.
 
-4. implementation uses a one-size-fits-all fundamental datatype called `K`, which is basically a `struct` used for *lists* (but not atoms). `K` is an opaque quasi-struct based on relative offsets, members are familiar:
+4. internally, `b` compiler uses a fundamental datatype called `K`, which is essentially a universal `struct` which describes a *vector* of values (including other nested lists). `K` is a pointer to a quasi-struct members of which are accessed using relative offsets (see *accessors* below). the stucture of `K` is simple enough to warrant a mnemonic:
 
 ```
 K is mturnnnn:
@@ -20,9 +20,9 @@ r reference count
 nnnn list length
 ```
 
-this signature, referred to as *preamble*, is `1+1+1+1+4` bytes long, and is followed by the actual payload, i.e. a sequence of list elements, if any.
+this signature, referred to as *list preamble*, is `1+1+1+1+4` bytes long, and is followed by the actual payload, i.e. a sequence of vector elements, if any.
 
-5. an important change compared to the original is that `K`, which is traditionally disguised as `unsigned char*` pointer, is redefined as `unsigned long long`, which doesn't depend on the pointer size of target architecture. For the most part, this change does not impact the code at all.
+5. an important change compared to the original codebase is that `K`, which is traditionally disguised as `unsigned char*` pointer, is redefined as `unsigned long long`, which doesn't depend on the pointer size of target architecture, and is always 8 bytes long. For the most part, this change does not impact the code at all.
 
 6. the parser and object code emitter are split into two separate files, `p.c` and `b.c` respectively, to save on scrolling, to better separate concerns and isolate globals.
 
@@ -39,7 +39,7 @@ this signature, referred to as *preamble*, is `1+1+1+1+4` bytes long, and is fol
 #define xz xK[2]  // 3rd
 ```
 
-8. `a.h` defines a roughly identical set of accessors for common local variable/argument names. it is very rare to see any other local identifiers other than:
+8. `a.h` defines a roughly identical set of accessors for common local variable/argument names. this means that it is very rare to see any other local identifiers other than:
 
 ```
 x,y,z - typically function arguments
@@ -47,7 +47,7 @@ r - usually return value
 f - either a function pointer or sometimes a temp variable
 ```
 
-all of the above are usually of type `K`. we would typically use any of these identifiers that wasn't used earlier in the local scope if we need a temp variable and cannot reuse an identifier declared earlier. the rationale is that for canonical identifiers there are pre-defined accessors, which keep the code compact.
+all of the above are usually of type `K`. we typically use any of these identifiers that were not used earlier in the local scope if we need a temporary variable. if we can, we reuse an identifier declared earlier. the rationale is that for canonical identifiers `xyzrf` there are pre-defined macro accessors, and this keeps the code compact.
 
 9. the actual semantics of `xyzrf` are documented inline where they are not obvious, typically at the site of their declaration.
 
