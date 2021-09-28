@@ -1,6 +1,6 @@
 ## notable changes
 
-here are notable changes compared to the (http://kparc.com/b)[original], which is also available in the initial commit for reference:
+here are notable changes compared to the [original](http://kparc.com/b), which is also available in the initial commit for reference:
 
 1. the original is using an opinionated superset of ISO C. specifically, it makes prominent use of nested functions, a gcc-specific extension unportable to any compliant compiler of C. the modified codebase is free from nested functions and some other compiler-specific gotchas (e.g. naked function signatures). it can be built with `gcc9`, `clang12` or `tcc` on macos and recent linuces, with some cosmetic compilation warnings.
 
