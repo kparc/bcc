@@ -2,25 +2,38 @@
 
 here are notable changes compared to the [original](http://kparc.com/b), which is also available in the initial commit for reference:
 
-1. the original is using an opinionated superset of ISO C. specifically, it makes prominent use of nested functions, a gcc-specific extension unportable to any compliant compiler of C. the modified codebase is free from nested functions and some other compiler-specific gotchas (e.g. naked function signatures). it can be built with `gcc9`, `clang12` or `tcc` on macos and recent linuces, with some cosmetic compilation warnings.
+1. the original is using an opinionated superset of ISO C. specifically, it makes prominent use of nested functions, a gcc-specific extension unportable to any compliant compiler of C. the modified codebase is free from nested functions and some other compiler-specific gotchas (e.g. naked function signatures). it can be built with `gcc11`, `clang13` or `tcc-mob` on macos and recent linuces, with some cosmetic compilation warnings.
 
-2. the code is is gradually reformatted to make inline comments possible. this makes source files taller, but makes them more user-friendly.
+2. the code is gradually reformatted to make inline comments possible. this makes source files taller, but makes them more user-friendly.
 
-3. code comments use doxygen syntax. inline comments exclusively narrate the line they are on.
+3. code comments use doxygen syntax. inline comments narrate the line they are on, without exceptions.
 
-4. internally, `b` compiler uses a fundamental datatype called `K`, which is essentially a universal `struct` which describes a *vector* of values (including other nested lists). `K` is a pointer to a quasi-struct members of which are accessed using relative offsets (see *accessors* below). the stucture of `K` is simple enough to warrant a mnemonic:
+4. internally, `b` compiler uses a fundamental datatype called `K`, which is essentially a universal `struct` which describes a *vector* of values (including other vectors, i.e. a vector of pointers to nested vectors). `K` is an opaque pointer to a quasi-struct, members of which are accessed using relative offsets (see *accessors* below). the stucture of `K` is simple enough to warrant a mnemonic:
 
 ```
 K is mturnnnn:
 
 m memory bucket id
 t list data type
-u type-specific attributes
+u bitfield for type-specific attributes, e.g. `sorted`
 r reference count
 nnnn list length
 ```
 
-this signature, referred to as *list preamble*, is `1+1+1+1+4` bytes long, and is followed by the actual payload, i.e. a sequence of vector elements, if any.
+this signature, referred to as *preamble*, is `1+1+1+1+4` bytes long, and is immediately followed by the actual payload, i.e. a sequence of vector elements, if any.
+
+supported vector types `t` are:
+
+```
+K  0       vector of vectors      sizeof(void*)
+KC 1       char/byte vector       8
+KH 2       short (int16)          16
+KI 3       integer                32
+KJ 4       long                   64
+KE 5       ieee float             32
+KF 6       ieee double            64
+KS 7       symbol (see below)     sizeof(void*)
+```
 
 5. an important change compared to the original codebase is that `K`, which is traditionally disguised as `unsigned char*` pointer, is redefined as `unsigned long long`, which doesn't depend on the pointer size of target architecture, and is always 8 bytes long. For the most part, this change does not impact the code at all.
 
@@ -34,9 +47,9 @@ this signature, referred to as *list preamble*, is `1+1+1+1+4` bytes long, and i
 #define xu xC[-6] // attrs
 #define xt xC[-5] // type
 #define xn xI[-1] // length
-#define xx xK[0]  // shortcut to 1st element of a generic list
-#define xy xK[1]  // 2nd
-#define xz xK[2]  // 3rd
+#define xx xK[0]  // handy shortcut to 1st element of a list of lists
+#define xy xK[1]  // ...2nd
+#define xz xK[2]  // ...3rd
 ```
 
 8. `a.h` defines a roughly identical set of accessors for common local variable/argument names. this means that it is very rare to see any other local identifiers other than:
