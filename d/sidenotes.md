@@ -35,9 +35,9 @@ KF 6       ieee double            64
 KS 7       symbol (see below)     sizeof(void*)
 ```
 
-5. an important change compared to the original codebase is that `K`, which is traditionally disguised as `unsigned char*` pointer, is redefined as `unsigned long long`, which doesn't depend on the pointer size of target architecture, and is always 8 bytes long. For the most part, this change does not impact the code at all.
+5. an important change compared to the original codebase is that `K`, which is traditionally disguised as `unsigned char*` pointer, is redefined as `unsigned long long`, which doesn't depend on the pointer size of target architecture, and is always 8 bytes long. For the most part, this change does not impact the code at all, and is introduced for compatibility with 32-bit platforms.
 
-6. compared to the original, the parser and machine code emitter are split into separate files, `p.c` and `b.c` respectively, to better separate concerns and isolate globals clearer.
+6. compared to the original, the parser and machine code emitter are split into separate files, `p.c` and `b.c` respectively, to better separate concerns and better isolate globals.
 
 7. since `K` is not a true struct, its members are addressed using so called *accessors*, defined in `a.h` along with more accessors, convenience macros and other sugar designed to keep the code compact:
 
