@@ -4,11 +4,11 @@ here are notable changes compared to the [original](http://kparc.com/b), which i
 
 1. the original is using an opinionated superset of ISO C. specifically, it makes prominent use of nested functions, a gcc-specific extension unportable to any compliant compiler of C. the modified codebase is free from nested functions and some other compiler-specific gotchas (e.g. naked function signatures). it can be built with `gcc11`, `clang13` or `tcc-mob` on macos and recent linuces, with some cosmetic compilation warnings.
 
-2. the code is gradually reformatted to make inline comments possible. this makes source files taller, but makes them more user-friendly.
+2. the code is gradually reformatted to make inline comments possible. this makes source files taller, but makes them more user-friendly, and provides insight how the original was written. above all, this aims to give a comprehensive answer to the popular question "how does atw do his thing", which is instructional.
 
 3. code comments use doxygen syntax. inline comments narrate the line they are on, without exceptions.
 
-4. internally, `b` compiler uses a fundamental datatype called `K`, which is essentially a universal `struct` which describes a *vector* of values (including other vectors, i.e. a vector of pointers to nested vectors). `K` is an opaque pointer to a quasi-struct, members of which are accessed using relative offsets (see *accessors* below). the stucture of `K` is simple enough to warrant a mnemonic:
+4. internally, `b` compiler uses a fundamental datatype called `K`, which is a universal one-size-fits-all `struct` which describes a *vector* of values (which includes other vectors, i.e. a vector of pointers to nested vectors). `K` is not defined as a proper C `struct`, but an opaque 64-bit value, members of which are accessed using relative offsets (see *accessors* below). the stucture of `K` is simple enough to warrant a mnemonic:
 
 ```
 K is mturnnnn:
@@ -37,7 +37,7 @@ KS 7       symbol (see below)     sizeof(void*)
 
 5. an important change compared to the original codebase is that `K`, which is traditionally disguised as `unsigned char*` pointer, is redefined as `unsigned long long`, which doesn't depend on the pointer size of target architecture, and is always 8 bytes long. For the most part, this change does not impact the code at all.
 
-6. the parser and object code emitter are split into two separate files, `p.c` and `b.c` respectively, to save on scrolling, to better separate concerns and isolate globals.
+6. compared to the original, the parser and machine code emitter are split into separate files, `p.c` and `b.c` respectively, to better separate concerns and isolate globals clearer.
 
 7. since `K` is not a true struct, its members are addressed using so called *accessors*, defined in `a.h` along with more accessors, convenience macros and other sugar designed to keep the code compact:
 
@@ -68,15 +68,19 @@ all of the above are usually of type `K`. we typically use any of these identifi
 
 ## malloc
 
-currently, `bcc` doesn't rely on a foreign `malloc`. instead it gradually `mmap`'s  anonymous chunks formatted into buckets of size sufficient to accommodate new lists, with bucket size rounded up to the next power of two relative to the list size. For lists that do not fit in any free memory bucket allocated earlier, an additional `mmap` chunk is requested, of minimal size of 4mb + 8 bytes for the preamble (it would be a viable design to pseudo-allocate all memory addressable by the process in advance, which is very cheap in case of anonymous `mmap`, but is more brittle depending on the mood of the host OS).
+currently, `bcc` doesn't rely on a foreign `malloc`. instead it gradually `mmap`'s anonymous chunks formatted into buckets of size sufficient to accommodate new lists, with bucket size rounded up to the next power of two relative to the list size. for lists that do not fit in any free memory bucket allocated earlier, an additional `mmap` chunk is requested, of minimal size of 4mb + 8 bytes for the preamble (it would be a viable design to pseudo-allocate all memory addressable by the process in advance, which is very cheap in case of anonymous `mmap`, but is more brittle depending on the mood of the host OS).
 
 for example, a typed list of integers with 80 elements would be of size `80 elements * 4 bytes size of int32 + 8 bytes preamble size`, a total of `328 bytes`, which is not a power of two, and requires a bucket of size that is the closest power of two rounded up, which is a 512-byte bucket.
 
 the smallest possible block size is 64 bytes. the difference between the actual size of the list and the size of its container is initially wasted.  In the above example, the overhead is `184 bytes`, which can potentially be used in case of a list join operation, when the list `y`, that is being appended to `x`, fits in the unused space of a block occupied by `x`. Join and append operations in relatively small increments are therefore assumed to be a sufficiently common operation.
 
-in short, `m.c` defines a static array `M` of 31 pointers to the heads of 31 linked lists. Every element of a list is called a bucket. the id of a bucket is a base two logarithm of its size with a small offset, i.e. sizes of buckets in successive lists start from 64 bytes, 128, 256, ... up to M[31]. buckets above 31 are OOM, a condition that is currently not handled (watchdog of the OS is likely to kill the process earlier)
+in short, `m.c` defines a global static array `M` of 31 pointers to the heads of 31 linked lists. every element of a list is called a bucket. the id of a bucket is a base two logarithm of its size with a small offset, i.e. sizes of buckets in successive lists start from 64 bytes, 128, 256, ... up to M[31]. buckets above 31 are OOM, a condition that is currently not handled (watchdog of the OS is likely to kill the process earlier)
 
-memory is managed by reference counting using functions `r1/r0`. buckets occupied by lists with no more references are returned to the heap for re-use, no block coalescing, zeroing or `munmap` is performed. **the release of resources is responsibility of a callee**, with a notable exception **when the callee reuses one of the incoming arguments as its pass-through return value, possibly mutating it in-place**.
+for any allocated vector, the `m` byte in its `mturnnnn` preamble identifies the bucket in `M` to which it belongs.
+
+memory is managed by reference counting using functions `r1/r0`, which increment and decrement the `r` byte in preable, respectively. buckets occupied by lists with no more references are returned to the heap for re-use. no block coalescing, zeroing or `munmap` is performed.
+
+by convention, **the release of resources is responsibility of a callee**, with a notable exception **when the callee reuses one of the incoming K objects as its pass-through return value, possibly mutating it in-place**. in other cases, e.g. when a calee receives two K objects `x` and `y` and produces a result `r`, it is expected to attempt to release `x` and `y` by calling `r0()`
 
 typical idioms seen at the end of a function are `X0(e)/Y0(e)/...` which attempt to release no longer needed `x,y,..` and return some `e`.
 
