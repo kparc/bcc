@@ -1,6 +1,8 @@
 #pragma once
+#ifndef COSMO
 #include<string.h>
 #include<stdio.h>
+#endif
 
 #ifndef QUIET
 #define O printf
@@ -8,7 +10,7 @@
 #define O
 #endif
 
-#define ptr(x) (*(S*)&x)
+#define ptr(x) ((S)x)
 #define xC ptr(x)
 #define yC ptr(y)
 #define zC ptr(z)

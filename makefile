@@ -17,7 +17,7 @@ Q=@
 O=-O0 -g -std=gnu11 -DUSE_AW_MALLOC -DQUIET
 LVM=clang
 GCC=$(shell env which gcc-9||env which gcc-8||echo gcc)
-#GCC+= -Wno-unused-value
+COSD=${COSMO_DIR}
 TCC=tcc
 TESTC=$(LVM) $O
 
@@ -50,6 +50,11 @@ g: uprep
 	$(Q)$(GCC) $O $(LF) $(SRC) -o b/bg $(CF) $(FIXME)
 	b/bg $T
 
+# cosmopolitan gcc
+c: uprep
+	$(Q)$(GCC) -g -Os -std=gnu11 -DCOSMO -DUSE_AW_MALLOC -Wall -static -minline-all-stringops  -fno-stack-protector  -Wno-format -Wno-pointer-sign -Wno-pragmas -Wno-unused-value -fno-pie -no-pie -mno-red-zone -nostdlib -nostdinc -fno-omit-frame-pointer -pg -mnop-mcount -o b/b.com.dbg $(SRC) -Wl,--gc-sections -fuse-ld=bfd -Wl,-T,$(COSD)/ape.lds -include $(COSD)/cosmopolitan.h $(COSD)/crt.o $(COSD)/ape.o $(COSD)/cosmopolitan.a
+	@objcopy -S -O binary b/b.com.dbg b/b.com
+	@b/b.com $T
 # tcc
 t: uprep
 	$(Q)$(TCC) $O $(SRC) -o b/bt

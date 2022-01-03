@@ -1,6 +1,10 @@
 //! \file h.h hash table cfg/api
 #pragma once
+
+#ifndef COSMO
 #include<stdlib.h>
+#endif
+
 #include"c.h"
 
 //#define HFN sdbm

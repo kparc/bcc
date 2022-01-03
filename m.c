@@ -3,9 +3,13 @@
 #include"m.h"
 //! malloc/free:  mturnnnn list join (k[cifs] k[CIFS])
 //! K is mturnnnn: membucket, type, flags, refcount, length
-ZI clzl(I n);ZK M[31];ZJ W=W0;//!< M memory buckets, W wssize (W0 initial offset for GT header and seed alloc c0() \see init()
+#ifndef COSMO
+ZI clzl(I n);
+#endif
+
+ZK M[31];ZJ W=W0;//!< M memory buckets, W wssize (W0 initial offset for GT header and seed alloc c0() \see init()
 S ma(I d,size_t n){ZJ p=BASE;p+=d?0:n;V*r=mmap((V*)(d?0:p-n),n,PROT_READ|PROT_WRITE|PROT_EXEC,d?MAP_PRIVATE:(MAP_ANON|MAP_PRIVATE|MAP_FIXED),d-!d,0);P(r==MAP_FAILED,O("%s\n",strerror(errno)),(S)0)R r;}
-K mf(S s,J*n){struct stat b;I d=open((V*)s,0);Qs(0>d,(S)s)R(K)(fstat(d,&b),s=(*n=b.st_size)?ma(d,*n):s,close(d),s);}
+K mf(S s,J*n){struct stat b;I d=open((V*)s,O_RDONLY);Qs(0>d,(S)s)R(K)(fstat(d,&b),s=(*n=b.st_size)?ma(d,*n):s,close(d),s);}
 
 K m1(J n){K x,r;             //!< allocate a memory block
     I i=clzl(n+7),j=i;       //!< i is the bucket id, log2((I)n)
