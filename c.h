@@ -73,9 +73,22 @@ enum UCL{UQ,Ul,Ug,Uc,Um,Ua};//!< QQ  Āɏ Ая  Αω  ∀⋿  ⌀⍺  (err, lat,
 #if (__x86_64__||i386)&&!__TINYC__
 Z_ I clzl(I n){R 60-__builtin_clzl(n);}Z_ V csr(){R;asm("movl $0x9fc0,-4(%rsp);ldmxcsr -4(%rsp);");}//V csr(){volatile I mxcsr=0x9fc0;asm("ldmxcsr %0":"=m"(mxcsr));}
 #else
-Z_ I clzl(I n){I i=0;W(n)n/=2,++i;R i-4;}Z_ V csr(){R;}  //<! FIXME tcc ldmxcsr nyi
+Z_ I clzl(I n){I i=0;W(n)n/=2,++i;R i-4;}Z_ V csr(){R;}  //<! FIXME tcc ldmxcsr nyi //printf("CSR\n");UJ m;asm volatile("mrs %0, s3_4_c15_c2_7" : "=r"(m): :);asm volatile("msr s3_4_c15_c2_7, %0" : : "r"(m & 0xfffffffff0ffffff) :);
 #endif
 
-Z_ F ms(){J a,d;asm volatile("rdtsc":"=a"(a),"=d"(d));R((d<<32)+a)*.58e-6;}//<! fixme .58e-6
+#if __i386
+Z_ UJ ms(){UJ a;asm volatile("rdtsc":"=A"(a));R a;}
+#elif __riscv
+Z_ UJ ms(){UJ a;asm volatile("csrr %0," "cycle":"=r"(a));R a;}
+#elif  __aarch64__
+Z_ UJ ms(){UJ a;asm volatile("mrs %0,cntvct_el0":"=r"(a));R a;}
+#elif __x86_64
+Z_ UJ ms(){UJ a,d;asm volatile("rdtsc":"=a"(a),"=d"(d));R a|d<<32;}
+#elif __EMSCRIPTEN__
+F emscripten_get_now();Z_ UJ ut(){R(U)emscripten_get_now();}
+#endif
+
+
+//Z_ F ms(){J a,d;asm volatile("rdtsc":"=a"(a),"=d"(d));R((d<<32)+a)*.58e-6;}//<! fixme .58e-6
 
 //:~
