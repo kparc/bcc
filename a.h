@@ -59,7 +59,7 @@ I _t(K x,S sT),U(I i);K _p(ST st),XXX(K*k,K y);
 #define t(x)     _t(x,T)
 
 #ifndef COSMO
-I clzl(I n);V csr();F ms();//<! s.c
+I clzl(I n);V csr();UJ ms();//<! s.c
 extern J nt[],ip();extern K ex(K),ps(S),r1(K),tn(I,I),k0(),l1(),sS(I,K),enm(J x),o(K);I cl(I c);V exit(I),w2(S),r0(K);S pi(J),pf(F),px(J);J ws();F fp(S,I);K2(j2);
 #else
 extern J nt[],ip();extern K ex(K),ps(S),r1(K),tn(I,I),k0(),l1(),sS(I,K),enm(J x),o(K);I cl(I c);V w2(S),r0(K);S pi(J),pf(F),px(J);J ws();F fp(S,I);K2(j2);
