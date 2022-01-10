@@ -83,7 +83,7 @@ Z_ UJ ms(){UJ a;asm volatile("csrr %0," "cycle":"=r"(a));R a;}
 #elif  __aarch64__
 Z_ UJ ms(){UJ a;asm volatile("mrs %0,cntvct_el0":"=r"(a));R a;}
 #elif __x86_64
-Z_ UJ ms(){UJ a,d;asm volatile("rdtsc":"=a"(a),"=d"(d));R a|d<<32;}
+Z_ F ms(){UJ a,d;asm volatile("rdtsc":"=a"(a),"=d"(d));R(a|d<<32)*.58e-6;}
 #elif __EMSCRIPTEN__
 F emscripten_get_now();Z_ UJ ut(){R(U)emscripten_get_now();}
 #endif
