@@ -1,11 +1,14 @@
+#ifndef COSMO
 #include<unistd.h>
 #include<sys/mman.h>
+#endif
+
 #include"a.h"// read/write mmap/munmap printf/scanf malloc/free
 #include"m.h"
 #include"h.h"
 
 //S mmap();I open(),close(),fstat(),munmap();J read(),write();V exit();
-V w2(S s){write(2,s,sl((char*)s));}ZS r2(S s){ZC b[256];R w2(s),b[read(0,b,256)-1]=0,b;}
+V w2(S s){write(2,s,sl((char*)s));}ZS r2(S s){ZC b[256];I i;w2(s);i=read(0,b,256);b[i-1]=0;R 13==b[i-2]?b[i-2]=0,b:b;}
 K dmp(S s,S x,J n){I d=open((V*)s,O_RDWR|O_CREAT|O_TRUNC,S_IRWXU);Qs(0>d,(S)s)write(d,x,n);R close(d),0;}
 
 //! printf/scanf (almost:)
@@ -30,7 +33,7 @@ K vf(I f){AB("nyi");}//K vf(I f){K x,r=kS(0);N(26,x=GGG[i];if(NL-x){K y=nm(x);O(
 
 K Li(K x,I i){R!xt||KS<xt?Xx:KC==xt?kc(Xc):KI==xt?ki(Xi):ks(Xi);} //!< list item x[i]
 ZK e1(K(*f)(),K x,K y){K r=kK(xn);N1(rn,Rx=f?f(Li(x,i),y):Li(x,i))R r;} //!< each: r[i]=f(x[i],y)
-K sS(I c,K x){I n=c?xn:0;N(xn,K y=Xx;n+=yn)K r=kC(n);if(c)--rn;S s=rC;N(xn,K y=Xx;s=memcpy(s,(V*)y,yn)+yn;if(c)*s++=c)R X0(r);}
+K sS(I c,K x){I n=c?xn:0;N(xn,K y=Xx;n+=yn)K r=kC(n);if(c)--rn;S s=rC;N(xn,K y=Xx;s=((S)memcpy(s,(V*)y,yn))+yn;if(c)*s++=c)R X0(r);}
 ZK c(K x,K pt){N(xn,if(94u<Xc-32){K r=kC(2*xn);N(xn,hh(rC+2*i,Xc))R j2(c2('0'+xu,'x'),r);})
  P(pt&&1<xn,r1(x))C qt='"';if(pt)qt='a'==cl(*xC)?0:'\'';R!qt?r1(x):cj(qt,jc(r1(x),qt));}
 
