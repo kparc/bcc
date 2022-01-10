@@ -1,5 +1,5 @@
-CF=-minline-all-stringops -fno-asynchronous-unwind-tables -fno-stack-protector -Wall -Wno-pragmas -Wno-unused-value
-#-Wno-unused-command-line-argument -Wno-unknown-warning-option -Wno-parentheses -Wno-pointer-sign
+CF=-fno-asynchronous-unwind-tables -fno-stack-protector -Wall -Wno-pragmas -Wno-unused-value -Wno-misleading-indentation
+#-Wno-unused-command-line-argument -Wno-unknown-warning-option -Wno-parentheses -Wno-pointer-sign -minline-all-stringops
 LF=-rdynamic
 #LF=+-nostdlib -c a.S
 SRC=[abmphu].c
@@ -16,7 +16,7 @@ Q=@
 # -DSYMS
 O=-O0 -g -std=gnu11 -DUSE_AW_MALLOC -DQUIET
 LVM=clang
-GCC=$(shell env which gcc-9||env which gcc-8||echo gcc)
+GCC=$(shell env env which gcc-11||which gcc-10||env which gcc-9||env which gcc-8||echo gcc)
 COSD=${COSMO_DIR}
 TCC=tcc
 TESTC=$(LVM) $O
@@ -28,7 +28,7 @@ T=tiso.b
 
 ifeq ($(shell uname),Darwin)
  LF+= -pagezero_size 1000
- CF+= -I$(shell xcrun --show-sdk-path)/usr/include
+ CF+= -I$(shell xcrun --show-sdk-path)/usr/include -L$(shell xcrun --show-sdk-path)/usr/lib
 endif
 
 # llvm
@@ -51,8 +51,9 @@ g: uprep
 	b/bg $T
 
 # cosmopolitan gcc
+# -fuse-ld=bfd -mnop-mcount -minline-all-stringops -mno-red-zone
 c: uprep
-	$(Q)$(GCC) -g -Os -std=gnu11 -DCOSMO -DUSE_AW_MALLOC -Wall -static -minline-all-stringops  -fno-stack-protector  -Wno-format -Wno-pointer-sign -Wno-pragmas -Wno-unused-value -fno-pie -no-pie -mno-red-zone -nostdlib -nostdinc -fno-omit-frame-pointer -pg -mnop-mcount -o b/b.com.dbg $(SRC) -Wl,--gc-sections -fuse-ld=bfd -Wl,-T,$(COSD)/ape.lds -include $(COSD)/cosmopolitan.h $(COSD)/crt.o $(COSD)/ape.o $(COSD)/cosmopolitan.a
+	$(Q)$(GCC) -g -Os -std=gnu11 -DCOSMO -DUSE_AW_MALLOC -Wall -static -fno-stack-protector  -Wno-format -Wno-pointer-sign -Wno-pragmas -Wno-unused-value -fno-pie -no-pie -nostdlib -nostdinc -fno-omit-frame-pointer -pg -o b/b.com.dbg $(SRC) -Wl,--gc-sections -Wl,-T,$(COSD)/ape.lds -include $(COSD)/cosmopolitan.h $(COSD)/crt.o $(COSD)/ape.o $(COSD)/cosmopolitan.a
 	@objcopy -S -O binary b/b.com.dbg b/b.com
 	@b/b.com $T
 # tcc
