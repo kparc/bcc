@@ -81,7 +81,7 @@ Z_ K kS(I n){R tn(KS,n);}
 Z_ K pn(S s,I n){R(K)memcpy((V*)kC(n),s,n);}Z_ K kp(S s){R pn(s,sl(s));}
 Z_ K kc(J x){R(K)(KC<<48|x);}
 Z_ K ki(unsigned x){R(K)(KI<<48|(J)x);}
-Z_ K kf(F f){R(K)(KF<<48|(J)f);}
+Z_ K kf(F f){R*(K*)&f;}
 Z_ K ks(J x){R(K)(KS<<48|x);}
 Z_ K _qs(S s){R(K)(QQ<<48|(J)s);}
 #define qs(s) _qs((S)(s))
@@ -101,8 +101,8 @@ Z_ K jc(K x,C c){R j2(x,kc(c));}
 // access x y z r
 #define Ax A(x)
 #define xi I(x)
-#define xj ((J)(x))
-#define xf ((F)(x))
+#define xj (J)(x)
+#define xf *(F*)&x
 #define xm xC[-8] //mem
 #define xr xC[-7] //ref
 #define xu xC[-6]
@@ -132,6 +132,7 @@ Z_ K jc(K x,C c){R j2(x,kc(c));}
 #define yy yK[1]
 #define yI ((I*)y)
 #define yK ((K*)y)
+#define yF ((F*)y)
 #define Yc ((S)y)[i]
 #define Yi yI[i]
 #define Yx yK[i]

@@ -10,7 +10,7 @@
 #define O
 #endif
 
-#define ptr(x) ((S)x)
+#define ptr(x) (*(S*)&x)
 #define xC ptr(x)
 #define yC ptr(y)
 #define zC ptr(z)
